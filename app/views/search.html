@@ -1,9 +1,47 @@
-      <form class="well form-inline">
-        <label>Try typing "Micro" or "GE":</label>
-        <input type="text" id="symbolsearch" class="input-" placeholder="Enter company name or symbol">
-        <span class="help-inline hide"><img src="resources/spinner.gif" align="absmiddle" alt="spinner" /> loading...</span>
-        <span class="help-inline hide label label-info"></span>
-      </form>
+<form class="well form-inline">
+    <h4>
+      Try typing "Micro" or "GE":
+      <small class="pull-right">Data from <a href="http://dev.markitondemand.com/MODApis/" target="_blank">markit on demand Data Apis v2</a></small>
+    </h4>
+    <input type="text" ng-model="asyncSelected" placeholder="Enter company name or symbol" uib-typeahead="symbol as symbol.Name+' ('+symbol.Exchange+')' for symbol in getSymbol($viewValue)" typeahead-loading="loadingSymbols" typeahead-no-results="noResults" class="form-control" ng-model-options="modelOptions" size=50>
+    <i ng-show="loadingSymbols" class="glyphicon glyphicon-refresh"></i>
+    <div ng-show="noResults">
+      <i class="glyphicon glyphicon-remove"></i> No Results Found
+    </div>
+    <div ng-show="portfolio.hasOwnProperty(asyncSelected.Symbol)" class="alert alert-warning">
+      Already in portfolio
+    </div>
 
-<p>From <a href="https://github.com/markitondemand/DataApis/blob/gh-pages/LookupSample/index.html">markitondemand/DataApis</a></p>
+    <div ng-show="!noResults && !loadingSymbols && asyncSelected.Exchange">
+      <pre>Model: {{asyncSelected | json}}</pre>
+      <button class="btn btn-primary" ng-click="add()" ng-disabled="portfolio.hasOwnProperty(asyncSelected.Symbol)">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </div>
+</form>
 
+<div>
+  <table class="table" ng-show="portfolio">
+    <tr>
+      <th>Symbol</th><th>Name</th><th>Exchange</th>
+      <th>History length</th><th>&nbsp;</th>
+    </tr>
+    <tr ng-repeat="p in portfolio">
+      <td>{{p.symbol.Symbol}}</td>
+      <td>{{p.symbol.Name}}</td>
+      <td>{{p.symbol.Exchange}}</td>
+      <td>
+        {{p.history.length}}
+        &nbsp;
+        <button class="btn btn-xs btn-info" ng-click="showChart(p)">
+          ...
+        </button>
+      </td>
+      <td>
+        <button class="btn" ng-click="getChart(p)">
+          <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -11,7 +11,9 @@
 angular
   .module('theVarApp', [
     'ngMessages',
-    'ngRoute'
+    'ngRoute',
+    'ui.bootstrap',
+    'LocalStorageModule'
   ])
   .config(function ($routeProvider) {
     $routeProvider
