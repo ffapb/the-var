@@ -24,24 +24,38 @@
   <table class="table" ng-show="portfolio">
     <tr>
       <th>Symbol</th><th>Name</th><th>Exchange</th>
-      <th>History length</th><th>&nbsp;</th>
+      <th>History length</th><th>&nbsp;</th><th>VaR (95%)</th>
     </tr>
-    <tr ng-repeat="p in portfolio">
-      <td>{{p.symbol.Symbol}}</td>
-      <td>{{p.symbol.Name}}</td>
-      <td>{{p.symbol.Exchange}}</td>
-      <td>
-        {{p.history.length}}
-        &nbsp;
-        <button class="btn btn-xs btn-info" ng-click="showChart(p)">
-          ...
-        </button>
-      </td>
-      <td>
-        <button class="btn" ng-click="getChart(p)">
-          <span class="glyphicon glyphicon-refresh"></span>
-        </button>
-      </td>
-    </tr>
+    <tbody ng-repeat="p in portfolio">
+      <tr>
+        <td>{{p.symbol.Symbol}}</td>
+        <td>{{p.symbol.Name}}</td>
+        <td>{{p.symbol.Exchange}}</td>
+        <td>
+          {{p.history.length}}
+          &nbsp;
+          <button class="btn btn-xs btn-info" ng-click="showChart(p)">
+            ...
+          </button>
+          <div jq-sparkline ng-model="p.pnlsEdf" type="bar" ng-if="p.pnlsEdf"></div>
+          <a href="http://www.reuters.com/finance/stocks/chart?symbol={{p.symbol.Symbol}}" target="_blank">Source</a>
+        </td>
+        <td>
+          <button class="btn" ng-click="getChart(p)">
+            <span class="glyphicon glyphicon-refresh"></span>
+          </button>
+        </td>
+        <td>
+          {{100*calculateVaR(p,95)|number:2}}
+        </td>
+      </tr>
+      <tr>
+        <td colspan=6>
+          <div jq-sparkline ng-model="p.history2" type="line" ng-if="p.history2"></div>
+        </td>
+      </tr>
+    </tbody>
   </table>
+
+  <button ng-click="clearAll()" class="btn btn-danger">Clear</button>
 </div>

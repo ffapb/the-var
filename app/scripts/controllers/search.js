@@ -73,9 +73,9 @@ angular.module('theVarApp')
       return $http.jsonp(url, {
         params: {
           parameters: {
-            DataPeriod: 'Month',
+            DataPeriod: 'Day', // Month
             NumberOfDays: 365,
-            Normalized: true,
+            Normalized: false, // until I understand how they're normalizing, I'm just using the close prices
             Elements: [
               {
                 Symbol: val.symbol.Symbol,
@@ -87,7 +87,6 @@ angular.module('theVarApp')
           jsoncallback: 'JSON_CALLBACK'
         }
       }).then(function(response){
-        console.log('done',response);
         var dates = response.data.Dates;
         var prices = response.data.Elements[0].DataSeries.close.values;
         var o = [];
@@ -95,6 +94,22 @@ angular.module('theVarApp')
           o.push({'date':dates[i],'close':prices[i]});
         }
         $scope.portfolio[val.symbol.Symbol].history = o;
+        $scope.portfolio[val.symbol.Symbol].history2 = angular.fromJson(angular.toJson(prices));
+
+        var pnls = [];
+        pnls.push(0);
+        for(i=1;i<prices.length;i++) {
+          pnls.push(prices[i]/prices[i-1]-1);
+        }
+        $scope.portfolio[val.symbol.Symbol].pnls=pnls;
+
+        var pnlsSort = angular.fromJson(angular.toJson(pnls));
+        pnlsSort.sort(function(a,b) {
+          return a-b;
+        });
+        $scope.portfolio[val.symbol.Symbol].pnlsSort=pnlsSort;
+
+        $scope.portfolio[val.symbol.Symbol].pnlsEdf=$scope.edf(pnls,1/100);
       });
     };
 
@@ -102,15 +117,76 @@ angular.module('theVarApp')
     angular.element(document).ready(function () {
       if(localStorageService.isSupported) {
         var lsKeys = localStorageService.keys();
-        if(lsKeys.indexOf("portfolio")!=-1) {
-          $scope.portfolio = localStorageService.get("portfolio");
+        if(lsKeys.indexOf('portfolio')!==-1) {
+          $scope.portfolio = localStorageService.get('portfolio');
         }
-        $scope.unbind = localStorageService.bind($scope, "portfolio");
+        $scope.unbind = localStorageService.bind($scope, 'portfolio');
       }
     });
 
     $scope.showChart=function(p) {
-      console.log(p.history);
+      console.log(p);
+    };
+
+    // https://gist.github.com/deenar/f97d517d3188fc7b5302
+    $scope.calculateVaR=function(p,percentile) {
+      if(!p.pnls) {
+        return;
+      }
+      if(p.pnls.length===0) {
+        return;
+      }
+
+      var pnls = p.pnlsSort;
+      var size = pnls.length;
+      var indexR = (size * ((100 - percentile) / 100)) - 1;
+      var upper = Math.min(size-1,Math.max(0,Math.ceil(indexR)));
+      var lower = Math.min(size-1,Math.max(0,Math.floor(indexR)));
+      if (lower === upper) {
+        return pnls[upper];
+      } else { /* interpolate if necessary */
+        return ((upper - indexR) * pnls[lower]) + ((indexR - lower) * pnls[upper]);
+      }
+    };
+
+    $scope.clearAll=function() {
+       return localStorageService.clearAll();
+    };
+
+    $scope.edf = function(data,ss) {
+      // data: [5,5.2,5.1,6,7,8.2,8.4,8.2]
+      // ss: step size: 1
+      var d2 = angular.fromJson(angular.toJson(data));
+      d2.sort(function(a,b) {
+        return a-b;
+      });
+      var m1 = d2.reduce(function(a,b) {
+        if(a<b) { return a; }
+        return b;
+      }, 9999); // get array minimum
+      m1 = Math.floor(m1/ss)*ss;
+      var o = d2.map(function(x) { return Math.floor((x-m1)/ss); });
+      console.log(ss,d2,m1,o);
+      var ou = [];
+      var od = [];
+      for(var i=0;i<o.length;i++) {
+        var sgn=1;
+        if(d2[i]<0) {
+          sgn=-1;
+        }
+
+        if(od.indexOf(o[i])===-1) {
+          ou.push(sgn);
+          od.push(o[i]);
+        } else {
+          ou[ou.length-1]+=sgn;
+        }
+      }
+      var op = ou.map(function(x) { return x/d2.length*100; });
+/*      for(i=1;i<op.length;i++) {
+        op[i]+=op[i-1];
+      }*/
+      return op;
     };
 
   });
