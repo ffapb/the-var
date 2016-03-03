@@ -62,7 +62,6 @@ angular.module('theVarApp')
           jsoncallback: 'JSON_CALLBACK'
         }
       }).then(function(response){
-        console.log('done',response);
         return response.data;
       });
     };
@@ -87,6 +86,11 @@ angular.module('theVarApp')
           jsoncallback: 'JSON_CALLBACK'
         }
       }).then(function(response){
+        if(response.data.Elements.length===0) {
+          window.alert('No data');
+          return;
+        }
+
         var dates = response.data.Dates;
         var prices = response.data.Elements[0].DataSeries.close.values;
         var o = [];
@@ -95,6 +99,10 @@ angular.module('theVarApp')
         }
         $scope.portfolio[val.symbol.Symbol].history = o;
         $scope.portfolio[val.symbol.Symbol].history2 = angular.fromJson(angular.toJson(prices));
+        $scope.portfolio[val.symbol.Symbol].historyMeta = {
+          mindate: dates[0],
+          maxdate: dates[dates.length-1]
+        };
 
         var pnls = [];
         pnls.push(0);
@@ -110,6 +118,9 @@ angular.module('theVarApp')
         $scope.portfolio[val.symbol.Symbol].pnlsSort=pnlsSort;
 
         $scope.portfolio[val.symbol.Symbol].pnlsEdf=$scope.edf(pnls,1/100);
+
+        $scope.portfolio[val.symbol.Symbol].selected=true;
+
       });
     };
 
@@ -130,10 +141,10 @@ angular.module('theVarApp')
 
     // https://gist.github.com/deenar/f97d517d3188fc7b5302
     $scope.calculateVaR=function(p,percentile) {
-      if(!p.pnls) {
+      if(!p.pnlsSort) {
         return;
       }
-      if(p.pnls.length===0) {
+      if(p.pnlsSort.length===0) {
         return;
       }
 
@@ -166,7 +177,6 @@ angular.module('theVarApp')
       }, 9999); // get array minimum
       m1 = Math.floor(m1/ss)*ss;
       var o = d2.map(function(x) { return Math.floor((x-m1)/ss); });
-      console.log(ss,d2,m1,o);
       var ou = [];
       var od = [];
       for(var i=0;i<o.length;i++) {
@@ -187,6 +197,33 @@ angular.module('theVarApp')
         op[i]+=op[i-1];
       }*/
       return op;
+    };
+
+    // https://gist.github.com/deenar/f97d517d3188fc7b5302
+    $scope.portfolioVaR=function(percentile) {
+      if(!$scope.portfolio) {
+        return;
+      }
+
+      var pnls = Object.keys($scope.portfolio).filter(function(x) {
+        return $scope.portfolio[x].selected;
+      }).map(function(k) {
+        return $scope.portfolio[k].pnlsSort;
+      }).reduce(function(a,b) {
+        if(b) {
+          return $.merge(a,b);
+        } else {
+          return a;
+        }
+      }, []);
+      pnls.sort(function(a,b) {
+          return a-b;
+        });
+      return $scope.calculateVaR({pnlsSort: pnls}, percentile);
+    };
+
+    $scope.remove=function(p) {
+      delete $scope.portfolio[p.symbol.Symbol];
     };
 
   });
