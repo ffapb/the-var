@@ -12,8 +12,7 @@ angular
   .module('theVarApp', [
     'ngMessages',
     'ngRoute',
-    'ui.bootstrap',
-    'LocalStorageModule'
+    'ui.bootstrap'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -27,12 +26,28 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/assetAdd', {
+      .when('/portfolioShow/:pid/assetAdd', {
         templateUrl: 'views/assetAdd.html',
         controller: 'AssetAddCtrl',
         controllerAs: 'assetAdd'
+      })
+      .when('/portfolioList', {
+        templateUrl: 'views/portfoliolist.html',
+        controller: 'PortfoliolistCtrl',
+        controllerAs: 'portfolioList'
+      })
+      .when('/portfolioAdd', {
+        templateUrl: 'views/portfolioadd.html',
+        controller: 'PortfolioaddCtrl',
+        controllerAs: 'portfolioAdd'
+      })
+      .when('/portfolioShow/:pid', {
+        templateUrl: 'views/portfolioshow.html',
+        controller: 'PortfolioshowCtrl',
+        controllerAs: 'portfolioShow'
       })
       .otherwise({
         redirectTo: '/'
       });
   });
+

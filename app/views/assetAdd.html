@@ -8,22 +8,21 @@
     <div ng-show="noResults">
       <i class="glyphicon glyphicon-remove"></i> No Results Found
     </div>
-    <div ng-show="portfolio.hasOwnProperty(asyncSelected.Symbol)" class="alert alert-warning">
+    <div ng-show="exists()" class="alert alert-warning">
       Already in portfolio
     </div>
 
     <div ng-show="!noResults && !loadingSymbols && asyncSelected.Exchange">
       <pre>Model: {{asyncSelected | json}}</pre>
-      <button class="btn btn-primary" ng-click="add()" ng-disabled="portfolio.hasOwnProperty(asyncSelected.Symbol)">
+      <button class="btn btn-primary" ng-click="add1()" ng-disabled="exists()">
         <span class="glyphicon glyphicon-plus"></span>
       </button>
     </div>
 </form>
 
-<div>Portfolio VaR 95%: {{100*portfolioVaR(95)|number:2}} %</div>
 
 <div>
-  <table class="table" ng-show="portfolio">
+  <table class="table" ng-show="!!pendingStock">
     <tr>
       <th>&nbsp;</th>
       <th>Symbol</th>
@@ -39,48 +38,51 @@
         based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
       </th>
     </tr>
-    <tbody ng-repeat="p in portfolio">
+    <tbody>
       <tr>
-        <td><input type="checkbox" ng-model="p.selected" /></td>
-        <td>{{p.symbol.Symbol}}</td>
-        <td>{{p.symbol.Name}}</td>
-        <td>{{p.symbol.Exchange}}</td>
+        <td>{{pendingStock.lookup.Symbol}}</td>
+        <td>{{pendingStock.lookup.Name}}</td>
+        <td>{{pendingStock.lookup.Exchange}}</td>
         <td>
-          <div>{{p.history.length}} points</div>
-          <div>{{p.historyMeta.mindate}} .. {{p.historyMeta.maxdate}}</div>
+          <div>{{pendingStock.history.length}} points</div>
+          <div>{{pendingStock.historyMeta.mindate}} .. {{pendingStock.historyMeta.maxdate}}</div>
         </td>
         <td>
-          <div jq-sparkline ng-model="p.pnlsEdf" type="bar" ng-if="p.pnlsEdf"></div>
+          <div jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar" ng-if="pendingStock.pnlsEdf"></div>
         </td>
         <td>
           <div>
-            <a href="http://www.reuters.com/finance/stocks/chart?symbol={{p.symbol.Symbol}}" target="_blank">Source</a>
+            <a href="http://www.reuters.com/finance/stocks/chart?symbol={{pendingStock.lookup.Symbol}}" target="_blank">Source</a>
           </div>
           <div>
-            <button class="btn btn-xs btn-info" ng-click="showChart(p)">
+            <button class="btn btn-xs btn-info" ng-click="showChart(pendingStock)">
               ...
             </button>
           </div>
         </td>
         <td>
-          <button class="btn btn-xs" ng-click="getChart(p)">
+          <button class="btn btn-xs" ng-click="getChart(pendingStock)">
             <span class="glyphicon glyphicon-refresh"></span>
           </button>
-          <button class="btn btn-danger btn-xs" ng-click="remove(p)">
+          <button class="btn btn-danger btn-xs" ng-click="remove(pendingStock)">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
         </td>
         <td>
-          {{100*calculateVaR(p,95)|number:2}} %
+          {{100*calculateVaR(pendingStock,95)|number:2}} %
         </td>
       </tr>
       <tr>
         <td colspan=9>
-          <div jq-sparkline ng-model="p.history2" type="line" ng-if="p.history2"></div>
+          <div jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <button class="btn btn-primary" ng-click="add2()" ng-disabled="!pendingStock.history2">
+    <span class="glyphicon glyphicon-plus"></span>
+  </button>
 
   <button ng-click="clearAll()" class="btn btn-danger">Clear</button>
 </div>

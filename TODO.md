@@ -1,5 +1,7 @@
 # 2016-03-02
 * multiple portfolios
+* was unable to use "angular-local-storage" from service
+ * reverting to explicitly making calls to localStorage
 
 # 2016-03-01
 * add calculate volatility based on historical prices

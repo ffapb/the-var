@@ -8,10 +8,10 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('MainCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('MainCtrl', function ($scope,Portfolios) {
+
+    $scope.np = function() {
+      return Portfolios.np();
+    };
+
   });

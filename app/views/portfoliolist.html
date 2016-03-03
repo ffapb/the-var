@@ -1,0 +1,26 @@
+<table class="table" ng-show="list()">
+  <tr ng-repeat="p in list()">
+    <td>
+      {{p.name}}
+      &nbsp;
+      <span class="badge">{{nass()}}</span>
+    </td>
+    <td>
+      <a class="btn btn-xs btn-default" ng-href="#/portfolioShow/{{p.id}}">
+        <span class="glyphicon glyphicon-pencil"></span>
+      </a>
+
+      <button class="btn btn-xs btn-danger" ng-click="del(p.id)">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+    </td>
+  </tr>
+</table>
+
+<div ng-messages="!list()" role="alert">
+  No portfolios
+  &nbsp;
+  <a class="btn" href="/#portfolioAdd">
+    <span class="glyphicon glyphicon-plus"></span>
+  </a>
+</div>
