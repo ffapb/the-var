@@ -1,8 +1,9 @@
 <div>Portfolio: {{portfolio.name}}</div>
 
-<div ng-messages="!list()" role="alert">
+<div ng-show="!list()" class="alert alert-warning">
   No assets
-  &nbsp;
+</div>
+<div>
   <a class="btn" href="/#portfolioShow/{{portfolio.id}}/assetAdd">
     <span class="glyphicon glyphicon-plus"></span>
   </a>
@@ -30,9 +31,9 @@
     <tbody ng-repeat="a in list()">
       <tr>
         <td><input type="checkbox" ng-model="a.selected" /></td>
-        <td>{{a.symbol.Symbol}}</td>
-        <td>{{a.symbol.Name}}</td>
-        <td>{{a.symbol.Exchange}}</td>
+        <td>{{a.lookup.Symbol}}</td>
+        <td>{{a.lookup.Name}}</td>
+        <td>{{a.lookup.Exchange}}</td>
         <td>
           <div>{{a.history.length}} points</div>
           <div>{{a.historyMeta.mindate}} .. {{a.historyMeta.maxdate}}</div>
@@ -42,7 +43,7 @@
         </td>
         <td>
           <div>
-            <a href="http://www.reuters.com/finance/stocks/chart?symbol={{a.symbol.Symbol}}" target="_blank">Source</a>
+            <a href="http://www.reuters.com/finance/stocks/chart?symbol={{a.lookup.Symbol}}" target="_blank">Source</a>
           </div>
           <div>
             <button class="btn btn-xs btn-info" ng-click="showChart(a)">

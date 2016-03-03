@@ -37,7 +37,7 @@ angular.module('theVarApp')
     };
 
     $scope.portfolioVaR=function(percentile) {
-      return varCalc.portfolioVaR(percentile,$scope.portfolio);
+      return varCalc.portfolioVaR(percentile,$scope.portfolio.assets);
     };
 
   });

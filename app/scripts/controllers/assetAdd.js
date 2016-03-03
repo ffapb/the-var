@@ -116,10 +116,6 @@ angular.module('theVarApp')
       return varCalc.edf(data,ss);
     };
 
-    $scope.portfolioVaR=function(percentile) {
-      return varCalc.portfolioVaR(percentile,$scope.portfolio);
-    };
-
     $scope.remove=function(p) {
       delete $scope.portfolio[p.symbol.Symbol];
     };

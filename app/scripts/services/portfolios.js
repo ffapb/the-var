@@ -51,10 +51,11 @@ angular.module('theVarApp')
           console.error('Invalid portfolio ID '+pid);
           return false;
         }
-        if(!ppp.assets) {
-          ppp.assets={};
+        if(!ppp[pid].assets) {
+          ppp[pid].assets={};
         }
-        ppp.assets[aaa.lookup.Symbol]=aaa;
+        ppp[pid].assets[aaa.lookup.Symbol]=aaa;
+        this.saveToLs();
         return this;
       }
     };
