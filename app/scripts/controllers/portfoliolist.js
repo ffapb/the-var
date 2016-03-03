@@ -27,6 +27,7 @@ angular.module('theVarApp')
       if(!a.hasOwnProperty('assets')) {
         return 0;
       }
+      a=a.assets;
       return Object.keys(a).length;
     };
   });

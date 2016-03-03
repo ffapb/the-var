@@ -117,7 +117,7 @@ angular.module('theVarApp')
     };
 
     $scope.remove=function(p) {
-      delete $scope.portfolio[p.symbol.Symbol];
+      delete $scope.portfolio[p.lookup.Symbol];
     };
 
   });

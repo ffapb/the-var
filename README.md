@@ -6,6 +6,12 @@ It will be published at http://shadiakiki1986.github.io/the-var/
 
 The data comes from [markit on demand Apis v2](http://dev.markitondemand.com/MODApis/)
 
+# Features
+
+* unlimited portfolios
+* unlimited assets
+* asset VaR and portfolio VaR
+
 
 # Similar apps
 Similar applications/documentation exist online, but they had some limits:

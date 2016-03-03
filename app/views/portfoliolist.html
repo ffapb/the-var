@@ -3,7 +3,7 @@
     <td>
       {{p.name}}
       &nbsp;
-      <span class="badge">{{nass()}}</span>
+      <span class="badge">{{nass(p.id)}}</span>
     </td>
     <td>
       <a class="btn btn-xs btn-default" ng-href="#/portfolioShow/{{p.id}}">
@@ -17,7 +17,7 @@
   </tr>
 </table>
 
-<div ng-messages="!list()" role="alert">
+<div ng-show="!list()" role="alert">
   No portfolios
   &nbsp;
   <a class="btn" href="/#portfolioAdd">
