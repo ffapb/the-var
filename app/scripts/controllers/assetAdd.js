@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name theVarApp.controller:SearchCtrl
+ * @name theVarApp.controller:AssetAddCtrl
  * @description
- * # SearchCtrl
+ * # AssetAddCtrl
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('SearchCtrl', function ($scope,$http,localStorageService) {
+  .controller('AssetAddCtrl', function ($scope,$http,localStorageService) {
 
     $scope.portfolio=null;
     $scope.pendingStock={};

@@ -27,10 +27,10 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/search', {
-        templateUrl: 'views/search.html',
-        controller: 'SearchCtrl',
-        controllerAs: 'search'
+      .when('/assetAdd', {
+        templateUrl: 'views/assetAdd.html',
+        controller: 'AssetAddCtrl',
+        controllerAs: 'assetAdd'
       })
       .otherwise({
         redirectTo: '/'
