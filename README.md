@@ -21,6 +21,9 @@ Similar applications/documentation exist online, but they had some limits:
 * http://financetrain.com/value-at-risk-of-a-portfolio/ : just documentation
 * https://www.portfolioscience.com/value-at-risk-calculation : excel api
 
+# Logo
+The logo is the VaR diagram posted on [wikipedia](https://en.wikipedia.org/wiki/File:VaR_diagram.JPG)
+
 # Development
 ## Under the hood
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
