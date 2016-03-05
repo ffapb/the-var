@@ -8,7 +8,7 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('AssetAddCtrl', function ($scope,varCalc,markitOnDemand,Portfolios,$routeParams) {
+  .controller('AssetAddCtrl', function ($scope,varCalc,markitOnDemand,Portfolios,$routeParams,Assets) {
 
     // same code in portfolioshow
     var pid = $routeParams.pid;
@@ -37,11 +37,20 @@ angular.module('theVarApp')
     $scope.pendingStock=false;
 
     $scope.add1=function() {
-      var x = $scope.asyncSelected;
-      $scope.pendingStock = {
-        lookup: x
+      $scope.pendingStock={
+        lookup: $scope.asyncSelected
       };
-      $scope.asyncSelected=null;
+      $scope.getChart($scope.asyncSelected.Symbol, function() {
+        $scope.pendingStock.portfolios = [$routeParams.pid];
+        $scope.pendingStock.src='mod';
+
+        Assets.add($scope.pendingStock);
+        $scope.pendingStock=false;
+        var sss = $scope.asyncSelected.Symbol;
+        $scope.asyncSelected=null;
+        window.location.href='#/assetShow/mod/'+sss;
+
+      });
     };
 
     $scope.getSymbol = function(val) {
@@ -60,8 +69,8 @@ angular.module('theVarApp')
       return markitOnDemand.quote(val);
     };
 
-    $scope.getChart = function(val) {
-      return markitOnDemand.interactiveChart(val.lookup.Symbol).then(function(response){
+    $scope.getChart = function(symbol,cb) {
+      return markitOnDemand.interactiveChart(symbol).then(function(response){
         if(response.data.Elements.length===0) {
           window.alert('No data');
           return;
@@ -96,6 +105,8 @@ angular.module('theVarApp')
         $scope.pendingStock.pnlsEdf=$scope.edf(pnls,1/100);
 
         $scope.pendingStock.selected=true;
+
+        if(cb) { cb(); }
 
       });
     };

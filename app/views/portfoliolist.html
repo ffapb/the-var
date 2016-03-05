@@ -1,4 +1,9 @@
+  <a class="btn btn-primary" href="/#portfolioAdd">
+    <span class="glyphicon glyphicon-plus"></span>
+  </a>
+
 <table class="table" ng-show="list()">
+  <caption>Portfolios &nbsp; <span class="badge">{{np()}}</span></caption>
   <tr ng-repeat="p in list()">
     <td>
       {{p.name}}
@@ -19,8 +24,6 @@
 
 <div ng-show="!list()" role="alert">
   No portfolios
-  &nbsp;
-  <a class="btn" href="/#portfolioAdd">
-    <span class="glyphicon glyphicon-plus"></span>
-  </a>
 </div>
+
+

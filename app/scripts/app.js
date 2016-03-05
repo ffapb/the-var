@@ -46,6 +46,11 @@ angular
         controller: 'PortfolioshowCtrl',
         controllerAs: 'portfolioShow'
       })
+      .when('/assetShow/:src/:symbol', {
+        templateUrl: 'views/assetshow.html',
+        controller: 'AssetshowCtrl',
+        controllerAs: 'assetShow'
+      })
       .otherwise({
         redirectTo: '/'
       });

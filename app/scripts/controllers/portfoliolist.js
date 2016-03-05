@@ -10,6 +10,10 @@
 angular.module('theVarApp')
   .controller('PortfoliolistCtrl', function ($scope,Portfolios) {
 
+    $scope.np = function() {
+      return Portfolios.np();
+    };
+
     $scope.list=function() {
       return Portfolios.list();
     };
