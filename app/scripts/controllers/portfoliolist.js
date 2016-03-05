@@ -8,7 +8,9 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('PortfoliolistCtrl', function ($scope,Portfolios) {
+  .controller('PortfoliolistCtrl', function ($scope,Portfolios,ActivateNavBar) {
+
+    ActivateNavBar.portfolios();
 
     $scope.np = function() {
       return Portfolios.np();

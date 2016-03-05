@@ -26,7 +26,7 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/portfolioShow/:pid/assetAdd', {
+      .when('/assetAdd', {
         templateUrl: 'views/assetAdd.html',
         controller: 'AssetAddCtrl',
         controllerAs: 'assetAdd'

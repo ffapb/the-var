@@ -8,7 +8,10 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('PortfolioaddCtrl', function ($scope,Portfolios,$location) {
+  .controller('PortfolioaddCtrl', function ($scope,Portfolios,$location,ActivateNavBar) {
+
+    ActivateNavBar.portfolios();
+
     $scope.add = function() {
       if(!$scope.portfolios) {
         $scope.portfolios={};

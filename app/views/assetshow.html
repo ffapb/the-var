@@ -1,0 +1,76 @@
+<a ng-click="goback()" class="btn btn-default">
+  Back to portfolio {{getPid()}}
+</a>
+
+<div ng-show="!pendingStock">
+  None selected
+</div>
+
+  <table class="table" ng-show="!!pendingStock">
+    <tr>
+      <th>&nbsp;</th>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>Exchange</th>
+      <th>History</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>
+        VaR (95%)
+        &nbsp;
+        based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
+      </th>
+    </tr>
+    <tbody>
+      <tr>
+        <td>{{pendingStock.lookup.Symbol}}</td>
+        <td>{{pendingStock.lookup.Name}}</td>
+        <td>{{pendingStock.lookup.Exchange}}</td>
+        <td>
+          <div>{{pendingStock.history.length}} points</div>
+          <div>{{pendingStock.historyMeta.mindate}} .. {{pendingStock.historyMeta.maxdate}}</div>
+        </td>
+        <td>
+          <div jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar" ng-if="pendingStock.pnlsEdf"></div>
+        </td>
+        <td>
+          <div>
+            <a href="http://www.reuters.com/finance/stocks/chart?symbol={{pendingStock.lookup.Symbol}}" target="_blank">Source</a>
+          </div>
+          <div>
+            <button class="btn btn-xs btn-info" ng-click="showChart(pendingStock)">
+              ...
+            </button>
+          </div>
+        </td>
+        <td>
+          <button class="btn btn-xs" ng-click="getChart()">
+            <span class="glyphicon glyphicon-refresh"></span>
+          </button>
+        </td>
+        <td>
+          {{100*calculateVaR(pendingStock,95)|number:2}} %
+        </td>
+      </tr>
+      <tr>
+        <td colspan=9>
+          <div jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+<div ng-show="inPortfolios().length>0">
+  In portfolios: {{inPortfolios().join(", ")}}
+</div>
+
+<div ng-show="notInPortfolios().length>0">
+  Add to portfolio: &nbsp;
+  <span ng-repeat="pid in notInPortfolios()">
+    <button ng-click="add2(pid)" class="btn btn-primary">
+   {{pid}}
+    </button>
+    &nbsp;
+  </span>
+</div>

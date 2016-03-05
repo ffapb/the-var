@@ -52,11 +52,36 @@ angular.module('theVarApp')
           return false;
         }
         if(!ppp[pid].assets) {
-          ppp[pid].assets={};
+          ppp[pid].assets=[];
         }
-        ppp[pid].assets[aaa.lookup.Symbol]=aaa;
+        if(ppp[pid].assets.filter(function(x) {
+          return x.src===aaa.src && x.symbol===aaa.lookup.Symbol;
+        }).length===0) {
+          ppp[pid].assets.push({src:aaa.src,symbol:aaa.lookup.Symbol});
+          this.saveToLs();
+        }
+      },
+      rmAsset: function(pid,aaa) {
+        if(!ppp.hasOwnProperty(pid)) {
+          console.error('Invalid portfolio ID '+pid);
+          return false;
+        }
+
+        var nu = ppp[pid].assets.filter(function(x) {
+          return x.src!==aaa.src || x.symbol!==aaa.lookup.Symbol;
+        });
+        ppp[pid].assets = nu;
         this.saveToLs();
-        return this;
+      },
+      holdingAsset: function(src,symbol) {
+        return Object.keys(ppp).filter(function(pid) {
+          if(!ppp[pid].hasOwnProperty('assets')) {
+            return false;
+          }
+          return ppp[pid].assets.filter(function(x) {
+            return x.src===src && x.symbol===symbol;
+          }).length > 0;
+        });
       }
     };
   });

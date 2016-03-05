@@ -9,7 +9,9 @@
  */
 angular.module('theVarApp')
   .controller('PortfolioshowCtrl',
-  function ($scope,Portfolios,$routeParams,varCalc) {
+  function ($scope,Portfolios,$routeParams,varCalc,Assets,ActivateNavBar) {
+
+    ActivateNavBar.portfolios();
 
     var pid = $routeParams.pid;
     var pl = Portfolios.list();
@@ -25,8 +27,19 @@ angular.module('theVarApp')
       if(!a) {
         return false;
       }
-      return a;
+      var al = Assets.list();
+      var o = a.map(function(x) {
+        if(al.hasOwnProperty(x.src)) {
+          if(al[x.src].hasOwnProperty(x.symbol)) {
+            return al[x.src][x.symbol];
+          }
+        }
+        return null;
+      }).filter(function(x) { return !!x; });
+      return o;
     };
+
+    $scope.alist = $scope.list();
 
     $scope.calculateVaR = function(p,percentile) {
       return varCalc.calculateVaR(p,percentile);
@@ -37,7 +50,13 @@ angular.module('theVarApp')
     };
 
     $scope.portfolioVaR=function(percentile) {
-      return varCalc.portfolioVaR(percentile,$scope.portfolio.assets);
+      return varCalc.portfolioVaR(percentile,$scope.alist);
+    };
+
+    $scope.remove = function(a) {
+      Portfolios.rmAsset(pid,a);
+      $scope.portfolio = Portfolios.list()[pid];
+      $scope.alist = $scope.list();
     };
 
   });

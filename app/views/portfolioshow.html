@@ -1,17 +1,15 @@
-<div><a href="#/portfolioList" class="btn btn-xs">Back</a></div>
+<div>Portfolio: {{portfolio.id}}, {{portfolio.name}}</div>
 
-<div>Portfolio: {{portfolio.name}}</div>
-
-<div ng-show="!list()" class="alert alert-warning">
+<div ng-show="!alist" class="alert alert-warning">
   No assets
 </div>
 <div>
-  <a class="btn btn-primary" href="/#portfolioShow/{{portfolio.id}}/assetAdd">
+  <a class="btn btn-primary" href="#/assetAdd?pid={{portfolio.id}}">
     <span class="glyphicon glyphicon-plus"></span>
   </a>
 </div>
 
-<div ng-show="list()">
+<div ng-show="alist">
   <div>Portfolio VaR 95%: {{100*portfolioVaR(95)|number:2}} %</div>
 
   <table class="table">
@@ -20,8 +18,6 @@
       <th>Symbol</th>
       <th>Name</th>
       <th>Exchange</th>
-      <th>History</th>
-      <th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>
@@ -30,47 +26,26 @@
         based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
       </th>
     </tr>
-    <tbody ng-repeat="a in list()">
-      <tr>
-        <td><input type="checkbox" ng-model="a.selected" /></td>
-        <td>{{a.lookup.Symbol}}</td>
-        <td>{{a.lookup.Name}}</td>
-        <td>{{a.lookup.Exchange}}</td>
-        <td>
-          <div>{{a.history.length}} points</div>
-          <div>{{a.historyMeta.mindate}} .. {{a.historyMeta.maxdate}}</div>
-        </td>
-        <td>
-          <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
-        </td>
-        <td>
-          <div>
-            <a href="http://www.reuters.com/finance/stocks/chart?symbol={{a.lookup.Symbol}}" target="_blank">Source</a>
-          </div>
-          <div>
-            <button class="btn btn-xs btn-info" ng-click="showChart(a)">
-              ...
-            </button>
-          </div>
-        </td>
-        <td>
-          <button class="btn btn-xs" ng-click="getChart(a)">
-            <span class="glyphicon glyphicon-refresh"></span>
-          </button>
-          <button class="btn btn-danger btn-xs" ng-click="remove(a)">
-            <span class="glyphicon glyphicon-remove"></span>
-          </button>
-        </td>
-        <td>
-          {{100*calculateVaR(a,95)|number:2}} %
-        </td>
-      </tr>
-      <tr>
-        <td colspan=9>
-          <div jq-sparkline ng-model="a.history2" type="line" ng-if="a.history2"></div>
-        </td>
-      </tr>
-    </tbody>
+    <tr ng-repeat="a in alist track by a.src+a.lookup.Symbol">
+      <td><input type="checkbox" ng-model="a.selected" /></td>
+      <td>{{a.lookup.Symbol}}</td>
+      <td>{{a.lookup.Name}}</td>
+      <td>{{a.lookup.Exchange}}</td>
+      <td>
+        <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
+      </td>
+      <td>
+        <button class="btn btn-danger btn-xs" ng-click="remove(a)">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+      </td>
+      <td>
+        {{100*calculateVaR(a,95)|number:2}} %
+      </td>
+      <td>
+      <a ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}">Details</a>
+      </td>
+    </tr>
   </table>
 
 </div>
