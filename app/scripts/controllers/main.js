@@ -14,4 +14,9 @@ angular.module('theVarApp')
       return Portfolios.np();
     };
 
+    $scope.activateNavBar=function() {
+      $('.nav.navbar-nav > li').removeClass('active');
+      $('.nav.navbar-nav > li:nth-child(2)').addClass('active');
+    };
+
   });
