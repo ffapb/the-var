@@ -4,7 +4,7 @@
     <a class="btn btn-xs btn-primary" href="#/assetAdd?pid={{portfolio.id}}">
       Add asset
     </a>
-    <button class="btn btn-xs btn-danger" ng-click="del()">
+    <button class="btn btn-xs btn-danger" ng-click="delPortfolio()">
      Delete portfolio 
     </button>
   </span>
@@ -26,12 +26,12 @@
       <th>Name</th>
       <th>Exchange</th>
       <th>&nbsp;</th>
-      <th>&nbsp;</th>
       <th>
         VaR (95%)
         &nbsp;
         based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
       </th>
+      <th>&nbsp;</th>
     </tr>
     <tr ng-repeat="a in alist track by a.src+a.lookup.Symbol">
       <td><input type="checkbox" ng-model="a.selected" /></td>
@@ -42,15 +42,16 @@
         <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
       </td>
       <td>
-        <button class="btn btn-danger btn-xs" ng-click="remove(a)">
-          <span class="glyphicon glyphicon-remove"></span>
-        </button>
-      </td>
-      <td>
         {{100*calculateVaR(a,95)|number:2}} %
       </td>
-      <td>
-      <a ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}">Details</a>
+      <td nowrap>
+        <a class="btn btn-xs btn-info" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}" title="Show details">
+          <span class="glyphicon glyphicon-search"></span>
+        </a>
+        &nbsp;
+        <button class="btn btn-danger btn-xs" ng-click="delAsset(a)" title="Delete asset from portfolio">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
       </td>
     </tr>
   </table>

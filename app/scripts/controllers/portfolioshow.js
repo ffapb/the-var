@@ -53,13 +53,15 @@ angular.module('theVarApp')
       return varCalc.portfolioVaR(percentile,$scope.alist);
     };
 
-    $scope.remove = function(a) {
-      Portfolios.rmAsset(pid,a);
-      $scope.portfolio = Portfolios.list()[pid];
-      $scope.alist = $scope.list();
+    $scope.delAsset = function(a) {
+      if(window.confirm('Are you sure you want to delete the asset from the portfolio?')) {
+        Portfolios.rmAsset(pid,a);
+        $scope.portfolio = Portfolios.list()[pid];
+        $scope.alist = $scope.list();
+      }
     };
 
-    $scope.del=function() {
+    $scope.delPortfolio=function() {
       if(window.confirm('Are you sure you want to delete the portfolio?')) {
         Portfolios.del(pid);
         window.location.href='#/portfolioList';
