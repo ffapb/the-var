@@ -69,10 +69,13 @@ angular.module('theVarApp')
       return Portfolios.holdingAsset(src,symbol,inverse);
     };
 
+    $scope.gcs=0;
     $scope.getChart = function() {
+      $scope.gcs=1;
       return markitOnDemand.interactiveChart(symbol).then(function(response){
+        $scope.gcs=0;
         if(response.data.Elements.length===0) {
-          window.alert('No data');
+          //window.alert('No data');
           return;
         }
 

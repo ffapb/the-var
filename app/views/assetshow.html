@@ -4,73 +4,89 @@
 
   <table class="table" ng-show="!!pendingStock">
     <tbody>
-      <tr><td>Source</td><td>{{pendingStock.src}}</td></tr>
+      <tr><td width="10em">Source</td><td>{{pendingStock.src}}</td></tr>
       <tr><td>Symbol</td><td>{{pendingStock.lookup.Symbol}}</td></tr>
       <tr><td>Name</td><td>{{pendingStock.lookup.Name}}</td></tr>
       <tr><td>Exchange</td><td>{{pendingStock.lookup.Exchange}}</td></tr>
-      <tr>
-        <td>History</td>
-        <td>
-          <div>{{pendingStock.history.length}} points</div>
-          <div>{{pendingStock.historyMeta.mindate}} .. {{pendingStock.historyMeta.maxdate}}</div>
-          <div>
-            <button class="btn btn-xs" ng-click="getChart()">
+      <tbody ng-show="!pendingStock.history">
+        <tr>
+          <td>History</td>
+          <td>
+            <span class="text-warning text-center">No close prices available</span>
+            &nbsp;
+            <button class="btn btn-xs btn-warning" ng-click="getChart()" ng-disabled="gcs">
               <span class="glyphicon glyphicon-refresh"></span>
             </button>
-          </div>
-          <div jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
-        </td>
-      </tr>
-      <tr>
-        <td>Empirical distribution</td>
-        <td>
-          <div jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar" ng-if="pendingStock.pnlsEdf"></div>
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>
-          <div>
-            <a href="http://www.reuters.com/finance/stocks/chart?symbol={{pendingStock.lookup.Symbol}}" target="_blank">Source</a>
-          </div>
-          <div>
-            <button class="btn btn-xs btn-info" ng-click="showChart(pendingStock)">
-              ...
-            </button>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          VaR (95%)
-          &nbsp;
-          based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
-        </td>
-        <td>
-          {{100*calculateVaR(pendingStock,95)|number:2}} %
-        </td>
-      </tr>
-      <tr>
-        <td>In portfolios:</td>
-        <td>
-          <span ng-repeat="ip in inPortfolios(false)">
-            <a ng-href="#/portfolioShow/{{ip.id}}">{{ip.name}}</a>
-            &nbsp;&nbsp;
-          </span>
-          <span ng-show="!inPortfolios(false).length">None</span>
-        </td>
-      </tr>
-      <tr ng-show="inPortfolios(true).length">
-        <td>Add to portfolio:</td>
-        <td>
-          <span ng-repeat="ip in inPortfolios(true)">
-            <button ng-click="add2(ip.id)" class="btn btn-primary">
-             {{ip.name}}
-            </button>
             &nbsp;
-          </span>
-        </td>
-      </tr>
+            <span ng-show="gcs">
+              Loading prices...
+            </span>
+          </td>
+        </tr>
+      </tbody>
+      <tbody ng-show="pendingStock.history">
+        <tr>
+          <td>History</td>
+          <td>
+            <div>{{pendingStock.history.length}} points</div>
+            <div>{{pendingStock.historyMeta.mindate}} .. {{pendingStock.historyMeta.maxdate}}</div>
+            <div>
+              <button class="btn btn-xs" ng-click="getChart()">
+                <span class="glyphicon glyphicon-refresh"></span>
+              </button>
+            </div>
+            <div jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
+          </td>
+        </tr>
+        <tr>
+          <td>Empirical distribution</td>
+          <td>
+            <div jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar" ng-if="pendingStock.pnlsEdf"></div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <div>
+              <a href="http://www.reuters.com/finance/stocks/chart?symbol={{pendingStock.lookup.Symbol}}" target="_blank">Source</a>
+            </div>
+            <div>
+              <button class="btn btn-xs btn-info" ng-click="showChart(pendingStock)">
+                ...
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            VaR (95%)
+            &nbsp;
+            based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
+          </td>
+          <td>{{100*calculateVaR(pendingStock,95)|number:2}} %</td>
+        </tr>
+        <tr>
+          <td>In portfolios:</td>
+          <td>
+            <span ng-repeat="ip in inPortfolios(false)">
+              <a ng-href="#/portfolioShow/{{ip.id}}">{{ip.name}}</a>
+              &nbsp;&nbsp;
+            </span>
+            <span ng-show="!inPortfolios(false).length">None</span>
+          </td>
+        </tr>
+        <tr ng-show="inPortfolios(true).length">
+          <td>Add to portfolio:</td>
+          <td>
+            <span ng-repeat="ip in inPortfolios(true)">
+              <button ng-click="add2(ip.id)" class="btn btn-primary">
+               {{ip.name}}
+              </button>
+              &nbsp;
+            </span>
+          </td>
+        </tr>
+      </tbody>
       <tr>
         <td></td>
         <td>
