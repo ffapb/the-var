@@ -14,13 +14,12 @@
           <td>
             <span class="text-warning text-center">No close prices available</span>
             &nbsp;
-            <button class="btn btn-xs btn-warning" ng-click="getChart()" ng-disabled="gcs">
+            <button class="btn btn-xs btn-warning" ng-click="getChart()" ng-disabled="gcs()==1">
               <span class="glyphicon glyphicon-refresh"></span>
             </button>
             &nbsp;
-            <span ng-show="gcs">
-              Loading prices...
-            </span>
+            <span ng-show="gcs()==1">Loading prices...</span>
+            <span ng-show="gcs()==2">Error in prices</span>
           </td>
         </tr>
       </tbody>

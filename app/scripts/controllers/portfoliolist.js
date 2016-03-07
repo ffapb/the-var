@@ -8,9 +8,13 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('PortfoliolistCtrl', function ($scope, Portfolios, ActivateNavBar, Assets, varCalc) {
+  .controller('PortfoliolistCtrl', function ($scope, Portfolios, ActivateNavBar, Assets, varCalc,ffa) {
 
     ActivateNavBar.portfolios();
+
+    $scope.ffaPortfolios = function() {
+      ffa.portfolios();
+    };
 
     $scope.np = function() {
       return Portfolios.np();
@@ -51,5 +55,4 @@ angular.module('theVarApp')
       return varCalc.portfolioVaR(percentile,o);
     };
 
-   
   });

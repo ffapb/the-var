@@ -69,45 +69,11 @@ angular.module('theVarApp')
       return Portfolios.holdingAsset(src,symbol,inverse);
     };
 
-    $scope.gcs=0;
+    $scope.gcs=function() { return Assets.getGcs(); };
+
     $scope.getChart = function() {
-      $scope.gcs=1;
-      return markitOnDemand.interactiveChart(symbol).then(function(response){
-        $scope.gcs=0;
-        if(response.data.Elements.length===0) {
-          //window.alert('No data');
-          return;
-        }
-
-        var dates = response.data.Dates;
-        var prices = response.data.Elements[0].DataSeries.close.values;
-        var o = [];
-        for(var i=0;i<dates.length;i++) {
-          o.push({'date':dates[i],'close':prices[i]});
-        }
-        $scope.pendingStock.history = o;
-        $scope.pendingStock.history2 = angular.fromJson(angular.toJson(prices));
-        $scope.pendingStock.historyMeta = {
-          mindate: dates[0],
-          maxdate: dates[dates.length-1]
-        };
-
-        var pnls = [];
-        pnls.push(0);
-        for(i=1;i<prices.length;i++) {
-          pnls.push(prices[i]/prices[i-1]-1);
-        }
-        $scope.pendingStock.pnls=pnls;
-
-        var pnlsSort = angular.fromJson(angular.toJson(pnls));
-        pnlsSort.sort(function(a,b) {
-          return a-b;
-        });
-        $scope.pendingStock.pnlsSort=pnlsSort;
-
-        $scope.pendingStock.pnlsEdf=$scope.edf(pnls,1/100);
-        $scope.pendingStock.selected=true;
-
+      Assets.getChart(src,symbol,function(ps) {
+        $scope.pendingStock = ps;
       });
     };
 

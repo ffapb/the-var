@@ -24,10 +24,11 @@ angular.module('theVarApp')
         return Object.keys(ppp).length;
       },
       add: function(newP) {
-        if(!newP.id || !newP.name) {
+        if(!newP.name || !newP.src) {
           console.error('Adding invalid portfolio '+angular.toJson(newP));
           return false;
         }
+        newP.id = this.newId();
         if(ppp.hasOwnProperty(newP.id)) {
           console.error('ID '+newP.id+' already exists');
           return false;
@@ -82,6 +83,23 @@ angular.module('theVarApp')
         }).map(function(x) {
           return ppp[x];
         });
+      },
+      newId: function() {
+        var id = 1;
+        if(this.np()!==0) {
+          var pl = this.list();
+          id = Object.keys(pl).map(function(x) {
+            return pl[x].id;
+          });
+          id=id.reduce(function(a,b) {
+            if(a<b) {
+              return b;
+            }
+            return a;
+          });
+          id=1+id;
+        }
+        return id;
       }
     };
   });

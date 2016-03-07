@@ -12,11 +12,13 @@
 <table class="table" ng-show="np()">
   <caption>Portfolios &nbsp; <span class="badge">{{np()}}</span></caption>
   <tr>
+    <th>Source</th>
     <th>Name</th>
     <th>Number of securities</th>
     <th>VaR 95%</th>
   </tr>
   <tr ng-repeat="p in list()">
+    <td>{{p.src}}</td>
     <td>
       <a ng-href="#/portfolioShow/{{p.id}}">
         {{p.name}}
@@ -29,4 +31,21 @@
   </tr>
 </table>
 
+<hr>
 
+<button class="btn" ng-click="ffaPortfolios()">Retrieve FFA portfolios</button>
+
+<div ng-show="fc1s==1">Loading FFA portfolios</div>
+<div ng-show="fc1s==2">Error in FFA portfolios</div>
+
+<div ng-show="ffaN()">
+  FFA portfolios
+  &nbsp;
+  <table class="table">
+    <tr ng-repeat="p in ffaPortfolios">
+      <td>{{p.acc.base}}</td>
+      <td>{{p.acc.a}}</td>
+      <td>{{p.port.length}} securities</td>
+    </tr>
+  </table>
+</div>
