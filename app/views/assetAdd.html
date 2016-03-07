@@ -10,10 +10,23 @@
     </div>
 
     <div ng-show="!noResults && !loadingSymbols && asyncSelected.Exchange">
+
       <pre>Model: {{asyncSelected | json}}</pre>
-      <button class="btn btn-primary" ng-click="add1()" ng-disabled="exists()">
-        <span class="glyphicon glyphicon-plus"></span>
-      </button>
+
+      <div ng-show="pa!=2">
+        <button class="btn btn-info" ng-click="getChart()" ng-disabled="exists()||!asyncSelected.Symbol||gcs">
+          Check prices
+        </button>
+
+        <span ng-show="gcs==1">Checking prices...</span>
+        <span ng-show="pa==1">No prices available...</span>
+      </div>
+
+      <div ng-show="pa==2">
+        <button class="btn btn-primary" ng-click="add1()" ng-disabled="exists()||!asyncSelected.Symbol||gcs||pa!=2">
+          Show details
+        </button>
+      </div>
     </div>
 </form>
 

@@ -22,6 +22,8 @@ angular.module('theVarApp')
     };
 
     $scope.getSymbol = function(val) {
+      $scope.pa=0;
+      $scope.asyncSelected=null;
       return markitOnDemand.lookup(val);
     };
 
@@ -35,6 +37,23 @@ angular.module('theVarApp')
 
     $scope.getQuote = function(val) {
       return markitOnDemand.quote(val);
+    };
+
+    $scope.gcs=0;
+    $scope.pa=0;
+    $scope.getChart = function() {
+      if(!$scope.asyncSelected) { return; }
+      var symbol=$scope.asyncSelected.Symbol;
+      $scope.gcs=1;
+      return markitOnDemand.interactiveChart(symbol).then(function(response){
+        $scope.gcs=0;
+        if(response.data.Elements.length===0) {
+          //window.alert('No data');
+          $scope.pa=1; // not avail
+          return;
+        }
+        $scope.pa=2; // avail
+      });
     };
 
   });

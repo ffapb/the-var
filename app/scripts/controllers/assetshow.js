@@ -35,11 +35,11 @@ angular.module('theVarApp')
       .lookup(symbol)
       .then(function(response) {
         var asyncSelected=response.filter(function(x) { return x.Symbol===symbol; });
-        if(asyncSelected.length!==1) {
+        if(asyncSelected.length===0) {
           console.error('Couldnt identify symbol');
           return;
         }
-        asyncSelected=asyncSelected[0];
+        asyncSelected=asyncSelected[0]; // selecting first only
         $scope.pendingStock={
           src: src,
           lookup: asyncSelected
