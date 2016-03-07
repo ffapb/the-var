@@ -38,4 +38,4 @@ Run `grunt` for building and `grunt serve` for preview.
 Running `grunt test` will run the unit tests with karma.
 
 ## Publish to gh-pages
-Run `grunt gh-pages`
+First commit and push, then run `grunt gh-pages`
