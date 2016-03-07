@@ -25,6 +25,9 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  // https://github.com/tschaub/grunt-gh-pages
+  grunt.loadNpmTasks('grunt-gh-pages');
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -423,7 +426,17 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    // publish to gh-pages
+    // https://github.com/tschaub/grunt-gh-pages
+    'gh-pages': {
+      options: {
+        base: 'dist'
+      },
+      src: ['**']
     }
+
   });
 
 
