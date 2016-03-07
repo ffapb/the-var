@@ -1,6 +1,4 @@
 # 2016-03-06
-* case of when the symbol has no prices
-* add "loading" when loading prices
 * how to show in portfolioshow that dates of the security prices used
 * add "clear all localstorage" somewhere
 * assetadd show json format result
