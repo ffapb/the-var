@@ -12,7 +12,8 @@ angular
   .module('theVarApp', [
     'ngMessages',
     'ngRoute',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'base64'
   ])
   .config(function ($routeProvider) {
     $routeProvider
