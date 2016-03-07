@@ -11,14 +11,21 @@
 
 <table class="table" ng-show="np()">
   <caption>Portfolios &nbsp; <span class="badge">{{np()}}</span></caption>
+  <tr>
+    <th>Name</th>
+    <th>Number of securities</th>
+    <th>VaR 95%</th>
+  </tr>
   <tr ng-repeat="p in list()">
     <td>
       <a ng-href="#/portfolioShow/{{p.id}}">
         {{p.name}}
       </a>
-      &nbsp;
+    </td>
+    <td>
       <span class="badge">{{nass(p.id)}}</span>
     </td>
+    <td>{{100*portfolioVaR(95,p)|number:2}} %</td>
   </tr>
 </table>
 
