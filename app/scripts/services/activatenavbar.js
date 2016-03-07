@@ -14,6 +14,10 @@ angular.module('theVarApp')
       portfolios: function() {
         $('.nav.navbar-nav > li').removeClass('active');
         $('.nav.navbar-nav > li:nth-child(2)').addClass('active');
+      },
+      assets: function() {
+        $('.nav.navbar-nav > li').removeClass('active');
+        $('.nav.navbar-nav > li:nth-child(3)').addClass('active');
       }
     };
   });

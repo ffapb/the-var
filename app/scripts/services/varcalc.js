@@ -82,6 +82,7 @@ angular.module('theVarApp')
             return a;
           }
         }, []);
+        if(!pnls.length) { return 0; }
         pnls.sort(function(a,b) {
             return a-b;
           });

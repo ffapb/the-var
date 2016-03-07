@@ -19,7 +19,7 @@ angular.module('theVarApp')
 
       $scope.newP.id = $scope.newId();
       if(Portfolios.add($scope.newP)) {
-        $location.url('portfolioList');
+        window.location.href = '#/portfolioShow/'+$scope.newP.id;
       }
     };
 
@@ -39,6 +39,13 @@ angular.module('theVarApp')
         id=1+id;
       }
       return id;
+    };
+
+
+    $scope.exists = function() {
+      if(!$scope.newP) { return false; }
+      var pl = Portfolios.list();
+      return Object.keys(pl).filter(function(x) { return pl[x].name===$scope.newP.name; }).length>0;
     };
 
   });

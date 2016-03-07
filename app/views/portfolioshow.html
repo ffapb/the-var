@@ -1,16 +1,23 @@
-<div>Portfolio: {{portfolio.id}}, {{portfolio.name}}</div>
+<h2>
+  <span>Portfolio: {{portfolio.name}}</span>
+  <span class="pull-right">
+    <a class="btn btn-xs btn-primary" href="#/assetAdd?pid={{portfolio.id}}">
+      Add asset
+    </a>
+    <button class="btn btn-xs btn-danger" ng-click="del()">
+     Delete portfolio 
+    </button>
+  </span>
+</h2>
 
-<div ng-show="!alist" class="alert alert-warning">
+<div ng-show="!alist.length" class="alert alert-warning">
   No assets
 </div>
-<div>
-  <a class="btn btn-primary" href="#/assetAdd?pid={{portfolio.id}}">
-    <span class="glyphicon glyphicon-plus"></span>
-  </a>
-</div>
 
-<div ng-show="alist">
+<div ng-show="alist.length">
   <div>Portfolio VaR 95%: {{100*portfolioVaR(95)|number:2}} %</div>
+
+  <br>
 
   <table class="table">
     <tr>

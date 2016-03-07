@@ -18,9 +18,6 @@ angular.module('theVarApp')
 
     return {
       list: function() {
-        if(this.np()===0) {
-          return false;
-        }
         return ppp;
       },
       np: function() {
@@ -73,14 +70,17 @@ angular.module('theVarApp')
         ppp[pid].assets = nu;
         this.saveToLs();
       },
-      holdingAsset: function(src,symbol) {
+      holdingAsset: function(src,symbol,inverse) {
         return Object.keys(ppp).filter(function(pid) {
           if(!ppp[pid].hasOwnProperty('assets')) {
-            return false;
+            if(!inverse) { return false; } else { return true; }
           }
-          return ppp[pid].assets.filter(function(x) {
+          var o = ppp[pid].assets.filter(function(x) {
             return x.src===src && x.symbol===symbol;
           }).length > 0;
+          if(!inverse) { return o; } else { return !o; }
+        }).map(function(x) {
+          return ppp[x];
         });
       }
     };

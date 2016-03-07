@@ -59,4 +59,12 @@ angular.module('theVarApp')
       $scope.alist = $scope.list();
     };
 
+    $scope.del=function() {
+      if(window.confirm('Are you sure you want to delete the portfolio?')) {
+        Portfolios.del(pid);
+        window.location.href='#/portfolioList';
+      }
+    };
+
+
   });

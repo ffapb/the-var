@@ -51,6 +51,11 @@ angular
         controller: 'AssetshowCtrl',
         controllerAs: 'assetShow'
       })
+      .when('/assetList', {
+        templateUrl: 'views/assetlist.html',
+        controller: 'AssetlistCtrl',
+        controllerAs: 'assetList'
+      })
       .otherwise({
         redirectTo: '/'
       });

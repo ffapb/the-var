@@ -8,13 +8,17 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios) {
+  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios,ActivateNavBar) {
+
+    ActivateNavBar.assets();
 
     var symbol = $routeParams.symbol;
     var src = $routeParams.src;
 
     $scope.goback=function() {
-      window.location.href='#/portfolioShow/'+$routeParams.pid;
+      if($routeParams.pid) {
+        window.location.href='#/portfolioShow/'+$routeParams.pid;
+      }
     };
 
     $scope.pendingStock=false;
@@ -56,20 +60,13 @@ angular.module('theVarApp')
       window.location.href='#/portfolioShow/'+pid;
     };
 
-    $scope.inPortfolios=function() {
-      if(!$scope.pendingStock) {
-        return [];
-      }
-      return Portfolios.holdingAsset(src,symbol);
+    $scope.noPortfolios=function() {
+      return Portfolios.np()===0;
     };
 
-    $scope.notInPortfolios=function() {
-      if(!$scope.pendingStock) {
-        return [];
-      }
-      var ha = Portfolios.holdingAsset(src,symbol);
-      var pl = Portfolios.list();
-      return Object.keys(pl).filter(function(x) { return ha.indexOf(x)===-1; });
+    $scope.inPortfolios=function(inverse) {
+      if(!$scope.pendingStock || $scope.noPortfolios()) { return []; }
+      return Portfolios.holdingAsset(src,symbol,inverse);
     };
 
     $scope.getChart = function() {

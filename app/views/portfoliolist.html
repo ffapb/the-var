@@ -1,29 +1,25 @@
+<div class="text-center">
   <a class="btn btn-primary" href="/#portfolioAdd">
-    <span class="glyphicon glyphicon-plus"></span>
+    New portfolio
   </a>
+</div>
 
-<table class="table" ng-show="list()">
+<div ng-show="!np()" role="alert">
+  No portfolios
+</div>
+
+
+<table class="table" ng-show="np()">
   <caption>Portfolios &nbsp; <span class="badge">{{np()}}</span></caption>
   <tr ng-repeat="p in list()">
     <td>
-      {{p.name}}
+      <a ng-href="#/portfolioShow/{{p.id}}">
+        {{p.name}}
+      </a>
       &nbsp;
       <span class="badge">{{nass(p.id)}}</span>
     </td>
-    <td>
-      <a class="btn btn-xs btn-default" ng-href="#/portfolioShow/{{p.id}}">
-        <span class="glyphicon glyphicon-pencil"></span>
-      </a>
-
-      <button class="btn btn-xs btn-danger" ng-click="del(p.id)">
-        <span class="glyphicon glyphicon-remove"></span>
-      </button>
-    </td>
   </tr>
 </table>
-
-<div ng-show="!list()" role="alert">
-  No portfolios
-</div>
 
 

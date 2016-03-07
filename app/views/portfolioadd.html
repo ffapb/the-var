@@ -1,3 +1,4 @@
 Portfolio name:
 <input type="text" ng-model="newP.name" />
-<button class="btn" ng-click="add()">Add</button>
+<button class="btn btn-primary" ng-click="add()" ng-disabled="exists()">Add</button>
+<div class="alert" ng-show="exists()">Name already exists</div>

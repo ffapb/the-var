@@ -16,7 +16,8 @@ angular.module('theVarApp')
         var src='mod';
         var sss = $scope.asyncSelected.Symbol;
         $scope.asyncSelected=null;
-        var url = '#/assetShow/'+src+'/'+sss+'?pid='+$routeParams.pid;
+        var url = '#/assetShow/'+src+'/'+sss;
+        if($routeParams.pid) { url+='?pid='+$routeParams.pid; }
         window.location.href=url;
     };
 
@@ -34,10 +35,6 @@ angular.module('theVarApp')
 
     $scope.getQuote = function(val) {
       return markitOnDemand.quote(val);
-    };
-
-    $scope.clearAll=function() {
-       localStorage.clear();
     };
 
   });

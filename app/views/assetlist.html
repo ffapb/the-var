@@ -1,0 +1,27 @@
+<a class="btn btn-primary" href="/#assetAdd">
+  <span class="glyphicon glyphicon-plus"></span>
+</a>
+
+<div ng-show="!na()" role="alert">
+  No assets
+</div>
+
+<table class="table" ng-show="na()">
+  <caption>Assets &nbsp; <span class="badge">{{np()}}</span></caption>
+  <tr ng-repeat="a in list()">
+    <td>{{a.src}}
+    <td>{{a.lookup.Symbol}}</td>
+    <td><span class="badge">{{nport(a.src,a.lookup.Symbol)}}</span></td>
+    <td>
+      <a class="btn btn-xs btn-default" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}">
+        <span class="glyphicon glyphicon-pencil"></span>
+      </a>
+
+      <button class="btn btn-xs btn-danger" ng-click="del(a.src,a.lookup.Symbol)">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+    </td>
+  </tr>
+</table>
+
+

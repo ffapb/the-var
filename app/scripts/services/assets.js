@@ -28,6 +28,20 @@ angular.module('theVarApp')
       },
       saveToLs: function() {
         localStorage.setItem('aaa',angular.toJson(aaa));
+      },
+      na: function() {
+        return Object.keys(aaa).length;
+      },
+      del: function(src,symbol) {
+        if(!this.exists(src,symbol)) { return; }
+        delete aaa[src][symbol];
+        if(Object.keys(aaa[src]).length===0) { delete aaa[src]; }
+        this.saveToLs();
+      },
+      exists: function(src,symbol) {
+        if(!aaa.hasOwnProperty(src)) { return false; }
+        if(!aaa[src].hasOwnProperty(symbol)) { return false; }
+        return true;
       }
     };
   });

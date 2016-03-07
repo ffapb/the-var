@@ -1,39 +1,34 @@
-<a ng-click="goback()" class="btn btn-default">
-  Back to portfolio {{getPid()}}
-</a>
-
 <div ng-show="!pendingStock">
   None selected
 </div>
 
   <table class="table" ng-show="!!pendingStock">
-    <tr>
-      <th>&nbsp;</th>
-      <th>Symbol</th>
-      <th>Name</th>
-      <th>Exchange</th>
-      <th>History</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th>
-        VaR (95%)
-        &nbsp;
-        based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
-      </th>
-    </tr>
     <tbody>
+      <tr><td>Source</td><td>{{pendingStock.src}}</td></tr>
+      <tr><td>Symbol</td><td>{{pendingStock.lookup.Symbol}}</td></tr>
+      <tr><td>Name</td><td>{{pendingStock.lookup.Name}}</td></tr>
+      <tr><td>Exchange</td><td>{{pendingStock.lookup.Exchange}}</td></tr>
       <tr>
-        <td>{{pendingStock.lookup.Symbol}}</td>
-        <td>{{pendingStock.lookup.Name}}</td>
-        <td>{{pendingStock.lookup.Exchange}}</td>
+        <td>History</td>
         <td>
           <div>{{pendingStock.history.length}} points</div>
           <div>{{pendingStock.historyMeta.mindate}} .. {{pendingStock.historyMeta.maxdate}}</div>
+          <div>
+            <button class="btn btn-xs" ng-click="getChart()">
+              <span class="glyphicon glyphicon-refresh"></span>
+            </button>
+          </div>
+          <div jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
         </td>
+      </tr>
+      <tr>
+        <td>Empirical distribution</td>
         <td>
           <div jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar" ng-if="pendingStock.pnlsEdf"></div>
         </td>
+      </tr>
+      <tr>
+        <td></td>
         <td>
           <div>
             <a href="http://www.reuters.com/finance/stocks/chart?symbol={{pendingStock.lookup.Symbol}}" target="_blank">Source</a>
@@ -44,33 +39,61 @@
             </button>
           </div>
         </td>
+      </tr>
+      <tr>
         <td>
-          <button class="btn btn-xs" ng-click="getChart()">
-            <span class="glyphicon glyphicon-refresh"></span>
-          </button>
+          VaR (95%)
+          &nbsp;
+          based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
         </td>
         <td>
           {{100*calculateVaR(pendingStock,95)|number:2}} %
         </td>
       </tr>
       <tr>
-        <td colspan=9>
-          <div jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
+        <td>In portfolios:</td>
+        <td>
+          <span ng-repeat="ip in inPortfolios(false)">
+            <a ng-href="#/portfolioShow/{{ip.id}}">{{ip.name}}</a>
+            &nbsp;&nbsp;
+          </span>
+          <span ng-show="!inPortfolios(false).length">None</span>
+        </td>
+      </tr>
+      <tr ng-show="inPortfolios(true).length">
+        <td>Add to portfolio:</td>
+        <td>
+          <span ng-repeat="ip in inPortfolios(true)">
+            <button ng-click="add2(ip.id)" class="btn btn-primary">
+             {{ip.name}}
+            </button>
+            &nbsp;
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <a ng-click="goback()" class="btn btn-danger" ng-show="getPid()">
+            Cancel
+          </a>
         </td>
       </tr>
     </tbody>
   </table>
 
-<div ng-show="inPortfolios().length>0">
-  In portfolios: {{inPortfolios().join(", ")}}
-</div>
-
-<div ng-show="notInPortfolios().length>0">
-  Add to portfolio: &nbsp;
-  <span ng-repeat="pid in notInPortfolios()">
-    <button ng-click="add2(pid)" class="btn btn-primary">
-   {{pid}}
-    </button>
-    &nbsp;
+<div ng-show="!inPortfolios(true).length || noPortfolios()" class="alert alert-warning text-center">
+  <span ng-show="!inPortfolios(true).length">
+    Add more portfolios
   </span>
+
+  <span ng-show="noPortfolios()" class="alert alert-warning">
+    No portfolios to add to. Add a portfolio first.
+  </span>
+
+  &nbsp;
+
+  <a class="btn btn-primary" href="/#portfolioAdd">
+    <span class="glyphicon glyphicon-plus"></span>
+  </a>
 </div>

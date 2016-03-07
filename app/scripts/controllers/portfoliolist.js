@@ -20,10 +20,6 @@ angular.module('theVarApp')
       return Portfolios.list();
     };
 
-    $scope.del=function(id) {
-      Portfolios.del(id);
-    };
-
     $scope.nass=function(id) {
       var a = Portfolios.list();
       if(!a.hasOwnProperty(id)) {
