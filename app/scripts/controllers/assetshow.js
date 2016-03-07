@@ -73,7 +73,10 @@ angular.module('theVarApp')
 
     $scope.getChart = function() {
       Assets.getChart(src,symbol,function(ps) {
-        $scope.pendingStock = ps;
+        // http://stackoverflow.com/a/171256/4126114
+        for(var attrname in ps) {
+          $scope.pendingStock[attrname] = ps[attrname];
+        }
       });
     };
 

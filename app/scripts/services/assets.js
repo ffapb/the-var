@@ -16,7 +16,7 @@ angular.module('theVarApp')
     }
 
     var gcs=0;
-    var pendingStock=false;
+    var pendingStock={};
 
     return {
       add: function(x) {
@@ -50,20 +50,14 @@ angular.module('theVarApp')
       },
 
       getChart: function(src,symbol,cb) {
-        if(!aaa.hasOwnProperty(src)) {
-          return;
-        }
-
-        if(!aaa[src].hasOwnProperty(symbol)) {
-          return;
-        }
-
         gcs=1;
-        pendingStock = angular.copy(aaa[src][symbol]);
+        pendingStock = {};
+        var self = this;
         if(src==='mod') {
           return markitOnDemand.interactiveChart(symbol).then(
             function(response) {
-              this.treatChart(response,cb);
+              gcs=0;
+              self.treatChart(response,cb);
             },
             function() {
               gcs=2;
@@ -84,7 +78,6 @@ angular.module('theVarApp')
 
       treatChart: function(response,cb) {
         console.log('treat chart');
-          gcs=0;
           console.log(response);
           if(response.data.Elements.length===0) {
             //window.alert('No data');
