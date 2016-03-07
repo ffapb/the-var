@@ -106,7 +106,6 @@ angular.module('theVarApp')
         $scope.pendingStock.pnlsSort=pnlsSort;
 
         $scope.pendingStock.pnlsEdf=$scope.edf(pnls,1/100);
-
         $scope.pendingStock.selected=true;
 
       });

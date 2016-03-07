@@ -7,6 +7,7 @@
 * add asset percentage of portfolio
 * add edit portfolio name
 * refresh prices from portfolioshow
+* GE listed on NYSE and BATS ... how to pass exchange to assetshow?
 
 # 2016-03-03
 * add NAV button for portfolios

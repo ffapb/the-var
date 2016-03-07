@@ -7,7 +7,7 @@
  * # jqSparkline
  */
 angular.module('theVarApp')
-  .directive('jqSparkline', function () {
+  .directive('jqSparkline', function ($timeout) {
 /*    return {
       template: '<div></div>',
       restrict: 'E',
@@ -25,11 +25,15 @@ angular.module('theVarApp')
                 opts.type = attrs.type || 'line';
 
                 scope.$watch(attrs.ngModel, function () {
+                  $timeout(function() {
                     render();
+                  },100);
                 });
                 
                 scope.$watch(attrs.opts, function(){
-                  render();
+                  $timeout(function() {
+                    render();
+                  },100);
                 }
                   );
                 var render = function () {
