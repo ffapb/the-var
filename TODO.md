@@ -1,6 +1,5 @@
 # 2016-03-07
-* redefinition of ffaConfig1 in services ffa and ffahistory to avoid circular dependency with service assets
-* broke price retrieval
+* fix 'abort' for ffa retrieval
 
 # 2016-03-06
 * how to show in portfolioshow that dates of the security prices used

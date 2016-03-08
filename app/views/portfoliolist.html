@@ -33,10 +33,21 @@
 
 <hr>
 
-<button class="btn" ng-click="ffaPortfolios()">Retrieve FFA portfolios</button>
+<button class="btn" ng-click="ffaPortfolios()" ng-disabled="ffaPStatus().r==1">
+  Retrieve FFA portfolios
+</button>
 
-<div ng-show="fc1s==1">Loading FFA portfolios</div>
-<div ng-show="fc1s==2">Error in FFA portfolios</div>
+<div ng-show="ffaPStatus().r==1">
+  <button class="btn" ng-click="ffaAbort()">
+    Abort
+  </button>
+  &nbsp;
+  Loading FFA portfolios:
+  {{ffaPStatus().i}} / {{ffaPStatus().n}}
+  &nbsp;
+  Last n points: {{ffaPStatus().l}}
+</div>
+<div ng-show="ffaPStatus().r==2">Error in FFA portfolios</div>
 
 <div ng-show="ffaN()">
   FFA portfolios

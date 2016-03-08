@@ -8,7 +8,7 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios,ActivateNavBar) {
+  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios,ActivateNavBar,ffa) {
 
     ActivateNavBar.assets();
 
@@ -72,11 +72,15 @@ angular.module('theVarApp')
     $scope.gcs=function() { return Assets.getGcs(); };
 
     $scope.getChart = function() {
-      Assets.getChart(src,symbol,function(ps) {
-        // http://stackoverflow.com/a/171256/4126114
-        for(var attrname in ps) {
-          $scope.pendingStock[attrname] = ps[attrname];
-        }
+      ffa.ffaConfig1().then(function(config) {
+        console.log('conf',config);
+        Assets.getChart(src,symbol,config)
+          .then(function(ps) {
+            // http://stackoverflow.com/a/171256/4126114
+            for(var attrname in ps) {
+              $scope.pendingStock[attrname] = ps[attrname];
+            }
+          });
       });
     };
 

@@ -12,9 +12,9 @@ angular.module('theVarApp')
 
     ActivateNavBar.portfolios();
 
-    $scope.ffaPortfolios = function() {
-      ffa.portfolios();
-    };
+    $scope.ffaPortfolios = function() { ffa.portfolios(); };
+    $scope.ffaPStatus = function() { return ffa.getStatus(); };
+    $scope.ffaAbort = function() { ffa.setAbort(); };
 
     $scope.np = function() {
       return Portfolios.np();
