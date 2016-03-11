@@ -17,10 +17,25 @@ angular.module('theVarApp')
     var abort = false;
     var al; // temp variable for looping
     var newP;
+    var available = 0;
 
     return {
       np: function() { return Object.keys(fff).length; },
+
+      getAvailable: function() {
+        return available;
+      },
+      checkAvailable: function() {
+        available=1;
+        $http.get('/the-var-config.json')
+          .then(function() {
+            available = 2;
+          }, function() {
+            available = 0;
+          });
+      },
       ffaConfig1: function() {
+        if(!available) { return false; }
         return $http.get('/the-var-config.json').then(function(response) {
           console.log('fc11',response.data);
           config = response.data;

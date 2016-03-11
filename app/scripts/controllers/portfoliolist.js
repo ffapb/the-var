@@ -11,9 +11,14 @@ angular.module('theVarApp')
   .controller('PortfoliolistCtrl', function ($scope, Portfolios, ActivateNavBar, Assets, varCalc,ffa) {
 
     ActivateNavBar.portfolios();
+    angular.element(document).ready(function () {
+      ffa.checkAvailable();
+    });
 
     $scope.ffaPortfolios = function() { ffa.portfolios(); };
     $scope.ffaPStatus = function() { return ffa.getStatus(); };
+    $scope.ffaGA = function() { return ffa.getAvailable(); };
+    $scope.ffaCA = function() { return ffa.checkAvailable(); };
     $scope.ffaAbort = function() { ffa.setAbort(); };
 
     $scope.np = function() {
