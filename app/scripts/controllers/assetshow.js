@@ -72,16 +72,25 @@ angular.module('theVarApp')
     $scope.gcs=function() { return Assets.getGcs(); };
 
     $scope.getChart = function() {
-      ffa.ffaConfig1().then(function(config) {
-        console.log('conf',config);
-        Assets.getChart(src,symbol,config)
-          .then(function(ps) {
-            // http://stackoverflow.com/a/171256/4126114
-            for(var attrname in ps) {
-              $scope.pendingStock[attrname] = ps[attrname];
-            }
-          });
-      });
+      var fc = ffa.ffaConfig1();
+      if(!!fc) {
+        fc.then(function(config) {
+          console.log('conf',config);
+          $scope.getChartCore(config);
+        });
+      } else {
+        $scope.getChartCore(false);
+      }
+    };
+
+    $scope.getChartCore=function(config) {
+      Assets.getChart(src,symbol,config)
+        .then(function(ps) {
+          // http://stackoverflow.com/a/171256/4126114
+          for(var attrname in ps) {
+            $scope.pendingStock[attrname] = ps[attrname];
+          }
+        });
     };
 
     $scope.showChart=function(p) {
