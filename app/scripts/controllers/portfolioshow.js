@@ -31,7 +31,9 @@ angular.module('theVarApp')
       var o = a.map(function(x) {
         if(al.hasOwnProperty(x.src)) {
           if(al[x.src].hasOwnProperty(x.symbol)) {
-            return al[x.src][x.symbol];
+            var o2 = al[x.src][x.symbol];
+            o2.pct = x.pct;
+            return o2;
           }
         }
         return null;
@@ -68,5 +70,8 @@ angular.module('theVarApp')
       }
     };
 
+    $scope.assetPct=function(a) {
+      Portfolios.assetPct(pid,a);
+    };
 
   });

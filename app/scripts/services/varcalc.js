@@ -71,10 +71,24 @@ angular.module('theVarApp')
           return;
         }
 
+        var totalPct = Object.keys(portfolio).filter(function(x) {
+          return portfolio[x].selected;
+        }).map(function(k) {
+          return Math.abs(portfolio[k].pct);
+        }).reduce(function(a,b) {
+          if(b) { return a+b; } else { return a; }
+        }, 0);
+
         var pnls = Object.keys(portfolio).filter(function(x) {
           return portfolio[x].selected;
         }).map(function(k) {
-          return portfolio[k].pnlsSort;
+          if(!portfolio[k].pct||!totalPct) {
+            return [];
+          } else {
+            return portfolio[k].pnlsSort.map(function(y) {
+              return y*portfolio[k].pct/totalPct;
+            });
+          }
         }).reduce(function(a,b) {
           if(b) {
             return $.merge(a,b);

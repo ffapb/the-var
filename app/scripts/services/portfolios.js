@@ -42,6 +42,7 @@ angular.module('theVarApp')
         this.saveToLs();
       },
       saveToLs: function() {
+        console.log('save to ls',ppp);
         localStorage.setItem('ppp',angular.toJson(ppp));
       },
       addAsset: function(pid,aaa) {
@@ -100,6 +101,20 @@ angular.module('theVarApp')
           id=1+id;
         }
         return id;
+      },
+      assetPct: function(pid,aaa) {
+        if(!ppp.hasOwnProperty(pid)) {
+          console.error('Invalid portfolio ID '+pid);
+          return false;
+        }
+
+        ppp[pid].assets = ppp[pid].assets.map(function(x) {
+          if(x.src===aaa.src || x.symbol===aaa.lookup.Symbol) {
+            x.pct = aaa.pct;
+          }
+          return x;
+        });
+        this.saveToLs();
       }
     };
   });

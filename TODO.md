@@ -1,3 +1,11 @@
+# 2016-03-14
+* add pct0 field from mf and initialize pct = pct0
+ * pct0 is non-editable, whereas pct is editable (like the manual)
+* change VaR calculation method
+ * I currently only sort asset returns in a portfolio to get the portfolio VaR
+ * I should consider the dates at which returns happen and align their additions and weighting
+  * this would give a lower VaR
+
 # 2016-03-07
 * fix 'abort' for ffa retrieval
 
