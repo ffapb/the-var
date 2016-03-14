@@ -61,12 +61,20 @@
           </td>
         </tr>
         <tr>
-          <td>
-            VaR (95%)
-            &nbsp;
-            based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
-          </td>
-          <td>{{100*calculateVaR(pendingStock,95)|number:2}} %</td>
+          <td>VaR 95%, 1-day</td>
+          <td>{{100*calculateVaR(pendingStock,95,1)|number:2}} %</td>
+        </tr>
+        <tr>
+          <td>VaR 95%, 7-day</td>
+          <td>{{100*calculateVaR(pendingStock,95,7)|number:2}} %</td>
+        </tr>
+        <tr>
+          <td>VaR 99%, 1-day</td>
+          <td>{{100*calculateVaR(pendingStock,99,1)|number:2}} %</td>
+        </tr>
+        <tr>
+          <td>VaR 99%, 7-day</td>
+          <td>{{100*calculateVaR(pendingStock,99,7)|number:2}} %</td>
         </tr>
         <tr>
           <td>In portfolios:</td>

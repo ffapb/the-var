@@ -15,7 +15,22 @@
 </div>
 
 <div ng-show="alist.length">
-  <div>Portfolio VaR 95%: {{100*portfolioVaR(95)|number:2}} %</div>
+  <div>
+    <table class="table" style="width:40%">
+      <caption>Portfolio VaR</caption>
+      <tr><th>&nbsp;</th><th>95%</th><th>99%</th></tr>
+      <tr>
+        <th>1-day</th>
+        <td>{{100*portfolioVaR(95,1)|number:2}} %</td>
+        <td>{{100*portfolioVaR(99,1)|number:2}} %</td>
+      </tr>
+      <tr>
+        <th>7-day</th>
+        <td>{{100*portfolioVaR(95,7)|number:2}} %</td>
+        <td>{{100*portfolioVaR(99,7)|number:2}} %</td>
+      </tr>
+    </table>
+  </div>
 
   <br>
 
@@ -26,7 +41,10 @@
       <th>Name</th>
       <th>Exchange</th>
       <th>&nbsp;</th>
-      <th>VaR (95%)</th>
+      <th>VaR 95%, 1-day</th>
+      <th>VaR 95%, 7-day</th>
+      <th>VaR 99%, 1-day</th>
+      <th>VaR 99%, 7-day</th>
       <th>Weight</th>
       <th>&nbsp;</th>
     </tr>
@@ -38,9 +56,10 @@
       <td>
         <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
       </td>
-      <td nowrap>
-        {{100*calculateVaR(a,95)|number:2}} %
-      </td>
+      <td nowrap>{{100*calculateVaR(a,95,1)|number:2}} %</td>
+      <td nowrap>{{100*calculateVaR(a,95,7)|number:2}} %</td>
+      <td nowrap>{{100*calculateVaR(a,99,1)|number:2}} %</td>
+      <td nowrap>{{100*calculateVaR(a,99,7)|number:2}} %</td>
       <td nowrap>
         <input type="number" min=0 max=100 step=0.1 ng-value="a.pct?a.pct:0" style="width:5em" ng-model="a.pct" ng-change="assetPct(a)">
         <div ng-show="a.src=='mf'" class="text-info">MF: {{a.pct}}</div>

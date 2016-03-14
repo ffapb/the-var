@@ -97,8 +97,8 @@ angular.module('theVarApp')
       console.log(p);
     };
 
-    $scope.calculateVaR = function(p,percentile) {
-      return varCalc.calculateVaR(p,percentile);
+    $scope.calculateVaR = function(p,percentile,nday) {
+      return varCalc.calculateVaR(p,percentile,nday);
     };
 
     $scope.edf = function(data,ss) {

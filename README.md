@@ -14,6 +14,7 @@ The data comes from [markit on demand Apis v2](http://dev.markitondemand.com/MOD
 * asset percentage of portfolio
 * get portfolios from FFA backend if available
 * edit portfolio name
+* VaR: 95%, 99%, 1-day, 7-day
 
 # Similar apps
 Similar applications/documentation exist online, but they had some limits:

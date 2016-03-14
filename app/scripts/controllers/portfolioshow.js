@@ -43,16 +43,16 @@ angular.module('theVarApp')
 
     $scope.alist = $scope.list();
 
-    $scope.calculateVaR = function(p,percentile) {
-      return varCalc.calculateVaR(p,percentile);
+    $scope.calculateVaR = function(p,percentile,nday) {
+      return varCalc.calculateVaR(p,percentile,nday);
     };
 
     $scope.edf = function(data,ss) {
       return varCalc.edf(data,ss);
     };
 
-    $scope.portfolioVaR=function(percentile) {
-      return varCalc.portfolioVaR(percentile,$scope.alist);
+    $scope.portfolioVaR=function(percentile,nday) {
+      return varCalc.portfolioVaR(percentile,$scope.alist,nday);
     };
 
     $scope.delAsset = function(a) {

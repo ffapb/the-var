@@ -12,15 +12,24 @@ angular.module('theVarApp')
     // AngularJS will instantiate a singleton by calling "new" on this function
     return {
       // https://gist.github.com/deenar/f97d517d3188fc7b5302
-      calculateVaR: function(p,percentile) {
-        if(!p.pnlsSort) {
-          return;
-        }
-        if(p.pnlsSort.length===0) {
-          return;
+      calculateVaR: function(p,percentile,nday) {
+        if(!p.history2) { return; }
+        if(p.history2.length===0) { return; }
+        if(nday<=0) { return; }
+
+        // calculate n-day returns (including 1-day)
+        var pnls =[];
+        pnls.push(0);
+        for(var i=1;i<p.history2.length;i++) {
+          if ( ( i % nday ) === 0 ) {
+            pnls.push((p.history2[i]/p.history2[i-nday]-1)); // to be able to compare /nday
+          }
         }
 
-        var pnls = p.pnlsSort;
+        pnls.sort(function(a,b) {
+          return a-b;
+        });
+
         var size = pnls.length;
         var indexR = (size * ((100 - percentile) / 100)) - 1;
         var upper = Math.min(size-1,Math.max(0,Math.ceil(indexR)));
@@ -66,11 +75,9 @@ angular.module('theVarApp')
         return op;
       },
 
-      // https://gist.github.com/deenar/f97d517d3188fc7b5302
-      portfolioVaR: function(percentile,portfolio) {
-        if(!portfolio) {
-          return;
-        }
+      portfolioVaR: function(percentile,portfolio,nday) {
+        if(!portfolio) { return; }
+        if(nday<=0) { return; }
 
         var totalPct = Object.keys(portfolio).filter(function(x) {
           return portfolio[x].selected;
@@ -80,21 +87,23 @@ angular.module('theVarApp')
           if(b) { return a+b; } else { return a; }
         }, 0);
 
-        var pnls = Object.keys(portfolio).filter(function(x) {
+        // construct hypothetical portfolio prices
+        var prices = Object.keys(portfolio).filter(function(x) {
           return portfolio[x].selected;
         }).map(function(k) {
           if(!portfolio[k].pct||!totalPct) {
             return [];
           } else {
             // This was the 1st implementation
+            // https://gist.github.com/deenar/f97d517d3188fc7b5302
             //return portfolio[k].pnlsSort.map(function(y) {
             //  return y*portfolio[k].pct/totalPct;
             //});
 
             return portfolio[k].pnls.map(function(y) {
-              return y*portfolio[k].pct/totalPct;
+              var o = y*portfolio[k].pct/totalPct;
+              return o;
             });
-
           }
         }).reduce(function(a,b) {
           if(!a) { return b; }
@@ -116,13 +125,22 @@ angular.module('theVarApp')
             o.push(a[i]+b[i]);
           }
           return o;
-        }, []);
-        if(!pnls) { return 0; }
-        if(!pnls.length) { return 0; }
-        pnls.sort(function(a,b) {
-            return a-b;
-          });
-        return this.calculateVaR({pnlsSort: pnls}, percentile);
+        }, []).map(function(x) {
+          return 1+x;
+        });
+
+        if(!prices) { return 0; }
+        if(!prices.length) { return 0; }
+
+        prices = prices.reduce(function(a,b) {
+          // cumulative product
+          a.push(a[a.length-1]*b);
+          return a;
+        },[prices[0]]).map(function(x) {
+          return x*100;
+        });
+
+        return this.calculateVaR({history2: prices}, percentile,nday);
       }
 
     };

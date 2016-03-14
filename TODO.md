@@ -7,6 +7,7 @@
   * this would give a lower VaR instead of just a weighted average of VaRs
   * due to unalignment of price drops between uncorrelated stocks
  * method 3: calculate standard deviation and instead of empirical distribution, use normal distribution + account for covariances
+* nday var: portfolio of single stock having var different than the stock var
 
 # 2016-03-07
 * fix 'abort' for ffa retrieval
@@ -23,8 +24,6 @@
 * automatic refresh of prices
 * simplify postprocessing after getting interactive chart data
 * work on unit tests
-* add 95% var setting to user
-* add 1-day or 7-day var setting to user
 * add ability to upload data to a server 
  * similar to dis-man upload to repo
 * add link to list of securities?
