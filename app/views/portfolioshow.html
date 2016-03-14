@@ -1,5 +1,5 @@
 <h2>
-  <span>Portfolio: {{portfolio.name}}</span>
+  <span>Portfolio: <input type="text" ng-model="portfolio.name" ng-change="updateName()" ></span>
   <span class="pull-right">
     <a class="btn btn-xs btn-primary" href="#/assetAdd?pid={{portfolio.id}}">
       Add asset
@@ -26,11 +26,7 @@
       <th>Name</th>
       <th>Exchange</th>
       <th>&nbsp;</th>
-      <th>
-        VaR (95%)
-        &nbsp;
-        based on <a href="https://gist.github.com/deenar/f97d517d3188fc7b5302" target="_blank">this</a>
-      </th>
+      <th>VaR (95%)</th>
       <th>Weight</th>
       <th>&nbsp;</th>
     </tr>
@@ -42,7 +38,7 @@
       <td>
         <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
       </td>
-      <td>
+      <td nowrap>
         {{100*calculateVaR(a,95)|number:2}} %
       </td>
       <td nowrap>

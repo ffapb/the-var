@@ -86,9 +86,15 @@ angular.module('theVarApp')
           if(!portfolio[k].pct||!totalPct) {
             return [];
           } else {
-            return portfolio[k].pnlsSort.map(function(y) {
+            // This was the 1st implementation
+            //return portfolio[k].pnlsSort.map(function(y) {
+            //  return y*portfolio[k].pct/totalPct;
+            //});
+
+            return portfolio[k].pnls.map(function(y) {
               return y*portfolio[k].pct/totalPct;
             });
+
           }
         }).reduce(function(a,b) {
           if(!a) { return b; }

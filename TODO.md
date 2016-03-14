@@ -1,10 +1,12 @@
 # 2016-03-14
 * add pct0 field from mf and initialize pct = pct0
  * pct0 is non-editable, whereas pct is editable (like the manual)
-* change VaR calculation method
- * I currently only sort asset returns in a portfolio to get the portfolio VaR
- * I should consider the dates at which returns happen and align their additions and weighting
-  * this would give a lower VaR
+* changing VaR calculation method
+ * method 1 (deprecating): sort asset returns in a portfolio to get the portfolio VaR
+ * method 2: consider the dates at which returns happen and align their additions and weighting
+  * this would give a lower VaR instead of just a weighted average of VaRs
+  * due to unalignment of price drops between uncorrelated stocks
+ * method 3: calculate standard deviation and instead of empirical distribution, use normal distribution + account for covariances
 
 # 2016-03-07
 * fix 'abort' for ffa retrieval
@@ -13,8 +15,6 @@
 * how to show in portfolioshow that dates of the security prices used
 * add "clear all localstorage" somewhere
 * assetadd show json format result
-* add asset percentage of portfolio
-* add edit portfolio name
 * refresh prices from portfolioshow
 * GE listed on NYSE and BATS ... how to pass exchange to assetshow?
 

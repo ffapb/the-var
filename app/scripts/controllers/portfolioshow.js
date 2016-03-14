@@ -74,4 +74,8 @@ angular.module('theVarApp')
       Portfolios.assetPct(pid,a);
     };
 
+    $scope.updateName=function() {
+      Portfolios.updateName($scope.portfolio.id,$scope.portfolio.name);
+    };
+
   });

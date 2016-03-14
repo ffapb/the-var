@@ -11,7 +11,9 @@ The data comes from [markit on demand Apis v2](http://dev.markitondemand.com/MOD
 * unlimited portfolios
 * unlimited assets
 * asset VaR and portfolio VaR
-
+* asset percentage of portfolio
+* get portfolios from FFA backend if available
+* edit portfolio name
 
 # Similar apps
 Similar applications/documentation exist online, but they had some limits:
