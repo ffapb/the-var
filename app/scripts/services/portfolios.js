@@ -109,7 +109,7 @@ angular.module('theVarApp')
         }
 
         ppp[pid].assets = ppp[pid].assets.map(function(x) {
-          if(x.src===aaa.src || x.symbol===aaa.lookup.Symbol) {
+          if(x.src===aaa.src && x.symbol===aaa.lookup.Symbol) {
             x.pct = aaa.pct;
           }
           return x;

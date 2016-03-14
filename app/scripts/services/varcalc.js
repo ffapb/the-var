@@ -65,6 +65,7 @@ angular.module('theVarApp')
         }*/
         return op;
       },
+
       // https://gist.github.com/deenar/f97d517d3188fc7b5302
       portfolioVaR: function(percentile,portfolio) {
         if(!portfolio) {
@@ -90,17 +91,33 @@ angular.module('theVarApp')
             });
           }
         }).reduce(function(a,b) {
-          if(b) {
-            return $.merge(a,b);
-          } else {
+          if(!a) { return b; }
+          if(!a.length) { return b; }
+          if(!b) { return a; }
+          if(!b.length) { return a; }
+
+          // This was the 1st implementation
+          // It's incorrect for portfolios since the weighting before the sorting reduces the VaR for no adequate reason
+          // return $.merge(a,b);
+
+          if(a.length!==b.length) {
+            console.error('Cannot add pnls',a.length,b.length);
             return a;
           }
+
+          var o=[];
+          for(var i=0;i<a.length;i++) {
+            o.push(a[i]+b[i]);
+          }
+          return o;
         }, []);
+        if(!pnls) { return 0; }
         if(!pnls.length) { return 0; }
         pnls.sort(function(a,b) {
             return a-b;
           });
         return this.calculateVaR({pnlsSort: pnls}, percentile);
       }
+
     };
   });
