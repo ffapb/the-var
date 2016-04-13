@@ -16,6 +16,8 @@ angular.module('theVarApp')
     });
 
     $scope.ffaPortfolios = function() { ffa.portfolios(); };
+    $scope.ffaReadyForPrices = function() { return ffa.readyForPrices(); };
+    $scope.ffaPrices = function() { ffa.portfolioPrices(); };
     $scope.ffaPStatus = function() { return ffa.getStatus(); };
     $scope.ffaGA = function() { return ffa.getAvailable(); };
     $scope.ffaCA = function() { return ffa.checkAvailable(); };

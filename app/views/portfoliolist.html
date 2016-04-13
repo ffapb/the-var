@@ -35,15 +35,19 @@
 
 <div ng-show="ffaGA()!=2">
   FFA portfolios not available
-  <button class="btn btn-info" ng-click="ffaCA()" ng-disabled="ffaGA()==1" ng-show="ffaGA()!=2">
+  <button class="btn btn-info" ng-click="ffaCA()" ng-disabled="ffaGA()==1">
     <span ng-show="ffaGA()==0" class="glyphicon glyphicon-repeat"></span>
     <span ng-show="ffaGA()==1">Checking...</span>
   </button>
 </div>
 
 <div ng-show="ffaGA()==2">
-  <button class="btn btn-info" ng-click="ffaPortfolios()" ng-disabled="ffaPStatus().r==1" ng-show="ffaGA()==2">
+  <button class="btn btn-info" ng-click="ffaPortfolios()" ng-disabled="ffaPStatus().r==1">
     Retrieve FFA portfolios
+  </button>
+
+  <button class="btn btn-info" ng-click="ffaPrices()" ng-disabled="!ffaReadyForPrices()||ffaPStatus().r==1">
+    Retrieve FFA prices
   </button>
 
   <div ng-show="ffaPStatus().r==1">
@@ -51,7 +55,7 @@
       Abort
     </button>
     &nbsp;
-    Loading FFA portfolios:
+    Loading FFA prices:
     {{ffaPStatus().i}} / {{ffaPStatus().n}}
     &nbsp;
     Last n points: {{ffaPStatus().l}}

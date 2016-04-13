@@ -1,3 +1,8 @@
+# 2016-04-13
+* get pct from mf for retrieve ffa portfolios
+* why does the count of "loading ffa prices" not complete to 500?
+* removed dubai from my config but still showing up when "retrieve ffa portfolios"... how?
+
 # 2016-03-14
 * add pct0 field from mf and initialize pct = pct0
  * pct0 is non-editable, whereas pct is editable (like the manual)

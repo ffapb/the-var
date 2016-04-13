@@ -49,8 +49,7 @@ angular.module('theVarApp')
       },
 
       getChart: function(src,symbol,config) {
-        console.log('Getting prices for '+src+', '+symbol); 
-
+        console.log('Getting prices for '+src+': '+symbol); 
         gcs=1;
         var self=this;
         if(src==='mod') {
@@ -60,11 +59,27 @@ angular.module('theVarApp')
               function() { gcs=2; }
             );
         } else if(src==='FFA MF') {
-          var url = config.endPoints.prices+'?format=json&tkr=["'+symbol+'"]';
-          var o = $http.get(url).then(
-              function(response) { gcs=0; return(self.treatChart(response)); },
-              function() { gcs=2; });
-          return o;
+          var symbol2=symbol;
+          if( typeof symbol !== 'string' && src==="FFA MF" && Object.prototype.toString.call(symbol) === '[object Array]' ) {
+            symbol2=symbol.join('","');
+          }
+
+          var url = config.endPoints.prices+'?format=json&tkr=["'+symbol2+'"]';
+          console.log("url",url);
+          return $http.get(url).then(
+            function(response) {
+              console.log("res ass",url,response);
+              gcs=0;
+              var x={};
+              for(var i in response.data) {
+                console.log("_____",i,response.data[i]);
+                x[i]=self.treatChart(response.data[i]);
+              }
+
+              return(x);
+            },
+            function() { gcs=2; }
+          );
         } else {
           console.error('Unsupported source');
         }
@@ -73,13 +88,13 @@ angular.module('theVarApp')
       treatChart: function(response) {
         console.log('treat chart');
         console.log(response);
-        if(response.data.Elements.length===0) {
+        if(response.Elements.length===0) {
           //window.alert('No data');
           return;
         }
 
-        var dates = response.data.Dates;
-        var prices = response.data.Elements[0].DataSeries.close.values;
+        var dates = response.Dates;
+        var prices = response.Elements[0].DataSeries.close.values;
         var o = [];
         for(var i=0;i<dates.length;i++) {
           o.push({'date':dates[i],'close':prices[i]});
