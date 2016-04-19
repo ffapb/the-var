@@ -1,7 +1,15 @@
+# 2016-04-19
+* Desirable features todo
+ * 20% drop since inception
+ * 10% of portfolio value as var limit
+ * 20% of bank capital as var limit
+ * display YTD, MTD, inception to date
+ * add asset class (pie chart distribution)
+ * FFA120
+* how to add returns of unequal lengths?
+
 # 2016-04-13
 * get pct from mf for retrieve ffa portfolios
-* why does the count of "loading ffa prices" not complete to 500?
-* removed dubai from my config but still showing up when "retrieve ffa portfolios"... how?
 
 # 2016-03-14
 * add pct0 field from mf and initialize pct = pct0

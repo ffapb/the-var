@@ -116,7 +116,7 @@ angular.module('theVarApp')
           // return $.merge(a,b);
 
           if(a.length!==b.length) {
-            console.error('Cannot add pnls',a.length,b.length);
+            console.error('Cannot add pnls of different lengths',a.length,b.length);
             return a;
           }
 

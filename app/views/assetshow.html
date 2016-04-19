@@ -6,6 +6,7 @@
     <tbody>
       <tr><td width="10em">Source</td><td>{{pendingStock.src}}</td></tr>
       <tr><td>Symbol</td><td>{{pendingStock.lookup.Symbol}}</td></tr>
+      <tr><td>Symbol 2</td><td>{{pendingStock.lookup.Symbol2}}</td></tr>
       <tr><td>Name</td><td>{{pendingStock.lookup.Name}}</td></tr>
       <tr><td>Exchange</td><td>{{pendingStock.lookup.Exchange}}</td></tr>
       <tbody ng-show="!pendingStock.history">
@@ -76,6 +77,8 @@
           <td>VaR 99%, 7-day</td>
           <td>{{100*calculateVaR(pendingStock,99,7)|number:2}} %</td>
         </tr>
+      </tbody>
+      <tbody>
         <tr>
           <td>In portfolios:</td>
           <td>

@@ -37,25 +37,27 @@
   <table class="table">
     <tr>
       <th>&nbsp;</th>
+      <th>&nbsp;</th>
       <th>Symbol</th>
+      <th>Alternatives</th>
       <th>Name</th>
       <th>Exchange</th>
-      <th>&nbsp;</th>
       <th>VaR 95%, 1-day</th>
       <th>VaR 95%, 7-day</th>
       <th>VaR 99%, 1-day</th>
       <th>VaR 99%, 7-day</th>
       <th>Weight</th>
       <th>&nbsp;</th>
+      <th>History</th>
+      <th>&nbsp;</th>
     </tr>
-    <tr ng-repeat="a in alist track by a.src+a.lookup.Symbol">
+    <tr ng-repeat="a in alist track by $index"> <!--a.src+a.lookup.Symbol">-->
+      <td>{{$index}}</td>
       <td><input type="checkbox" ng-model="a.selected" /></td>
       <td>{{a.lookup.Symbol}}</td>
+      <td>{{a.lookup.SymbAlt.join(",")}}</td>
       <td>{{a.lookup.Name}}</td>
       <td>{{a.lookup.Exchange}}</td>
-      <td>
-        <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
-      </td>
       <td nowrap>{{100*calculateVaR(a,95,1)|number:2}} %</td>
       <td nowrap>{{100*calculateVaR(a,95,7)|number:2}} %</td>
       <td nowrap>{{100*calculateVaR(a,99,1)|number:2}} %</td>
@@ -65,13 +67,17 @@
         <div ng-show="a.src=='mf'" class="text-info">MF: {{a.pct}}</div>
       </td>
       <td nowrap>
-        <a class="btn btn-xs btn-info" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}" title="Show details">
+        <a class="btn btn-xs btn-info" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}" title="Show details" ng-disabled="!a.src || !a.lookup.Symbol">
           <span class="glyphicon glyphicon-search"></span>
         </a>
         &nbsp;
         <button class="btn btn-danger btn-xs" ng-click="delAsset(a)" title="Delete asset from portfolio">
           <span class="glyphicon glyphicon-remove"></span>
         </button>
+      </td>
+      <td>{{a.history?a.history.length:0}}</td>
+      <td>
+        <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
       </td>
     </tr>
   </table>

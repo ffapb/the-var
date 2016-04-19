@@ -72,12 +72,16 @@ angular.module('theVarApp')
     $scope.gcs=function() { return Assets.getGcs(); };
 
     $scope.getChart = function() {
-      var fc = ffa.ffaConfig1();
-      if(!!fc) {
-        fc.then(function(config) {
-          console.log('conf',config);
-          $scope.getChartCore(config);
-        });
+      if(src=="FFA MF") {
+        var fc = ffa.ffaConfig1();
+        if(!!fc) {
+          fc.then(function(config) {
+            console.log('conf',config);
+            $scope.getChartCore(config);
+          });
+        } else {
+          console.error("Failed to get ffa config");
+        }
       } else {
         $scope.getChartCore(false);
       }
@@ -86,9 +90,15 @@ angular.module('theVarApp')
     $scope.getChartCore=function(config) {
       Assets.getChart(src,symbol,config)
         .then(function(ps) {
-          // http://stackoverflow.com/a/171256/4126114
-          for(var attrname in ps) {
-            $scope.pendingStock[attrname] = ps[attrname];
+          if(src=="mod") ps={"test":ps}
+          console.log("ps",ps);
+          for(var s in ps) { // this is just length 1
+            // http://stackoverflow.com/a/171256/4126114
+            for(var attrname in ps[s]) {
+              $scope.pendingStock[attrname] = ps[s][attrname];
+            }
+            console.log("pending stock",$scope.pendingStock);
+            Assets.update($scope.pendingStock);
           }
         });
     };

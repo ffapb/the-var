@@ -23,19 +23,29 @@ angular.module('theVarApp')
       np: function() {
         return Object.keys(ppp).length;
       },
-      add: function(newP) {
-        if(!newP.name || !newP.src) {
+      add: function(name,src,assets) {
+        if(!name || !src) {
           console.error('Adding invalid portfolio '+angular.toJson(newP));
           return false;
         }
+        var newP={name:name,src:src,assets:assets};
         newP.id = this.newId();
         if(ppp.hasOwnProperty(newP.id)) {
           console.error('ID '+newP.id+' already exists');
           return false;
         }
+
+        var found = Object.keys(ppp).filter(function(k) {
+          return ppp[k].src===newP.src && ppp[k].name===newP.name;
+        });
+        if(found.length>0) {
+          console.error('Portfolios already contain ',newP);
+          return ppp[found[0]].id;
+        }
+   
         ppp[newP.id] = angular.fromJson(angular.toJson(newP));
         this.saveToLs();
-        return this;
+        return newP.id;
       },
       del: function(id) {
         delete ppp[id];

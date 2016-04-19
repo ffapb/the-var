@@ -23,8 +23,9 @@ angular.module('theVarApp')
       }
 
       $scope.newP.src='Manual';
-      if(Portfolios.add($scope.newP)) {
-        window.location.href = '#/portfolioShow/'+$scope.newP.id;
+      var id = Portfolios.add($scope.newP.src,$scope.newP.name,[]);
+      if(id) {
+        window.location.href = '#/portfolioShow/'+id;
       }
     };
 

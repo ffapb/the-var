@@ -8,7 +8,7 @@
  * Service in the theVarApp.
  */
 angular.module('theVarApp')
-  .service('ffa', function ($http,$base64,Portfolios,Assets) {
+  .service('ffa', ['$http','$base64','Portfolios','Assets','$q','$timeout', function ($http,$base64,Portfolios,Assets,$q,$timeout) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     var fff={};
@@ -28,7 +28,7 @@ angular.module('theVarApp')
       },
       checkAvailable: function() {
         available=1;
-        $http.get('/the-var-config.json')
+        return $http.get('/the-var-config.json')
           .then(function() {
             available = 2;
           }, function() {
@@ -36,14 +36,25 @@ angular.module('theVarApp')
           });
       },
       ffaConfig1: function() {
-        if(!available) { return false; }
-        return $http.get('/the-var-config.json').then(function(response) {
-          console.log('fc11',response.data);
-          config = response.data;
-          return config;
-        }, function(response) {
-          console.error('fc12',response);
-        });
+        if(!config) {
+          return this.checkAvailable().then(function() {
+            if(!available) { return false; }
+            return $http.get('/the-var-config.json').then(function(response) {
+              console.log('fc11',response.data);
+              config = response.data;
+              return config;
+            }, function(response) {
+              console.error('fc12',response);
+            });
+          });
+        } else {
+          // http://markdalgleish.com/2013/06/using-promises-in-angularjs-views/
+          var deferred = $q.defer();
+          $timeout(function() {
+            deferred.resolve(config);
+          }, 100);
+          return deferred.promise;
+        }
       },
       getStatus: function() { return pst; },
       portfolios: function() {
@@ -81,7 +92,44 @@ angular.module('theVarApp')
             if(abort) { pst.r=2; return; }
 
             console.log('fc13',response);
-            fff[a.base+'-'+a.a]={acc: a, port: response.data }; // .slice(1,20) // slice only for testing purposes
+            var k=a.base+'-'+a.a;
+            fff[k]={acc: a, port: response.data }; // .slice(1,20) // slice only for testing purposes
+
+            // add symbolMain and symbol2
+            var re=/[a-zA-Z0-9]+ [a-zA-Z]{2} (Equity|Corp)/i
+            fff[k]["port"].map(function(a) {
+              a.symbAlt=[a.TIT_ISIN_BBG,a.TIT_REU_COD,a.TIT_COD];
+              a.symbolMain=a.TIT_ISIN_BBG;
+              if(re.test(a.TIT_REU_COD)) {
+                a.symbolMain=a.TIT_REU_COD;
+              } else {
+                if(a.TIT_ISIN_BBG=="" && a.TIT_REU_COD=="") {
+                  a.symbolMain=a.TIT_COD;
+                }
+              }
+              a.symbAlt=a.symbAlt.filter(function(x) { return x!=a.symbolMain && !!x; });
+              if(!a.symbol) console.error("Failed to identify symbol for",a);
+              return a;
+            });
+ 
+            var assets = fff[k]["port"].map(function(x) {
+              return {src: 'FFA MF', symbol:x["symbolMain"], pct: 1};
+            });
+
+            Portfolios.add('FFA MF',k,assets);
+            fff[k]["port"].map(function(a) {
+              var newA = {
+                src: 'FFA MF',
+                lookup: {
+                  Exchange: '-',
+                  Symbol: a.symbolMain,
+                  SymbAlt: a.symbAlt,
+                  Name: a.TIT_NOM
+                }
+              };
+              Assets.add(newA);
+            });
+
             if(self.np()<nac) {
               self.pstart(a1+1);
             } else {
@@ -108,6 +156,7 @@ angular.module('theVarApp')
         return;
       }
       // prepare some variables to track status
+      pst.r = 1;
       pst.i=0;
       pst.n=Object.keys(fff)
         .map(function(x) { return fff[x].port.length; })
@@ -116,7 +165,7 @@ angular.module('theVarApp')
           }, 0);
 
       // run core
-      self.mergeWithPortfolios();
+      this.mwpSingle(0,this);
     },
 
     mwpPost: function(x) {
@@ -133,25 +182,9 @@ angular.module('theVarApp')
       if(abort) { pst.r=2; return; }
       var k = Object.keys(fff)[ki];
 
-      newP = {
-        src: 'FFA MF',
-        name: k,
-        assets: []
-      };
-      var pl = Portfolios.list();
-      var found = Object.keys(pl).filter(function(k) {
-        return pl[k].src===newP.src && pl[k].name===newP.name;
-      });
-      if(found.length>0) {
-        console.error('Portfolios already contain ',fff[k]);
-        newP.id = pl[found[0]].id;
-      } else {
-        Portfolios.add(newP);
-      }
-
       // move status by number of skipped 
       pst.i+=fff[k].port.filter(function(a) {
-        return !a.TIT_ISIN_BBG;
+        return !a.symbolMain;
       }).length;
       // continue
       self.mwpSingle2(ki,self);
@@ -163,7 +196,7 @@ angular.module('theVarApp')
 
       var k = Object.keys(fff)[ki];
       al = fff[k].port.filter(function(a) {
-        return a.TIT_ISIN_BBG;
+        return a.symbolMain;
       });
       if(al.length==0) { return; }
 
@@ -172,7 +205,7 @@ angular.module('theVarApp')
     },
 
     getChart: function(al2i,self,ki) {
-      var al2=al.map(function(x) { return x.TIT_ISIN_BBG; });
+      var al2=al.map(function(x) { return x.symbolMain; });
 
       // iterate in steps of N
       var N=50;
@@ -190,21 +223,21 @@ angular.module('theVarApp')
           pst.i+=al2s.length - Object.keys(psa).length;
           for(var psk in psa) {
             var ps=psa[psk];
-            var al3=al.filter(function(x) { return x.TIT_ISIN_BBG==psk; });
+            var al3=al.filter(function(x) { return x.symbolMain==psk; });
             if(al3.length==0) { console.error("Did not find the code "+psk+" ... what?"); return; }
             if(al3.length >1) { console.error("Found more than one code "+psk+" ... what?"); return; }
             var a=al3[0];
 
-            console.log('Doing',a.TIT_ISIN_BBG);
+            console.log('Doing',a.symbolMain);
 
             var newA = {
               src: 'FFA MF',
               lookup: {
                 Exchange: '-',
-                Symbol: a.TIT_ISIN_BBG,
+                Symbol: a.symbolMain,
+                SymbAlt: a.symbAlt,
                 Name: a.TIT_NOM
-              },
-              pct: 1
+              }
             };
 
             // Append new fields
@@ -215,11 +248,10 @@ angular.module('theVarApp')
             pst.l = newA.history.length;
 
             if(Assets.exists(newA.src,newA.lookup.Symbol)) {
-              console.error('Assets already contain ',newA);
+              //console.error('Assets already contain ',newA);
               Assets.update(newA);
             } else {
-              Assets.add(newA);
-              Portfolios.addAsset(newP.id, newA);
+              console.error("How was this asset not yet added?",newA);
             }
             self.mwpPost();
           }
@@ -248,10 +280,6 @@ angular.module('theVarApp')
         console.log("finished looping");
         self.mwpPost();
       }
-    },
-
-    mergeWithPortfolios: function() {
-        this.mwpSingle(0,this);
     }
 
   };
@@ -286,4 +314,4 @@ angular.module('theVarApp')
 */
   //  $scope.ffaConfig();
 
-  });
+  }]);

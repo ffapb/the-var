@@ -55,7 +55,7 @@ angular.module('theVarApp')
         if(src==='mod') {
           return markitOnDemand.interactiveChart(symbol)
             .then(
-              function(response) { gcs=0; return(self.treatChart(response)); },
+              function(response) { gcs=0; return(self.treatChart(response.data)); },
               function() { gcs=2; }
             );
         } else if(src==='FFA MF') {
@@ -133,6 +133,7 @@ angular.module('theVarApp')
           return;
         }
         aaa[newA.src][newA.lookup.Symbol]=newA;
+        this.saveToLs();
       }
 
     };
