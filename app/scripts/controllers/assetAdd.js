@@ -8,9 +8,7 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('AssetAddCtrl', function ($scope,varCalc,markitOnDemand,Portfolios,$routeParams) {
-
-    $scope.pendingStock=false;
+  .controller('AssetAddCtrl', function ($scope,varCalc,markitOnDemand,Portfolios,$routeParams,$location) {
 
     $scope.add1=function() {
         var src='mod';
@@ -18,7 +16,7 @@ angular.module('theVarApp')
         $scope.asyncSelected=null;
         var url = '#/assetShow/'+src+'/'+sss;
         if($routeParams.pid) { url+='?pid='+$routeParams.pid; }
-        window.location.href=url;
+        $location.url(url);
     };
 
     $scope.getSymbol = function(val) {
