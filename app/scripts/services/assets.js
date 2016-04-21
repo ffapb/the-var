@@ -18,6 +18,9 @@ angular.module('theVarApp')
     var gcs=0;
 
     return {
+      setAAA: function(bbb) {
+        aaa=bbb;
+      },
       add: function(x) {
         if(!aaa.hasOwnProperty(x.src)) { aaa[x.src]={}; }
         if(aaa[x.src].hasOwnProperty(x.lookup.Symbol)) {
