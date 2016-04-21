@@ -6,18 +6,21 @@ describe('Controller: AssetAddCtrl', function () {
   beforeEach(module('theVarApp'));
 
   var AssetAddCtrl,
-    scope;
+    scope, location;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope, $location) {
     scope = $rootScope.$new();
     AssetAddCtrl = $controller('AssetAddCtrl', {
       $scope: scope
       // place here mocked dependencies
     });
+    location=$location;
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(AssetAddCtrl.awesomeThings.length).toBe(3);
+  it('after add1 should change location', function () {
+    scope.asyncSelected={"Symbol":"bla"};
+    scope.add1();
+    expect(decodeURIComponent(location.url())).toBe("#/assetShow/mod/bla");
   });
 });

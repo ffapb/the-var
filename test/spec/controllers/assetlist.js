@@ -6,18 +6,35 @@ describe('Controller: AssetlistCtrl', function () {
   beforeEach(module('theVarApp'));
 
   var AssetlistCtrl,
-    scope;
+    scope, AssetsH;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope, Assets) {
     scope = $rootScope.$new();
     AssetlistCtrl = $controller('AssetlistCtrl', {
       $scope: scope
       // place here mocked dependencies
     });
+    AssetsH=Assets;
+    var aaa = {
+      "source1": {
+        "symbol1": 123,
+        "symbol2": 456
+      },
+      "source2": {
+        "symbol3": 123,
+        "symbol4": 456
+      }
+    };
+    AssetsH.setAAA(aaa);
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(AssetlistCtrl.awesomeThings.length).toBe(3);
+  it('list should flatten', function () {
+    expect(scope.list().length).toBe(4);
   });
+
+  it('nport should return 0 for non-existing', function () {
+    expect(scope.nport("source3","bla")).toBe(0);
+  });
+
 });

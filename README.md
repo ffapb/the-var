@@ -34,7 +34,14 @@ version 0.15.1.
 
 ## Build
 
-Run `grunt` for building and `grunt serve` for preview.
+First, install grunt locally, as well as the npm dependencies and bower dependencies
+
+    # http://stackoverflow.com/a/18114868/4126114
+    sudo npm install grunt --save-dev
+    sudo npm install
+    bower install
+
+Then run `grunt` for building and `grunt serve` for preview.
 
 ## Testing
 
