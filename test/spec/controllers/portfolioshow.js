@@ -5,19 +5,37 @@ describe('Controller: PortfolioshowCtrl', function () {
   // load the controller's module
   beforeEach(module('theVarApp'));
 
-  var PortfolioshowCtrl,
-    scope;
+  var PortfolioshowCtrl, scope, PortfoliosM;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope, Portfolios) {
     scope = $rootScope.$new();
     PortfolioshowCtrl = $controller('PortfolioshowCtrl', {
       $scope: scope
       // place here mocked dependencies
     });
+    PortfoliosM = Portfolios;
+    var ppp = {
+      "1": {
+        "id": "1",
+        "src": "mod",
+        "name": "portfolio 1",
+        "assets": [
+          { "src": "mod",
+            "symbol": "symbol 1"
+          },
+          { "src": "mod",
+            "symbol": "symbol 2"
+          }
+        ]
+      }
+    };
+    PortfoliosM.set(ppp);
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(PortfolioshowCtrl.awesomeThings.length).toBe(3);
+  it('some tests', function () {
+    scope.set("1");
+    expect(scope.portfolio).not.toBeNull();
+    expect(scope.alist).not.toBeNull();
   });
 });

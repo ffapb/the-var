@@ -13,14 +13,21 @@ angular.module('theVarApp')
 
     ActivateNavBar.portfolios();
 
-    var pid = $routeParams.pid;
-    var pl = Portfolios.list();
-    if(!pl.hasOwnProperty(pid)) {
-      window.location.href='#/portfolioList';
-      console.error('Invalid portfolio id '+pid);
-      return;
-    }
-    $scope.portfolio = pl[pid];
+    var pid, pl;
+    $scope.portfolio = null;
+    $scope.alist=null;
+
+    $scope.set=function(pid_) {
+      pid = pid_;
+      pl = Portfolios.list();
+      if(!pl.hasOwnProperty(pid)) {
+        window.location.href='#/portfolioList';
+        console.error('Invalid portfolio id '+pid);
+        return;
+      }
+      $scope.portfolio = pl[pid];
+      $scope.alist = $scope.list();
+    };
 
     $scope.list = function() {
       var a = $scope.portfolio.assets;
@@ -41,7 +48,7 @@ angular.module('theVarApp')
       return o;
     };
 
-    $scope.alist = $scope.list();
+    $scope.set($routeParams.pid);
 
     $scope.calculateVaR = function(p,percentile,nday) {
       return varCalc.calculateVaR(p,percentile,nday);

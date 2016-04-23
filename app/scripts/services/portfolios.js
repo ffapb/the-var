@@ -17,6 +17,7 @@ angular.module('theVarApp')
     }
 
     return {
+      set: function(xxx) { ppp=xxx; },
       list: function() {
         return ppp;
       },

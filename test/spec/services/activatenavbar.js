@@ -7,8 +7,8 @@ describe('Service: activateNavBar', function () {
 
   // instantiate service
   var activateNavBar;
-  beforeEach(inject(function (_activateNavBar_) {
-    activateNavBar = _activateNavBar_;
+  beforeEach(inject(function (_ActivateNavBar_) {
+    activateNavBar = _ActivateNavBar_;
   }));
 
   it('should do something', function () {
