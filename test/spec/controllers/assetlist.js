@@ -6,7 +6,7 @@ describe('Controller: AssetlistCtrl', function () {
   beforeEach(module('theVarApp'));
 
   var AssetlistCtrl,
-    scope, AssetsH;
+    scope, AssetsM;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, Assets) {
@@ -15,7 +15,7 @@ describe('Controller: AssetlistCtrl', function () {
       $scope: scope
       // place here mocked dependencies
     });
-    AssetsH=Assets;
+    AssetsM=Assets;
     var aaa = {
       "source1": {
         "symbol1": 123,
@@ -26,7 +26,7 @@ describe('Controller: AssetlistCtrl', function () {
         "symbol4": 456
       }
     };
-    AssetsH.setAAA(aaa);
+    AssetsM.setAAA(aaa);
   }));
 
   it('list should flatten', function () {

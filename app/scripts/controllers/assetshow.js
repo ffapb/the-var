@@ -8,12 +8,12 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios,ActivateNavBar,ffa) {
+  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios,ActivateNavBar,ffa,$location) {
 
     ActivateNavBar.assets();
 
-    var symbol = $routeParams.symbol;
-    var src = $routeParams.src;
+    $scope.pendingStock=false;
+    var symbol,src;
 
     $scope.goback=function() {
       if($routeParams.pid) {
@@ -21,43 +21,50 @@ angular.module('theVarApp')
       }
     };
 
-    $scope.pendingStock=false;
+    $scope.set=function(s1,s2) {
+      if(!s1||!s2) return;
+      symbol = s1;
+      src = s2;
 
-    var al = Assets.list();
-    if(al.hasOwnProperty(src)) {
-      if(al[src].hasOwnProperty(symbol)) {
-        $scope.pendingStock = al[src][symbol];
-      }
-    }
-
-    $scope.add1=function() {
-     markitOnDemand
-      .lookup(symbol)
-      .then(function(response) {
-        var asyncSelected=response.filter(function(x) { return x.Symbol===symbol; });
-        if(asyncSelected.length===0) {
-          console.error('Couldnt identify symbol');
-          return;
+      var al = Assets.list();
+      if(al.hasOwnProperty(src)) {
+        if(al[src].hasOwnProperty(symbol)) {
+          $scope.pendingStock = al[src][symbol];
+          return $scope.add1();
         }
-        asyncSelected=asyncSelected[0]; // selecting first only
-        $scope.pendingStock={
-          src: src,
-          lookup: asyncSelected
-        };
-        $scope.getChart();
-      });
+      }
+      return false;
     };
 
-    if(!$scope.pendingStock) { $scope.add1(); }
+    $scope.add1=function() {
+      return markitOnDemand
+        .lookup(symbol)
+        .then(function(response) {
+          var asyncSelected=response.filter(function(x) { return x.Symbol===symbol; });
+          if(asyncSelected.length===0) {
+            console.error('Couldnt identify symbol');
+            return;
+          }
+          asyncSelected=asyncSelected[0]; // selecting first only
+          $scope.pendingStock={
+            src: src,
+            lookup: asyncSelected
+          };
+          return $scope.getChart();
+        });
+    };
+
+    $scope.set($routeParams.symbol,$routeParams.src);
 
     $scope.getPid = function() { return $routeParams.pid; };
 
     $scope.add2 = function(pid) {
-      Assets.add($scope.pendingStock);
+      // not sure what this is for anymore
+      //Assets.add($scope.pendingStock);
       Portfolios.addAsset(pid,$scope.pendingStock);
       $scope.pendingStock=false;
       $scope.asyncSelected=null;
-      window.location.href='#/portfolioShow/'+pid;
+      $location.url('#/portfolioShow/'+pid);
     };
 
     $scope.noPortfolios=function() {
@@ -77,18 +84,18 @@ angular.module('theVarApp')
         if(!!fc) {
           fc.then(function(config) {
             console.log('conf',config);
-            $scope.getChartCore(config);
+            return $scope.getChartCore(config);
           });
         } else {
           console.error("Failed to get ffa config");
         }
       } else {
-        $scope.getChartCore(false);
+        return $scope.getChartCore(false);
       }
     };
 
     $scope.getChartCore=function(config) {
-      Assets.getChart(src,symbol,config)
+      return Assets.getChart(src,symbol,config)
         .then(function(ps) {
           if(src=="mod") ps={"test":ps}
           console.log("ps",ps);
