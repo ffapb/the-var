@@ -89,7 +89,7 @@ angular.module('theVarApp')
       },
 
       treatChart: function(response) {
-        console.log('treat chart');
+        console.log('treat chart',response);
         console.log(response);
         if(response.Elements.length===0) {
           //window.alert('No data');
