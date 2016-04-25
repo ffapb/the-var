@@ -19,12 +19,14 @@ angular.module('theVarApp')
 
         // calculate n-day returns (including 1-day)
         var pnls =[];
-        pnls.push(0);
+        //pnls.push(0);
         for(var i=1;i<p.history2.length;i++) {
           if ( ( i % nday ) === 0 ) {
             pnls.push((p.history2[i]/p.history2[i-nday]-1)); // to be able to compare /nday
           }
         }
+
+        if(pnls.length==0) return;
 
         pnls.sort(function(a,b) {
           return a-b;
@@ -47,10 +49,10 @@ angular.module('theVarApp')
         d2.sort(function(a,b) {
           return a-b;
         });
+        // find the minimum bin edge
         var m1 = d2.reduce(function(a,b) {
-          if(a<b) { return a; }
-          return b;
-        }, 9999); // get array minimum
+          return Math.min(a,b);
+        }, 99999999);
         m1 = Math.floor(m1/ss)*ss;
         var o = d2.map(function(x) { return Math.floor((x-m1)/ss); });
         var ou = [];
@@ -68,6 +70,7 @@ angular.module('theVarApp')
             ou[ou.length-1]+=sgn;
           }
         }
+        // convert to percentages of the total count
         var op = ou.map(function(x) { return x/d2.length*100; });
   /*      for(i=1;i<op.length;i++) {
           op[i]+=op[i-1];
@@ -79,18 +82,19 @@ angular.module('theVarApp')
         if(!portfolio) { return; }
         if(nday<=0) { return; }
 
-        var totalPct = Object.keys(portfolio).filter(function(x) {
-          return portfolio[x].selected;
-        }).map(function(k) {
+        var portSelKeys = Object.keys(portfolio).filter(function(x) {
+          return !!portfolio[x].selected;
+        });
+        if(portSelKeys.length==0) return 0;
+
+        var totalPct = portSelKeys.map(function(k) {
           return Math.abs(portfolio[k].pct);
         }).reduce(function(a,b) {
           if(b) { return a+b; } else { return a; }
         }, 0);
 
-        // construct hypothetical portfolio prices
-        var prices = Object.keys(portfolio).filter(function(x) {
-          return portfolio[x].selected;
-        }).map(function(k) {
+        // multiply pnls by weights of assets
+        var pnlsWeighted = portSelKeys.map(function(k) {
           if(!portfolio[k].pct||!totalPct) {
             return [];
           } else {
@@ -105,7 +109,9 @@ angular.module('theVarApp')
               return o;
             });
           }
-        }).reduce(function(a,b) {
+        });
+        // add pnls
+        var pnlsTotal = pnlsWeighted.reduce(function(a,b) {
           if(!a) { return b; }
           if(!a.length) { return b; }
           if(!b) { return a; }
@@ -125,23 +131,27 @@ angular.module('theVarApp')
             o.push(a[i]+b[i]);
           }
           return o;
-        }, []).map(function(x) {
+        }, []);
+
+        if(!pnlsTotal) { return 0; }
+        if(!pnlsTotal.length) { return 0; }
+
+        // construct hypothetical re-based prices for portfolio from pnlsTotals
+        pnlsTotal = this.pnls2prices(pnlsTotal);
+
+        return this.calculateVaR({history2: pnlsTotal}, percentile,nday);
+      }, // end of function
+
+      pnls2prices: function(pnls) {
+        // construct hypothetical re-based prices for portfolio from pnlsTotals
+        return pnls.map(function(x) {
           return 1+x;
-        });
-
-        if(!prices) { return 0; }
-        if(!prices.length) { return 0; }
-
-        prices = prices.reduce(function(a,b) {
+        }).reduce(function(a,b) {
           // cumulative product
           a.push(a[a.length-1]*b);
           return a;
-        },[prices[0]]).map(function(x) {
-          return x*100;
-        });
+        },[100]); //.map(function(x) { return x*100; });
+      } // end of function
 
-        return this.calculateVaR({history2: prices}, percentile,nday);
-      }
-
-    };
-  });
+    }; // end of class return
+  }); // end of service
