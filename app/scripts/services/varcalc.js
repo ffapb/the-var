@@ -80,7 +80,7 @@ angular.module('theVarApp')
 
       portfolioVaR: function(percentile,portfolio,nday) {
         if(!portfolio) { return; }
-        if(nday<=0) { return; }
+        if(!nday || nday<=0) { return; }
 
         var portSelKeys = Object.keys(portfolio).filter(function(x) {
           return !!portfolio[x].selected;

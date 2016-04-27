@@ -117,6 +117,8 @@ angular.module('theVarApp')
         }
         pendingStock.pnls=pnls;
 
+        pendingStock.pnls2=pnls.map(function(x) { return 100*x; });
+
         var pnlsSort = angular.fromJson(angular.toJson(pnls));
         pnlsSort.sort(function(a,b) {
           return a-b;
@@ -132,10 +134,10 @@ angular.module('theVarApp')
 
       update: function(newA) {
         if(!this.exists(newA.src,newA.lookup.Symbol)) {
-          console.error('Trying to update a non-existent');
-          return;
+          this.add(newA);
+        } else {
+          aaa[newA.src][newA.lookup.Symbol]=newA;
         }
-        aaa[newA.src][newA.lookup.Symbol]=newA;
         this.saveToLs();
       }
 

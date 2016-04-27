@@ -24,7 +24,7 @@ angular.module('theVarApp')
       np: function() {
         return Object.keys(ppp).length;
       },
-      add: function(name,src,assets) {
+      add: function(src,name,assets) {
         if(!name || !src) {
           console.error('Adding invalid portfolio '+angular.toJson(newP));
           return false;

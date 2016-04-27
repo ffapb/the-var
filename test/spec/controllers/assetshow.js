@@ -56,11 +56,11 @@ describe('Controller: AssetshowCtrl', function () {
 
         expect(AssetsM.list()["mod"]["symbol1"].hasOwnProperty("history")).toBe(true);
         scope.add2("123");
-        expect(decodeURIComponent(location.url())).toBe("#/portfolioShow/123");
+        expect(decodeURIComponent(location.url())).toBe("/portfolioShow/123");
         done();
       });
+      http.flush();
     }
     expect(scope.pendingStock).toBe(123);
-    http.flush();
   });
 });

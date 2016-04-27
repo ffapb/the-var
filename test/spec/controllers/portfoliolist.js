@@ -36,6 +36,6 @@ describe('Controller: PortfoliolistCtrl', function () {
   it('a few tests', function () {
     expect(scope.nass("1")).toBe(2);
     expect(scope.nass("doesnt exist")).toBe(0);
-    expect(scope.portfolioVaR(95,scope.list()["1"])).toBe(0);
+    expect(scope.portfolioVaR(95,scope.list()["1"],1)).toBe(0);
   });
 });

@@ -17,6 +17,8 @@ angular.module('theVarApp')
     $scope.portfolio = null;
     $scope.alist=null;
 
+    $scope.showNoData=true;
+
     $scope.set=function(pid_) {
       pid = pid_;
       pl = Portfolios.list();
@@ -83,6 +85,15 @@ angular.module('theVarApp')
 
     $scope.updateName=function() {
       Portfolios.updateName($scope.portfolio.id,$scope.portfolio.name);
+    };
+
+    $scope.colorCondition=function(a,perc,nday) {
+      if(!a.pnls) return 'grey';
+      var v1=a.pnls[a.pnls.length-1];
+      var v2=$scope.calculateVaR(a,perc,nday);
+      if(v1>v2) return 'green';
+      if(v1<v2) return 'red';
+      return 'black';
     };
 
   });

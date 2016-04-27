@@ -17,7 +17,7 @@ angular.module('theVarApp')
 
     $scope.goback=function() {
       if($routeParams.pid) {
-        window.location.href='#/portfolioShow/'+$routeParams.pid;
+        $location.url('/portfolioShow/'+$routeParams.pid);
       }
     };
 
@@ -30,9 +30,10 @@ angular.module('theVarApp')
       if(al.hasOwnProperty(src)) {
         if(al[src].hasOwnProperty(symbol)) {
           $scope.pendingStock = al[src][symbol];
-          return $scope.add1();
+          return false;
         }
       }
+      if(!$scope.pendingStock) return $scope.add1();
       return false;
     };
 
@@ -64,7 +65,7 @@ angular.module('theVarApp')
       Portfolios.addAsset(pid,$scope.pendingStock);
       $scope.pendingStock=false;
       $scope.asyncSelected=null;
-      $location.url('#/portfolioShow/'+pid);
+      $location.url('/portfolioShow/'+pid); // do not use '#/portfoli...'
     };
 
     $scope.noPortfolios=function() {

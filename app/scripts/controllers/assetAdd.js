@@ -14,9 +14,12 @@ angular.module('theVarApp')
         var src='mod';
         var sss = $scope.asyncSelected.Symbol;
         $scope.asyncSelected=null;
-        var url = '#/assetShow/'+src+'/'+sss;
-        if($routeParams.pid) { url+='?pid='+$routeParams.pid; }
-        $location.url(url);
+        var url = '/assetShow/'+src+'/'+sss; // no need for # in the url for location.url
+        if($routeParams.pid) {
+          $location.path(url).search('pid='+$routeParams.pid);
+        } else {
+          $location.path(url);
+        }
     };
 
     $scope.getSymbol = function(val) {

@@ -98,17 +98,17 @@ angular.module('theVarApp')
             // add symbolMain and symbol2
             var re=/[a-zA-Z0-9]+ [a-zA-Z]{2} (Equity|Corp)/i
             fff[k]["port"].map(function(a) {
-              a.symbAlt=[a.TIT_ISIN_BBG,a.TIT_REU_COD,a.TIT_COD];
               a.symbolMain=a.TIT_ISIN_BBG;
               if(re.test(a.TIT_REU_COD)) {
                 a.symbolMain=a.TIT_REU_COD;
               } else {
-                if(a.TIT_ISIN_BBG=="" && a.TIT_REU_COD=="") {
+                if(a.TIT_ISIN_BBG=="") { // && a.TIT_REU_COD=="") {
                   a.symbolMain=a.TIT_COD;
-                }
+                } 
               }
+              a.symbAlt=[a.TIT_ISIN_BBG,a.TIT_REU_COD,a.TIT_COD];
               a.symbAlt=a.symbAlt.filter(function(x) { return x!=a.symbolMain && !!x; });
-              if(!a.symbol) console.error("Failed to identify symbol for",a);
+              if(!a.symbolMain) console.error("Failed to identify symbol for",a);
               return a;
             });
  
@@ -208,7 +208,7 @@ angular.module('theVarApp')
       var al2=al.map(function(x) { return x.symbolMain; });
 
       // iterate in steps of N
-      var N=50;
+      var N=60;
       if(al2i>Math.floor(al2.length/N)) {
         console.error("Should not have gotten here",al2i,al2.length,N,Math.floor(al2.length/N));
         return;

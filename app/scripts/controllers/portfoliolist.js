@@ -44,13 +44,13 @@ angular.module('theVarApp')
       return Object.keys(a).length;
     };
 
-    $scope.portfolioVaR=function(percentile, portfolio) {
+    $scope.portfolioVaR=function(percentile, portfolio,nday) {
       var a = portfolio.assets;
       if(!a) {
         return 0;
       }
       var al = Assets.list();
-      var o = a.map(function(x) {
+      var o1 = a.map(function(x) {
         if(al.hasOwnProperty(x.src)) {
           if(al[x.src].hasOwnProperty(x.symbol)) {
             return al[x.src][x.symbol];
@@ -58,8 +58,8 @@ angular.module('theVarApp')
         }
         return null;
       }).filter(function(x) { return !!x; });
-
-      return varCalc.portfolioVaR(percentile,o);
+      var o2=varCalc.portfolioVaR(percentile,o1,nday);
+      return o2;
     };
 
   });

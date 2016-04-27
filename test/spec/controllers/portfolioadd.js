@@ -25,7 +25,7 @@ describe('Controller: PortfolioaddCtrl', function () {
   it('add on non-existing', function () {
     scope.newP={"name":"123"};
     var id=scope.add();
-    expect(decodeURIComponent(location.url())).toBe("#/portfolioShow/"+id);
+    expect(decodeURIComponent(location.url())).toBe("/portfolioShow/"+id);
   });
 
 });
