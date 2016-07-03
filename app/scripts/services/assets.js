@@ -9,7 +9,7 @@
  */
 angular.module('theVarApp')
   .service('Assets', function (markitOnDemand,varCalc,$http) {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    // AngularJS will instantiate a singleton by calling 'new' on this function
     var aaa={};
     if(localStorage.getItem('aaa')) {
       aaa = angular.fromJson(localStorage.getItem('aaa'));
@@ -63,19 +63,19 @@ angular.module('theVarApp')
             );
         } else if(src==='FFA MF') {
           var symbol2=symbol;
-          if( typeof symbol !== 'string' && src==="FFA MF" && Object.prototype.toString.call(symbol) === '[object Array]' ) {
-            symbol2=symbol.join('","');
+          if( typeof symbol !== 'string' && src==='FFA MF' && Object.prototype.toString.call(symbol) === '[object Array]' ) {
+            symbol2=symbol.join('','');
           }
 
           var url = config.endPoints.prices+'?format=json&tkr=["'+symbol2+'"]';
-          console.log("url",url);
+          console.log('url',url);
           return $http.get(url).then(
             function(response) {
-              console.log("res ass",url,response);
+              console.log('res ass',url,response);
               gcs=0;
               var x={};
               for(var i in response.data) {
-                console.log("_____",i,response.data[i]);
+                console.log('_____',i,response.data[i]);
                 x[i]=self.treatChart(response.data[i]);
               }
 

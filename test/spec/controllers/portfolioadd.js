@@ -18,14 +18,14 @@ describe('Controller: PortfolioaddCtrl', function () {
   }));
 
   it('exists on non-existing', function () {
-    scope.newP={"name":"123"};
+    scope.newP={'name':'123'};
     expect(scope.exists()).toBe(false);
   });
 
   it('add on non-existing', function () {
-    scope.newP={"name":"123"};
+    scope.newP={'name':'123'};
     var id=scope.add();
-    expect(decodeURIComponent(location.url())).toBe("/portfolioShow/"+id);
+    expect(decodeURIComponent(location.url())).toBe('/portfolioShow/'+id);
   });
 
 });

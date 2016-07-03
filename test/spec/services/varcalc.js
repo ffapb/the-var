@@ -53,26 +53,26 @@ describe('Service: varCalc', function () {
 
   it('portfolioVaR',function() {
     var p1 = {
-      "symbol1": { "pct": 1, "pnls": [1,2,3,4,5,6,7,8,9], "selected": true },
-      "symbol2": { "pct": 1, "pnls": [1,2,3,4,5,6,7,8,9], "selected": true },
-      "symbol3": { "pct": 1, "pnls": [1,2,3,4,5,6,7,8,9], "selected": true },
+      'symbol1': { 'pct': 1, 'pnls': [1,2,3,4,5,6,7,8,9], 'selected': true },
+      'symbol2': { 'pct': 1, 'pnls': [1,2,3,4,5,6,7,8,9], 'selected': true },
+      'symbol3': { 'pct': 1, 'pnls': [1,2,3,4,5,6,7,8,9], 'selected': true },
     };
     var e1 = varCalc.portfolioVaR(95,p1,1);
     var r1 = varCalc.calculateVaR({history2:varCalc.pnls2prices(p1.symbol1.pnls)},95,1);
     expect(e1).toBe(r1);
 
     var p2 = {
-      "symbol1": { "pct": 1, "pnls": [1,2,3,4,5,6,7,8,9], "selected": false },
-      "symbol2": { "pct": 1, "pnls": [1,2,3,4,5,6,7,8,9], "selected": false },
-      "symbol3": { "pct": 1, "pnls": [1,2,3,4,5,6,7,8,9], "selected": false },
+      'symbol1': { 'pct': 1, 'pnls': [1,2,3,4,5,6,7,8,9], 'selected': false },
+      'symbol2': { 'pct': 1, 'pnls': [1,2,3,4,5,6,7,8,9], 'selected': false },
+      'symbol3': { 'pct': 1, 'pnls': [1,2,3,4,5,6,7,8,9], 'selected': false },
     };
     var e2 = varCalc.portfolioVaR(95,p2,1);
     expect(e2).toBe(0);
 
     var p3 = {
-      "symbol1": { "pct": 1, "pnls": [1   ,1   ,1   ,1   ,1   ], "selected": true },
-      "symbol2": { "pct": 1, "pnls": [0.5 ,0.5 ,0.5 ,0.5 ,0.5 ], "selected": true },
-      "symbol3": { "pct": 1, "pnls": [0.75,0.75,0.75,0.75,0.75], "selected": true },
+      'symbol1': { 'pct': 1, 'pnls': [1   ,1   ,1   ,1   ,1   ], 'selected': true },
+      'symbol2': { 'pct': 1, 'pnls': [0.5 ,0.5 ,0.5 ,0.5 ,0.5 ], 'selected': true },
+      'symbol3': { 'pct': 1, 'pnls': [0.75,0.75,0.75,0.75,0.75], 'selected': true },
     };
     var e3 = varCalc.portfolioVaR(95,p3,1);
     var r3 = varCalc.calculateVaR({history2:varCalc.pnls2prices(p3.symbol3.pnls)},95,1);

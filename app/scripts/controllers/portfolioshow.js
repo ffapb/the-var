@@ -88,11 +88,11 @@ angular.module('theVarApp')
     };
 
     $scope.colorCondition=function(a,perc,nday) {
-      if(!a.pnls) return 'grey';
+      if(!a.pnls) { return 'grey'; }
       var v1=a.pnls[a.pnls.length-1];
       var v2=$scope.calculateVaR(a,perc,nday);
-      if(v1>v2) return 'green';
-      if(v1<v2) return 'red';
+      if(v1>v2) { return 'green'; }
+      if(v1<v2) { return 'red'; }
       return 'black';
     };
 

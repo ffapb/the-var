@@ -17,13 +17,13 @@ describe('Controller: AssetlistCtrl', function () {
     });
     AssetsM=Assets;
     var aaa = {
-      "source1": {
-        "symbol1": 123,
-        "symbol2": 456
+      'source1': {
+        'symbol1': 123,
+        'symbol2': 456
       },
-      "source2": {
-        "symbol3": 123,
-        "symbol4": 456
+      'source2': {
+        'symbol3': 123,
+        'symbol4': 456
       }
     };
     AssetsM.setAAA(aaa);
@@ -34,7 +34,7 @@ describe('Controller: AssetlistCtrl', function () {
   });
 
   it('nport should return 0 for non-existing', function () {
-    expect(scope.nport("source3","bla")).toBe(0);
+    expect(scope.nport('source3','bla')).toBe(0);
   });
 
 });

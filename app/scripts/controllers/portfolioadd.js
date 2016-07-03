@@ -24,7 +24,7 @@ angular.module('theVarApp')
 
       $scope.newP.src='Manual';
       var id = Portfolios.add($scope.newP.src,$scope.newP.name,[]);
-      if(id) $location.url('/portfolioShow/'+id); // do not use '#/portfolioShow'
+      if(id) { $location.url('/portfolioShow/'+id); } // do not use '#/portfolioShow'
       return id;
     };
 

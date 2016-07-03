@@ -19,8 +19,8 @@ describe('Controller: AssetAddCtrl', function () {
   }));
 
   it('after add1 should change location', function () {
-    scope.asyncSelected={"Symbol":"bla"};
+    scope.asyncSelected={'Symbol':'bla'};
     scope.add1();
-    expect(decodeURIComponent(location.url())).toBe("/assetShow/mod/bla");
+    expect(decodeURIComponent(location.url())).toBe('/assetShow/mod/bla');
   });
 });

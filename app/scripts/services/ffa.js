@@ -9,14 +9,13 @@
  */
 angular.module('theVarApp')
   .service('ffa', ['$http','$base64','Portfolios','Assets','$q','$timeout', function ($http,$base64,Portfolios,Assets,$q,$timeout) {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    // AngularJS will instantiate a singleton by calling 'new' on this function
 
     var fff={};
     var config = null;
     var pst = {i:0,n:Number.POSITIVE_INFINITY,r:0,l:0}; // status variable
     var abort = false;
     var al; // temp variable for looping
-    var newP;
     var available = 0;
     var self;
 
@@ -74,7 +73,7 @@ angular.module('theVarApp')
         this.pstart(0);
       },
 
-      setAbort: function() { abort=true; console.error("Will abort"); },
+      setAbort: function() { abort=true; console.error('Will abort'); },
 
       pstart: function(a1) {
         self=this;
@@ -96,28 +95,28 @@ angular.module('theVarApp')
             fff[k]={acc: a, port: response.data }; // .slice(1,20) // slice only for testing purposes
 
             // add symbolMain and symbol2
-            var re=/[a-zA-Z0-9]+ [a-zA-Z]{2} (Equity|Corp)/i
-            fff[k]["port"].map(function(a) {
+            var re=/[a-zA-Z0-9]+ [a-zA-Z]{2} (Equity|Corp)/i;
+            fff[k].port.map(function(a) {
               a.symbolMain=a.TIT_ISIN_BBG;
               if(re.test(a.TIT_REU_COD)) {
                 a.symbolMain=a.TIT_REU_COD;
               } else {
-                if(a.TIT_ISIN_BBG=="") { // && a.TIT_REU_COD=="") {
+                if(a.TIT_ISIN_BBG==='') { // && a.TIT_REU_COD=='') {
                   a.symbolMain=a.TIT_COD;
                 } 
               }
               a.symbAlt=[a.TIT_ISIN_BBG,a.TIT_REU_COD,a.TIT_COD];
-              a.symbAlt=a.symbAlt.filter(function(x) { return x!=a.symbolMain && !!x; });
-              if(!a.symbolMain) console.error("Failed to identify symbol for",a);
+              a.symbAlt=a.symbAlt.filter(function(x) { return x!==a.symbolMain && !!x; });
+              if(!a.symbolMain) { console.error('Failed to identify symbol for',a); }
               return a;
             });
  
-            var assets = fff[k]["port"].map(function(x) {
-              return {src: 'FFA MF', symbol:x["symbolMain"], pct: 1};
+            var assets = fff[k].port.map(function(x) {
+              return {src: 'FFA MF', symbol:x.symbolMain, pct: 1};
             });
 
             Portfolios.add('FFA MF',k,assets);
-            fff[k]["port"].map(function(a) {
+            fff[k].port.map(function(a) {
               var newA = {
                 src: 'FFA MF',
                 lookup: {
@@ -143,16 +142,15 @@ angular.module('theVarApp')
 
     readyForPrices: function() {
       var self=this;
-      if(!config) return false;
+      if(!config) { return false; }
       var nac = config.accounts.length;
       console.log('abc',self.np(),Object.keys(fff).length,fff,nac);
       return(self.np()===nac);
     },
 
     portfolioPrices: function() {
-      var nac = config.accounts.length;
       if(!this.readyForPrices()) {
-        console.error("Not yet ready for prices");
+        console.error('Not yet ready for prices');
         return;
       }
       // prepare some variables to track status
@@ -169,7 +167,7 @@ angular.module('theVarApp')
     },
 
     mwpPost: function(x) {
-      if(!x) x=1;
+      if(!x) { x=1; }
       if(pst.i===pst.n) {
         pst.r=0;
       } else {
@@ -198,7 +196,7 @@ angular.module('theVarApp')
       al = fff[k].port.filter(function(a) {
         return a.symbolMain;
       });
-      if(al.length==0) { return; }
+      if(al.length===0) { return; }
 
       console.log('fsdafdsa234234',k,al);
       self.getChart(0,self,ki);
@@ -210,22 +208,23 @@ angular.module('theVarApp')
       // iterate in steps of N
       var N=60;
       if(al2i>Math.floor(al2.length/N)) {
-        console.error("Should not have gotten here",al2i,al2.length,N,Math.floor(al2.length/N));
+        console.error('Should not have gotten here',al2i,al2.length,N,Math.floor(al2.length/N));
         return;
       }
       var al2s=al2.slice(al2i*N,al2i*N+N); // if al2i=0 and N=10, this will be 0,10 but will return the items from index 0 to index 9 inclusive
-      console.log("subset",al2i,al2s,self);
+      console.log('subset',al2i,al2s,self);
 
-      Assets.getChart("FFA MF",al2s,config)
+      Assets.getChart('FFA MF',al2s,config)
         .then(function(psa) {
           console.log('res',psa,fff,al2s,self);
           // count failed codes
           pst.i+=al2s.length - Object.keys(psa).length;
+          var myfilter=function(x) { return x.symbolMain===psk; };
           for(var psk in psa) {
             var ps=psa[psk];
-            var al3=al.filter(function(x) { return x.symbolMain==psk; });
-            if(al3.length==0) { console.error("Did not find the code "+psk+" ... what?"); return; }
-            if(al3.length >1) { console.error("Found more than one code "+psk+" ... what?"); return; }
+            var al3=al.filter(myfilter);
+            if(al3.length===0) { console.error('Did not find the code '+psk+' ... what?'); return; }
+            if(al3.length >1) { console.error('Found more than one code '+psk+' ... what?'); return; }
             var a=al3[0];
 
             console.log('Doing',a.symbolMain);
@@ -251,12 +250,12 @@ angular.module('theVarApp')
               //console.error('Assets already contain ',newA);
               Assets.update(newA);
             } else {
-              console.error("How was this asset not yet added?",newA);
+              console.error('How was this asset not yet added?',newA);
             }
             self.mwpPost();
           }
 
-          console.log("recurse",al2i,al2.length,N,Math.floor(al2.length/N));
+          console.log('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
           if(al2i+1>Math.floor(al2.length/N)) {
             self.mwpS2Post(ki,self);
           } else {
@@ -277,7 +276,7 @@ angular.module('theVarApp')
       if(ki+1<Object.keys(fff).length) {
         self.mwpSingle(ki+1,self);
       } else {
-        console.log("finished looping");
+        console.log('finished looping');
         self.mwpPost();
       }
     }

@@ -26,7 +26,7 @@ angular.module('theVarApp')
           }
         }
 
-        if(pnls.length==0) return;
+        if(pnls.length===0) { return; }
 
         pnls.sort(function(a,b) {
           return a-b;
@@ -85,7 +85,7 @@ angular.module('theVarApp')
         var portSelKeys = Object.keys(portfolio).filter(function(x) {
           return !!portfolio[x].selected;
         });
-        if(portSelKeys.length==0) return 0;
+        if(portSelKeys.length===0) { return 0; }
 
         var totalPct = portSelKeys.map(function(k) {
           return Math.abs(portfolio[k].pct);

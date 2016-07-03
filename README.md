@@ -36,8 +36,11 @@ version 0.15.1.
 
 First, install grunt locally, as well as the npm dependencies and bower dependencies
 
+    # update npm
+    # http://blog.npmjs.org/post/85484771375/how-to-install-npm
+    sudo npm install npm -g
     # http://stackoverflow.com/a/18114868/4126114
-    sudo npm install grunt --save-dev
+    sudo npm install grunt karma -g # --save-dev
     sudo npm install
     bower install
 

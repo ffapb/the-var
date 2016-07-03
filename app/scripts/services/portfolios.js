@@ -25,11 +25,11 @@ angular.module('theVarApp')
         return Object.keys(ppp).length;
       },
       add: function(src,name,assets) {
+        var newP={name:name,src:src,assets:assets};
         if(!name || !src) {
           console.error('Adding invalid portfolio '+angular.toJson(newP));
           return false;
         }
-        var newP={name:name,src:src,assets:assets};
         newP.id = this.newId();
         if(ppp.hasOwnProperty(newP.id)) {
           console.error('ID '+newP.id+' already exists');

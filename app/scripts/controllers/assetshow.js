@@ -22,7 +22,7 @@ angular.module('theVarApp')
     };
 
     $scope.set=function(s1,s2) {
-      if(!s1||!s2) return;
+      if(!s1||!s2) { return; }
       symbol = s1;
       src = s2;
 
@@ -33,7 +33,7 @@ angular.module('theVarApp')
           return false;
         }
       }
-      if(!$scope.pendingStock) return $scope.add1();
+      if(!$scope.pendingStock) { return $scope.add1(); }
       return false;
     };
 
@@ -80,7 +80,7 @@ angular.module('theVarApp')
     $scope.gcs=function() { return Assets.getGcs(); };
 
     $scope.getChart = function() {
-      if(src=="FFA MF") {
+      if(src==='FFA MF') {
         var fc = ffa.ffaConfig1();
         if(!!fc) {
           fc.then(function(config) {
@@ -88,7 +88,7 @@ angular.module('theVarApp')
             return $scope.getChartCore(config);
           });
         } else {
-          console.error("Failed to get ffa config");
+          console.error('Failed to get ffa config');
         }
       } else {
         return $scope.getChartCore(false);
@@ -98,14 +98,14 @@ angular.module('theVarApp')
     $scope.getChartCore=function(config) {
       return Assets.getChart(src,symbol,config)
         .then(function(ps) {
-          if(src=="mod") ps={"test":ps}
-          console.log("ps",ps);
+          if(src==='mod') { ps={'test':ps}; }
+          console.log('ps',ps);
           for(var s in ps) { // this is just length 1
             // http://stackoverflow.com/a/171256/4126114
             for(var attrname in ps[s]) {
               $scope.pendingStock[attrname] = ps[s][attrname];
             }
-            console.log("pending stock",$scope.pendingStock);
+            console.log('pending stock',$scope.pendingStock);
             Assets.update($scope.pendingStock);
           }
         });
