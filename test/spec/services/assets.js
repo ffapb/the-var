@@ -36,6 +36,7 @@ describe('Service: Assets', function () {
     var a1={src:'mod',lookup:{Symbol:'symbol5'}};
     expect(Assets.exists(a1.src,a1.lookup.Symbol)).toBe(false);
     expect(Assets.na()===n0+1);
+    Assets.add(a1); // var pid1 = ...
     expect(Assets.exists(a1.src,a1.lookup.Symbol)).toBe(true);
     // add existing
     Assets.add(a1);

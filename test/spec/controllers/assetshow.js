@@ -60,7 +60,9 @@ describe('Controller: AssetshowCtrl', function () {
         done();
       });
       http.flush();
+    } else {
+      expect(scope.pendingStock).toBe(123);
+      done();
     }
-    expect(scope.pendingStock).toBe(123);
   });
 });
