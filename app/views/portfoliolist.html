@@ -14,8 +14,11 @@
   <tr>
     <th>Source</th>
     <th>Name</th>
-    <th>Number of securities</th>
+    <th>Securities</th>
     <th>VaR 95%, 1-day</th>
+    <th>VaR 95%, 7-day</th>
+    <th>VaR 99%, 1-day</th>
+    <th>VaR 99%, 7-day</th>
   </tr>
   <tr ng-repeat="p in list()">
     <td>{{p.src}}</td>
@@ -28,6 +31,9 @@
       <span class="badge">{{nass(p.id)}}</span>
     </td>
     <td>{{100*portfolioVaR(95,p,1)|number:2}} %</td>
+    <td>{{100*portfolioVaR(95,p,7)|number:2}} %</td>
+    <td>{{100*portfolioVaR(99,p,1)|number:2}} %</td>
+    <td>{{100*portfolioVaR(99,p,7)|number:2}} %</td>
   </tr>
 </table>
 
