@@ -1,3 +1,8 @@
+# 2016-07-02
+* set up travis CI
+ * http://stackoverflow.com/questions/19255976/how-to-make-travis-execute-angular-tests-on-chrome-please-set-env-variable-chr#19416096
+* integrate tarek list of feedback in email
+
 # 2016-04-19
 * Desirable features todo
  * 20% drop since inception
