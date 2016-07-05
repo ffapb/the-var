@@ -41,15 +41,19 @@
           </td>
         </tr>
         <tr>
-          <td>Prices</td>
-          <td><div jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div></td>
-        </tr>
-        <tr>
-          <td><span class="glyphicon glyphicon-search" ng-click="showJqplot=!showJqplot"></span></td>
           <td>
+            Prices plot
+            <br/>
+            <button ng-click="showJqplot=!showJqplot">
+              <span ng-show="!showJqplot">Detailed</span>
+              <span ng-show=" showJqplot">Summary</span>
+            </button>
+          </td>
+          <td>
+            <div ng-if="!showJqplot" jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
+
             <!-- http://angular-ui.github.io/ui-chart/ -->
-            <div ng-if="showJqplot" ui-chart="[pendingStock.historyJqplot]" chart-options="myChartOpts" ></div>
-            {{[pendingStock.historyJqplot]}}
+            <div ng-if=" showJqplot" ui-chart="[pendingStock.historyJqplot]" chart-options="myChartOpts" ></div>
           </td>
         </tr>
         <tr>
