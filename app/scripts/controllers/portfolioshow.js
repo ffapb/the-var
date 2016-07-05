@@ -104,6 +104,6 @@ angular.module('theVarApp')
       return 100-$scope.alist
         .map(function(a) { return a.pct; })
         .reduce(function(a,b) { return a+b; },0);
-    }
+    };
 
   });

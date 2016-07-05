@@ -9,7 +9,8 @@
     "jquery-ui": "^1.11.4",
     "angular-bootstrap": "^1.2.1",
     "jquery-sparkline": "^2.1.3",
-    "angular-base64": "^2.0.5"
+    "angular-base64": "^2.0.5",
+    "angular-ui-chart": "^0.0.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
@@ -28,6 +29,13 @@
       "main": [
         "themes/smoothness/jquery-ui.css",
         "jquery-ui.js"
+      ]
+    },
+    "jqplot": {
+      "main": [
+        "jquery.jqplot.js",
+        "jquery.jqplot.min.css",
+        "plugins/jqplot.dateAxisRenderer.min.js"
       ]
     }
   }

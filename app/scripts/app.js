@@ -13,7 +13,8 @@ angular
     'ngMessages',
     'ngRoute',
     'ui.bootstrap',
-    'base64'
+    'base64',
+    'ui.chart'
   ])
   .config(function ($routeProvider) {
     $routeProvider

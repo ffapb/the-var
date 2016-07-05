@@ -123,4 +123,15 @@ angular.module('theVarApp')
       return varCalc.edf(data,ss);
     };
 
+    // http://www.jqplot.com/examples/date-axes.php
+    $scope.myChartOpts = {
+      title:'Default Date Axis',
+      axes:{
+          xaxis:{
+              renderer:$.jqplot.DateAxisRenderer
+          }
+      },
+      series:[{lineWidth:4, markerOptions:{style:'square'}}]
+    };
+
   });

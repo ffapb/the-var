@@ -97,6 +97,9 @@ angular.module('theVarApp')
         }
 
         var dates = response.Dates;
+        dates = dates.map(function(x) {
+          return x.replace("T00:00:00","");
+        });
         var prices = response.Elements[0].DataSeries.close.values;
         var o = [];
         for(var i=0;i<dates.length;i++) {
@@ -109,6 +112,10 @@ angular.module('theVarApp')
           mindate: dates[0],
           maxdate: dates[dates.length-1]
         };
+        pendingStock.historyJqplot = [];
+        for(var i=0;i<dates.length;i++) {
+          pendingStock.historyJqplot.push([dates[i],prices[i]]);
+        }
 
         var pnls = [];
         pnls.push(0);

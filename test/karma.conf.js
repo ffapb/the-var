@@ -29,6 +29,9 @@ module.exports = function(config) {
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/jquery-sparkline/dist/jquery.sparkline.js',
       'bower_components/angular-base64/angular-base64.js',
+      'bower_components/jqplot/jquery.jqplot.js',
+      'bower_components/jqplot/plugins/jqplot.dateAxisRenderer.min.js',
+      'bower_components/angular-ui-chart/src/chart.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
