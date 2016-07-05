@@ -135,7 +135,15 @@ angular.module('theVarApp')
 
         ppp[pid].name=name;
         this.saveToLs();
+      },
+      updateValue: function(pid,value) {
+        if(!ppp.hasOwnProperty(pid)) {
+          console.error('Invalid portfolio ID '+pid);
+          return false;
+        }
 
+        ppp[pid].value=value;
+        this.saveToLs();
       }
     };
   });

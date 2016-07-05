@@ -1,14 +1,25 @@
-<h2>
-  <span>Portfolio: <input type="text" ng-model="portfolio.name" ng-change="updateName()" ></span>
-  <span class="pull-right">
-    <a class="btn btn-xs btn-primary" href="#/assetAdd?pid={{portfolio.id}}">
-      Add asset
-    </a>
-    <button class="btn btn-xs btn-danger" ng-click="delPortfolio()">
-     Delete portfolio 
-    </button>
+  <span>
+    <table class="table table-condensed" border=0>
+      <tr class="h2">
+        <td class="pull-right">Portfolio</td>
+        <td><input type="text" ng-model="portfolio.name" ng-change="updateName()" ></td>
+        <td>
+          <span class="pull-right">
+            <a class="btn btn-xs btn-primary" href="#/assetAdd?pid={{portfolio.id}}">
+              Add asset
+            </a>
+            <button class="btn btn-xs btn-danger" ng-click="delPortfolio()">
+             Delete portfolio 
+            </button>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="pull-right">Value (USD)</td>
+        <td><input type="text" ng-model="portfolio.value" ng-change="updateValue()" ></td>
+      </tr>
+    </table>
   </span>
-</h2>
 
 <div ng-show="!alist.length" class="alert alert-warning">
   No assets
@@ -21,13 +32,25 @@
       <tr><th>&nbsp;</th><th>95%</th><th>99%</th></tr>
       <tr>
         <th>1-day</th>
-        <td>{{100*portfolioVaR(95,1)|number:2}} %</td>
-        <td>{{100*portfolioVaR(99,1)|number:2}} %</td>
+        <td>
+          <div>{{100*portfolioVaR(95,1)                |number:2}} %</div>
+          <div>{{    portfolioVaR(95,1)*portfolio.value|number:2}} USD</div>
+        </td>
+        <td>
+          <div>{{100*portfolioVaR(99,1)                |number:2}} %</div>
+          <div>{{    portfolioVaR(99,1)*portfolio.value|number:2}} USD</div>
+        </td>
       </tr>
       <tr>
         <th>7-day</th>
-        <td>{{100*portfolioVaR(95,7)|number:2}} %</td>
-        <td>{{100*portfolioVaR(99,7)|number:2}} %</td>
+        <td>
+          <div>{{100*portfolioVaR(95,7)                |number:2}} %</div>
+          <div>{{    portfolioVaR(95,7)*portfolio.value|number:2}} USD</div>
+        </td>
+        <td>
+          <div>{{100*portfolioVaR(99,7)                |number:2}} %</div>
+          <div>{{    portfolioVaR(99,7)*portfolio.value|number:2}} USD</div>
+        </td>
       </tr>
     </table>
   </div>
@@ -59,6 +82,15 @@
       <th>History</th>
       <th>&nbsp;</th>
     </tr>
+    <tr class="{{unallocated()<5?'warning':'danger'}}" ng-show="unallocated()!=0">
+      <td colspan=2>&nbsp;</td>
+      <td colspan=9>Unallocated</td>
+      <td>
+        <div>{{unallocated()|number:2}} %</div>
+        <div>{{unallocated()/100*portfolio.value|number:2}} USD</div>
+      </td>
+      <td colspan=3>&nbsp;</td>
+    </tr>
     <tr ng-repeat="a in alist track by $index" ng-show="!!a.history||showNoData"> <!--a.src+a.lookup.Symbol">-->
       <td>{{$index+1}}</td>
       <td><input type="checkbox" ng-model="a.selected" /></td>
@@ -73,7 +105,9 @@
       <td nowrap style="color:{{colorCondition(a,99,7)}}">{{100*calculateVaR(a,99,7)|number:2}} %</td>
       <td nowrap>
         <input type="number" min=0 max=100 step=0.1 ng-value="a.pct?a.pct:0" style="width:5em" ng-model="a.pct" ng-change="assetPct(a)">
+        %
         <div ng-show="a.src=='mf'" class="text-info">MF: {{a.pct}}</div>
+        <div>{{a.pct/100*portfolio.value}} USD</div>
       </td>
       <td nowrap>
         <a class="btn btn-xs btn-info" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}" title="Show details" ng-disabled="!a.src || !a.lookup.Symbol">

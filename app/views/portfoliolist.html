@@ -14,6 +14,7 @@
   <tr>
     <th>Source</th>
     <th>Name</th>
+    <th>Value</th>
     <th>Securities</th>
     <th>VaR 95%, 1-day</th>
     <th>VaR 95%, 7-day</th>
@@ -27,13 +28,26 @@
         {{p.name}}
       </a>
     </td>
+    <td>{{p.value?p.value:"-"}} USD</td>
     <td>
       <span class="badge">{{nass(p.id)}}</span>
     </td>
-    <td>{{100*portfolioVaR(95,p,1)|number:2}} %</td>
-    <td>{{100*portfolioVaR(95,p,7)|number:2}} %</td>
-    <td>{{100*portfolioVaR(99,p,1)|number:2}} %</td>
-    <td>{{100*portfolioVaR(99,p,7)|number:2}} %</td>
+    <td>
+      <div>{{100    *portfolioVaR(95,p,1)|number:2}} %</div>
+      <div>{{p.value*portfolioVaR(95,p,1)|number:2}} USD</div>
+    </td>
+    <td>
+      <div>{{100    *portfolioVaR(95,p,7)|number:2}} %</div>
+      <div>{{p.value*portfolioVaR(95,p,7)|number:2}} USD</div>
+    </td>
+    <td>
+      <div>{{100    *portfolioVaR(99,p,1)|number:2}} %</div>
+      <div>{{p.value*portfolioVaR(99,p,1)|number:2}} USD</div>
+    </td>
+    <td>
+      <div>{{100    *portfolioVaR(99,p,7)|number:2}} %</div>
+      <div>{{p.value*portfolioVaR(99,p,7)|number:2}} USD</div>
+    </td>
   </tr>
 </table>
 
