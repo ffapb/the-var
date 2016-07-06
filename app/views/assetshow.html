@@ -9,10 +9,10 @@
       <tr><td>Alternatives</td><td>{{pendingStock.lookup.SymbAlt.join(",")}}</td></tr>
       <tr><td>Name</td><td>{{pendingStock.lookup.Name}}</td></tr>
       <tr><td>Exchange</td><td>{{pendingStock.lookup.Exchange}}</td></tr>
-      <tbody ng-show="!pendingStock.history">
+      <tbody>
         <tr>
           <td>History</td>
-          <td>
+          <td ng-if="!pendingStock.history">
             <span class="text-warning text-center">No close prices available</span>
             &nbsp;
             <button class="btn btn-xs" ng-click="getChart()" ng-disabled="gcs()==1">
@@ -22,12 +22,7 @@
             <span ng-show="gcs()==1">Loading prices...</span>
             <span ng-show="gcs()==2">Error in prices</span>
           </td>
-        </tr>
-      </tbody>
-      <tbody ng-show="pendingStock.history">
-        <tr>
-          <td>History</td>
-          <td>
+          <td ng-if="pendingStock.history">
             <div>{{pendingStock.history.length}} points</div>
             <div>{{pendingStock.historyMeta.mindate}} .. {{pendingStock.historyMeta.maxdate}}</div>
             <div>

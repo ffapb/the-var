@@ -132,9 +132,7 @@ angular.module('theVarApp')
           tickOptions:{formatString:'%Y-%m-%d'}
         },
         yaxis:{
-          tickOptions:{
-            formatString:'$%.2f'
-          }
+          tickOptions:{formatString:'$%.2f'}
         }
       },
       highlighter: {
@@ -142,7 +140,10 @@ angular.module('theVarApp')
         sizeAdjust: 7.5
       },
       cursor: {
-        zoom: true
+        show: true,
+        showTooltip: false,
+        zoom: true,
+        looseZoom: true
       },
       series:[
         {
