@@ -53,9 +53,9 @@
 
 <hr>
 
-<div ng-show="ffaGA()!=2">
+<div ng-show="ffaGA()!=2" class="alert alert-warning text-center">
   FFA portfolios not available
-  <button class="btn btn-info" ng-click="ffaCA()" ng-disabled="ffaGA()==1">
+  <button class="btn btn-info btn-xs" ng-click="ffaCA()" ng-disabled="ffaGA()==1" title="Retry">
     <span ng-show="ffaGA()==0" class="glyphicon glyphicon-repeat"></span>
     <span ng-show="ffaGA()==1">Checking...</span>
   </button>
