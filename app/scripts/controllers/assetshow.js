@@ -127,11 +127,31 @@ angular.module('theVarApp')
     $scope.myChartOpts = {
       title:'Default Date Axis',
       axes:{
-          xaxis:{
-              renderer:$.jqplot.DateAxisRenderer
+        xaxis:{
+          renderer:$.jqplot.DateAxisRenderer,
+          tickOptions:{formatString:'%Y-%m-%d'}
+        },
+        yaxis:{
+          tickOptions:{
+            formatString:'$%.2f'
           }
+        }
       },
-      series:[{lineWidth:4, markerOptions:{style:'square'}}]
+      highlighter: {
+        show: true,
+        sizeAdjust: 7.5
+      },
+      cursor: {
+        zoom: true
+      },
+      series:[
+        {
+          lineWidth:1,
+          shadow:false,
+          showMarker: false
+//          markerOptions:{style:'none'}
+        }
+      ]
     };
 
   });

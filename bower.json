@@ -35,7 +35,8 @@
       "main": [
         "jquery.jqplot.js",
         "jquery.jqplot.min.css",
-        "plugins/jqplot.dateAxisRenderer.min.js"
+        "plugins/jqplot.dateAxisRenderer.min.js",
+        "plugins/jqplot.highlighter.min.js"
       ]
     }
   }
