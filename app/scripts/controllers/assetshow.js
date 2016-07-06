@@ -124,7 +124,8 @@ angular.module('theVarApp')
     };
 
     // http://www.jqplot.com/examples/date-axes.php
-    $scope.myChartOpts = {
+    $scope.myChartOpts={};
+    $scope.myChartOpts.usd = {
       title:'Default Date Axis',
       axes:{
         xaxis:{
@@ -154,5 +155,9 @@ angular.module('theVarApp')
         }
       ]
     };
+    $scope.myChartOpts.perc = angular.fromJson(angular.toJson($scope.myChartOpts.usd));
+    $scope.myChartOpts.perc.axes.xaxis.renderer = $.jqplot.DateAxisRenderer;
+    $scope.myChartOpts.perc.axes.yaxis.tickOptions.formatString='%%%.2f';
+    console.log($scope.myChartOpts.perc);
 
   });

@@ -102,7 +102,7 @@ angular.module('theVarApp')
 
     $scope.unallocated = function() {
       return 100-$scope.alist
-        .map(function(a) { return a.pct; })
+        .map(function(a) { return a.pct?a.pct:0; })
         .reduce(function(a,b) { return a+b; },0);
     };
 

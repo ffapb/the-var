@@ -14,7 +14,8 @@ angular
     'ngRoute',
     'ui.bootstrap',
     'base64',
-    'ui.chart'
+    'ui.chart',
+    'angularMoment'
   ])
   .config(function ($routeProvider) {
     $routeProvider

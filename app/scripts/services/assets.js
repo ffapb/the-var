@@ -8,7 +8,7 @@
  * Service in the theVarApp.
  */
 angular.module('theVarApp')
-  .service('Assets', function (markitOnDemand,varCalc,$http) {
+  .service('Assets', function (markitOnDemand,varCalc,$http,moment) {
     // AngularJS will instantiate a singleton by calling 'new' on this function
     var aaa={};
     if(localStorage.getItem('aaa')) {
@@ -108,9 +108,20 @@ angular.module('theVarApp')
         var pendingStock = {};
         pendingStock.history = o;
         pendingStock.history2 = angular.fromJson(angular.toJson(prices));
+
+        var prevEom = this.findPrevEom(dates,'month');
+        var prevEoy = this.findPrevEom(dates,'year');
         pendingStock.historyMeta = {
           mindate: dates[0],
-          maxdate: dates[dates.length-1]
+          maxdate: dates[dates.length-1],
+          lastprice: prices[dates.length-1],
+          firstprice: prices[0],
+          prevEomDate: prevEom!==-1?dates[prevEom]:'N/A',
+          prevEomClose: prevEom!==-1?prices[prevEom]:'N/A',
+          prevEoyDate: prevEoy!==-1?dates[prevEoy]:'N/A',
+          prevEoyClose: prevEoy!==-1?prices[prevEoy]:'N/A',
+          tm1date: dates.length>1?dates[dates.length-2]:'N/A',
+          tm1price: dates.length>1?prices[dates.length-2]:'N/A'
         };
         pendingStock.historyJqplot = [];
         for(i=0;i<dates.length;i++) {
@@ -126,6 +137,21 @@ angular.module('theVarApp')
 
         pendingStock.pnls2=pnls.map(function(x) { return 100*x; });
 
+        pendingStock.historyMeta.pnl = {
+          last: pendingStock.pnls2[pendingStock.pnls2.length-1],
+          eom: (prices[prices.length-1]/prices[prevEom]-1)*100,
+          eoy: (prices[prices.length-1]/prices[prevEoy]-1)*100,
+          first: (prices[prices.length-1]/prices[0]-1)*100
+        };
+
+        pendingStock.pnlsJqplot=[];
+        for(i=1;i<prices.length;i++) {
+          pendingStock.pnlsJqplot.push([
+            dates[i],
+            100*(prices[i]/prices[i-1]-1)
+          ]);
+        }
+
         var pnlsSort = angular.fromJson(angular.toJson(pnls));
         pnlsSort.sort(function(a,b) {
           return a-b;
@@ -135,6 +161,29 @@ angular.module('theVarApp')
         pendingStock.pnlsEdf=varCalc.edf(pnls,1/100);
         pendingStock.selected=true;
         return pendingStock;
+      },
+
+      // calculate prevEom date and price
+      findPrevEom: function(dates,target) {
+        if(target!=='month' && target!=='year') {
+          console.error('Unsupported target');
+          return -1;
+        }
+
+        var maxDate = dates[dates.length-1];
+        var prevEom = moment(maxDate,'YYYY-MM-DD')
+          .startOf(target)
+          .subtract(1,'days')
+          .format('YYYY-MM-DD');
+        var io = dates.indexOf(prevEom);
+        if(io!==-1) { return io; }
+        var before = dates.filter(function(x) { return x<prevEom; });
+        if(before.length>0) {
+          before=before[before.length-1];
+          io = dates.indexOf(before);
+          if(io!==-1) { return io; }
+        }
+        return -1;
       },
 
       getGcs: function() { return gcs; },

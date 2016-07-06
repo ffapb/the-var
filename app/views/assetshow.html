@@ -24,7 +24,37 @@
           </td>
           <td ng-if="pendingStock.history">
             <div>{{pendingStock.history.length}} points</div>
-            <div>{{pendingStock.historyMeta.mindate}} .. {{pendingStock.historyMeta.maxdate}}</div>
+            <table class="table">
+              <tr>
+                <td>First</td>
+                <td>{{pendingStock.historyMeta.mindate}}</td>
+                <td>{{pendingStock.historyMeta.firstprice}} USD</td>
+                <td>{{pendingStock.historyMeta.pnl.first|number:2}} %</td>
+              </tr>
+              <tr>
+                <td>Prev EOY</td>
+                <td>{{pendingStock.historyMeta.prevEoyDate}}</td>
+                <td>{{pendingStock.historyMeta.prevEoyClose}} USD</td>
+                <td>{{pendingStock.historyMeta.pnl.eoy|number:2}} %</td>
+              </tr>
+              <tr>
+                <td>Prev EOM</td>
+                <td>{{pendingStock.historyMeta.prevEomDate}}</td>
+                <td>{{pendingStock.historyMeta.prevEomClose}} USD</td>
+                <td>{{pendingStock.historyMeta.pnl.eom|number:2}} %</td>
+              </tr>
+              <tr>
+                <td>Last-1</td>
+                <td>{{pendingStock.historyMeta.tm1date}}</td>
+                <td>{{pendingStock.historyMeta.tm1price}} USD</td>
+                <td>{{pendingStock.historyMeta.pnl.last|number:2}} %</td>
+              </tr>
+              <tr>
+                <td>Last</td>
+                <td>{{pendingStock.historyMeta.maxdate}}</td>
+                <td>{{pendingStock.historyMeta.lastprice}} USD</td>
+              </tr>
+            </table>
             <div>
               <button class="btn btn-xs" ng-click="getChart()" ng-disabled="gcs()==1">
                 <span class="glyphicon glyphicon-refresh"></span>
@@ -39,21 +69,32 @@
           <td>
             Prices plot
             <br/>
-            <button ng-click="showJqplot=!showJqplot">
-              <span ng-show="!showJqplot">Detailed</span>
-              <span ng-show=" showJqplot">Summary</span>
+            <button ng-click="showJqplot1=!showJqplot1">
+              <span ng-show="!showJqplot1">Detailed</span>
+              <span ng-show=" showJqplot1">Summary</span>
             </button>
           </td>
           <td>
-            <div ng-if="!showJqplot" jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
-
+            <div ng-if="!showJqplot1" jq-sparkline ng-model="pendingStock.history2" type="line" ng-if="pendingStock.history2"></div>
             <!-- http://angular-ui.github.io/ui-chart/ -->
-            <div ng-if=" showJqplot" ui-chart="[pendingStock.historyJqplot]" chart-options="myChartOpts" ></div>
+            <div ng-if=" showJqplot1" ui-chart="[pendingStock.historyJqplot]" chart-options="myChartOpts.usd" ></div>
           </td>
         </tr>
         <tr>
-          <td>P&amp;L</td>
-          <td><div jq-sparkline ng-model="pendingStock.pnls2" type="line" ng-if="pendingStock.pnls2"></div></td>
+          <td>
+            P&amp;L plot
+            <br/>
+            <button ng-click="showJqplot2=!showJqplot2">
+              <span ng-show="!showJqplot2">Detailed</span>
+              <span ng-show=" showJqplot2">Summary</span>
+            </button>
+          </td>
+          <td>
+            <div ng-if="!pendingStock.pnls2">Not available</div>
+            <div ng-if="!showJqplot2 && pendingStock.pnls2" jq-sparkline ng-model="pendingStock.pnls2" type="line"></div>
+            <!-- http://angular-ui.github.io/ui-chart/ -->
+            <div ng-if=" showJqplot2 && pendingStock.pnls2" ui-chart="[pendingStock.pnlsJqplot]" chart-options="myChartOpts.perc" ></div>
+          </td>
         </tr>
         <tr>
           <td>Empirical distribution</td>

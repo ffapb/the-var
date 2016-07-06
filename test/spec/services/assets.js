@@ -88,4 +88,17 @@ describe('Service: Assets', function () {
     http.flush();
   });
 
+  it('find prev eom',function() {
+    var dates = ['2015-01-01','2015-01-15','2015-01-30','2015-02-01','2015-02-15'];
+    expect(Assets.findPrevEom(dates,'month')).toBe(2);
+    dates = ['2015-01-01','2015-01-15','2015-01-29','2015-02-01','2015-02-15'];
+    expect(Assets.findPrevEom(dates,'month')).toBe(2);
+    dates = ['2015-01-01','2015-01-15','2015-01-29'];
+    expect(Assets.findPrevEom(dates,'month')).toBe(-1);
+    dates = ['2015-01-01','2015-01-15','2015-01-29'];
+    expect(Assets.findPrevEom(dates,'year')).toBe(-1);
+    dates = ['2014-10-10','2014-12-30','2015-01-01','2015-01-15','2015-01-29','2015-02-01','2015-02-15'];
+    expect(Assets.findPrevEom(dates,'year')).toBe(1);
+  });
+ 
 });
