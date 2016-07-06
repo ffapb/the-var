@@ -54,6 +54,11 @@ angular
         controller: 'AssetlistCtrl',
         controllerAs: 'assetList'
       })
+      .when('/Settings', {
+        templateUrl: 'views/settings.html',
+        controller: 'SettingsCtrl',
+        controllerAs: 'Settings'
+      })
       .otherwise({
         redirectTo: '/'
       });

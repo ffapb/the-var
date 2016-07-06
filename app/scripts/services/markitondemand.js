@@ -8,7 +8,7 @@
  * Service in the theVarApp.
  */
 angular.module('theVarApp')
-  .service('markitOnDemand', function ($http) {
+  .service('markitOnDemand', function ($http,Settings,moment) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     return {
       // Based on 
@@ -44,20 +44,28 @@ angular.module('theVarApp')
       interactiveChart: function(symbol) {
         var url = 'http://dev.markitondemand.com/MODApis/Api/v2/InteractiveChart/jsonp';
 
+        var parameters = {
+          DataPeriod: 'Day', // Month
+          NumberOfDays: 365,
+          Normalized: false, // until I understand how they're normalizing, I'm just using the close prices
+          Elements: [
+            {
+              Symbol: symbol,
+              Type: 'price',
+              Params: ['c'],
+            }
+          ]
+        };
+        if(Settings.end!==moment().format('YYYY-MM-DD') || Settings.length.n!==1 || Settings.length.y!=='year') {
+          // http://dev.markitondemand.com/MODApis/#interactive
+          delete parameters.NumberOfDays;
+          parameters.StartDate = Settings.start()+'T00:00:00-00';
+          parameters.EndDate = Settings.end+'T00:00:00-00';
+        }
+
         return $http.jsonp(url, {
           params: {
-            parameters: {
-              DataPeriod: 'Day', // Month
-              NumberOfDays: 365,
-              Normalized: false, // until I understand how they're normalizing, I'm just using the close prices
-              Elements: [
-                {
-                  Symbol: symbol,
-                  Type: 'price',
-                  Params: ['c'],
-                }
-              ]
-            },
+            parameters: parameters,
             jsoncallback: 'JSON_CALLBACK'
           }
         });

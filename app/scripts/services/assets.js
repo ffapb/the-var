@@ -107,7 +107,7 @@ angular.module('theVarApp')
         }
         var pendingStock = {};
         pendingStock.history = o;
-        pendingStock.history2 = angular.fromJson(angular.toJson(prices));
+        pendingStock.history2 = this.downsample(prices,100); // end up with 100 points
 
         var prevEom = this.findPrevEom(dates,'month');
         var prevEoy = this.findPrevEom(dates,'year');
@@ -135,10 +135,13 @@ angular.module('theVarApp')
         }
         pendingStock.pnls=pnls;
 
-        pendingStock.pnls2=pnls.map(function(x) { return 100*x; });
+        pendingStock.pnls2=this.downsample(
+          pnls.map(function(x) { return 100*x; }),
+          100
+        );
 
         pendingStock.historyMeta.pnl = {
-          last: pendingStock.pnls2[pendingStock.pnls2.length-1],
+          last: pendingStock.pnls[pendingStock.pnls.length-1]*100,
           eom: (prices[prices.length-1]/prices[prevEom]-1)*100,
           eoy: (prices[prices.length-1]/prices[prevEoy]-1)*100,
           first: (prices[prices.length-1]/prices[0]-1)*100
@@ -161,6 +164,21 @@ angular.module('theVarApp')
         pendingStock.pnlsEdf=varCalc.edf(pnls,1/100);
         pendingStock.selected=true;
         return pendingStock;
+      },
+
+      // downsample
+      // x: array of points
+      // l: result length
+      downsample: function(x,l) {
+        var y = angular.fromJson(angular.toJson(x));
+        var o = [];
+        var skip = Math.floor(y.length / l);
+        for(var i=0;i<y.length;i++) {
+          if(i % skip === 0) {
+            o.push(y[i]);
+          }
+        }
+        return o;
       },
 
       // calculate prevEom date and price

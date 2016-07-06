@@ -32,6 +32,12 @@ The logo is the VaR diagram posted on [wikipedia](https://en.wikipedia.org/wiki/
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
 version 0.15.1.
 
+To add services/controllers/routes:
+```bash
+npm install -g grunt-cli bower yo generator-karma generator-angular
+yo angular:service Settings
+```
+
 ## Build
 
 First, install grunt locally, as well as the npm dependencies and bower dependencies
