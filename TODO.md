@@ -1,3 +1,7 @@
+# 2016-07-06
+* varcalc has no concept of dates
+ * the `nday` it does is actually an `npoints`
+
 # 2016-07-02
 * set up travis CI
  * http://stackoverflow.com/questions/19255976/how-to-make-travis-execute-angular-tests-on-chrome-please-set-env-variable-chr#19416096

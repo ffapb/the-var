@@ -39,16 +39,9 @@ describe('Controller: PortfolioshowCtrl', function () {
     expect(scope.alist).not.toBeNull();
   });
 
-  it('colorCondition', function () {
+  it('calculateVaR', function () {
     var p1 = { pnls: [2], history2: [1,1,1,1,1,1,1,1] };
     expect(scope.calculateVaR(p1,95,1)).toBe(0);
-    expect(scope.colorCondition(p1,95,1)==='green');
-
-    var p2 = { pnls: [-2], history2: [1,1,1,1,1,1,1,1] };
-    expect(scope.colorCondition(p2,95,1)==='red');
-
-    var p3 = { pnls: [0], history2: [1,1,1,1,1,1,1,1] };
-    expect(scope.colorCondition(p3,95,1)==='black');
   });
 
 });

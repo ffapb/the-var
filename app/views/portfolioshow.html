@@ -27,20 +27,7 @@
 
 <div ng-show="alist.length">
   <div>
-    <table class="table" style="width:40%">
-      <caption>Portfolio VaR</caption>
-      <tr><th>&nbsp;</th><th>95%</th><th>99%</th></tr>
-      <tr>
-        <th>1-day</th>
-        <td><divvar varisk="{{portfolioVaR(95,1)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
-        <td><divvar varisk="{{portfolioVaR(99,1)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
-      </tr>
-      <tr>
-        <th>7-day</th>
-        <td><divvar varisk="{{portfolioVaR(95,7)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
-        <td><divvar varisk="{{portfolioVaR(99,7)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
-      </tr>
-    </table>
+    <varmatrix type="matrix"></varmatrix>
   </div>
 
   <br>

@@ -16,6 +16,7 @@ angular.module('theVarApp')
         if(!p.history2) { return; }
         if(p.history2.length===0) { return; }
         if(nday<=0) { return; }
+        if(p.history2.length<nday) { return; } // insufficient points
 
         // calculate n-day returns (including 1-day)
         var pnls =[];
