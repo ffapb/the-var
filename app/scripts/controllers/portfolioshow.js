@@ -91,15 +91,6 @@ angular.module('theVarApp')
       Portfolios.updateValue($scope.portfolio.id,$scope.portfolio.value);
     };
 
-    $scope.colorCondition=function(a,perc,nday) {
-      if(!a.pnls) { return 'grey'; }
-      var v1=a.pnls[a.pnls.length-1];
-      var v2=$scope.calculateVaR(a,perc,nday);
-      if(v1>v2) { return 'green'; }
-      if(v1<v2) { return 'red'; }
-      return 'black';
-    };
-
     $scope.unallocated = function() {
       return 100-$scope.alist
         .map(function(a) { return a.pct?a.pct:0; })

@@ -32,25 +32,13 @@
       <tr><th>&nbsp;</th><th>95%</th><th>99%</th></tr>
       <tr>
         <th>1-day</th>
-        <td>
-          <div>{{100*portfolioVaR(95,1)                |number:2}} %</div>
-          <div>{{    portfolioVaR(95,1)*portfolio.value|number:2}} USD</div>
-        </td>
-        <td>
-          <div>{{100*portfolioVaR(99,1)                |number:2}} %</div>
-          <div>{{    portfolioVaR(99,1)*portfolio.value|number:2}} USD</div>
-        </td>
+        <td><divvar varisk="{{portfolioVaR(95,1)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
+        <td><divvar varisk="{{portfolioVaR(99,1)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
       </tr>
       <tr>
         <th>7-day</th>
-        <td>
-          <div>{{100*portfolioVaR(95,7)                |number:2}} %</div>
-          <div>{{    portfolioVaR(95,7)*portfolio.value|number:2}} USD</div>
-        </td>
-        <td>
-          <div>{{100*portfolioVaR(99,7)                |number:2}} %</div>
-          <div>{{    portfolioVaR(99,7)*portfolio.value|number:2}} USD</div>
-        </td>
+        <td><divvar varisk="{{portfolioVaR(95,7)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
+        <td><divvar varisk="{{portfolioVaR(99,7)}}" limit="{{-0.20}}" usd="{{portfolio.value}}"></divvar></td>
       </tr>
     </table>
   </div>
@@ -98,11 +86,12 @@
       <td>{{a.lookup.SymbAlt.join(",")}}</td>
       <td>{{a.lookup.Name}}</td>
       <td>{{a.lookup.Exchange}}</td>
-      <td>{{100*a.pnls[a.pnls.length-1]|number:2}} % <br> ({{a.historyMeta.maxdate}})</td>
-      <td nowrap style="color:{{colorCondition(a,95,1)}}">{{100*calculateVaR(a,95,1)|number:2}} %</td>
-      <td nowrap style="color:{{colorCondition(a,95,7)}}">{{100*calculateVaR(a,95,7)|number:2}} %</td>
-      <td nowrap style="color:{{colorCondition(a,99,1)}}">{{100*calculateVaR(a,99,1)|number:2}} %</td>
-      <td nowrap style="color:{{colorCondition(a,99,7)}}">{{100*calculateVaR(a,99,7)|number:2}} %</td>
+      <td>{{a.pnls2[a.pnls2.length-1]|number:2}} % <br> ({{a.historyMeta.maxdate}})</td>
+      <td nowrap><divvar varisk="{{calculateVaR(a,95,1)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
+      <td nowrap><divvar varisk="{{calculateVaR(a,95,7)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
+      <td nowrap><divvar varisk="{{calculateVaR(a,99,1)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
+      <td nowrap><divvar varisk="{{calculateVaR(a,99,7)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
+
       <td nowrap>
         <input type="number" min=0 max=100 step=0.1 ng-value="a.pct?a.pct:0" style="width:5em" ng-model="a.pct" ng-change="assetPct(a)">
         %
