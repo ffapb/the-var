@@ -60,9 +60,25 @@ angular.module('theVarApp')
       return tr;
     }
 
+    function getRowBody(scope) {
+      var tr = $('<tr/>');
+      percentile.map(function(p) {
+        nday.map(function(nd) {
+          var td = $('<td nowrap/>');
+          var perc = 100*scope.portfolioVaR(p,scope.p,nd);
+          perc = perc.toFixed(2);
+          $('<div/>',{text: perc+' %'}).appendTo(td);
+          var usd = scope.p.value*scope.portfolioVaR(p,scope.p,nd);
+          usd=usd.toFixed(2);
+          $('<div/>',{text: usd+' USD'}).appendTo(td);
+          td.appendTo(tr);
+        });
+      });
+      return tr;
+    }
+
     return {
-      restrict: 'E',
-      replace: true,
+      restrict: 'EA',
       link: function postLink(scope, element, attrs) {
         switch(attrs.type) {
           case 'matrix':
@@ -71,7 +87,14 @@ angular.module('theVarApp')
             $compile(element.contents())(scope);
             break;
           case 'rowHeader':
-            $(getRowHeader()[0].innerHTML).appendTo(element);
+            console.log('rh',element.html());
+            var grh = getRowHeader();
+            grh.find('th').appendTo(element);
+            break;
+          case 'rowBody':
+            console.log('rb',element.html(),attrs.pid);
+            var grb = getRowBody(scope);
+            grb.find('td').appendTo(element);
             break;
           default:
             element.text('This is the varmatrix directive');

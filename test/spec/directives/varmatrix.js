@@ -27,10 +27,20 @@ describe('Directive: varmatrix', function () {
   }));
 
   it('row header', inject(function ($compile) {
-    element = angular.element('<varmatrix type="rowHeader"></varmatrix>');
+    element = angular.element('<tr varmatrix type="rowHeader"><th>bla</th></tr>');
     element = $compile(element)(scope);
-    console.log(element.html());
-    expect(element.find('th').length).toBe(6);
+    var expected = '<th>bla</th><th>VaR 95%, 1-day</th><th>VaR 95%, 1-week</th><th>VaR 95%, 1-year</th><th>VaR 99%, 1-day</th><th>VaR 99%, 1-week</th><th>VaR 99%, 1-year</th>';
+    expect(element.html()).toBe(expected);
+  }));
+
+  it('row body', inject(function ($compile) {
+    scope.portfolioVaR=function() { return 1; };
+    scope.p={value:100};
+
+    element = angular.element('<tr varmatrix type="rowBody"><th>bla</th></tr>');
+    element = $compile(element)(scope);
+    var expected = '<th>bla</th><td><div>100 %</div><div>100 %</div></td><td><div>100 %</div><div>100 %</div></td><td><div>100 %</div><div>100 %</div></td><td><div>100 %</div><div>100 %</div></td><td><div>100 %</div><div>100 %</div></td><td><div>100 %</div><div>100 %</div></td>';
+    expect(element.html()).toBe(expected);
   }));
 
 });
