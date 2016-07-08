@@ -136,7 +136,7 @@ angular.module('theVarApp')
         }
         pendingStock.pnls=pnls;
 
-        pendingStock.pnls2=this.downsample(
+        pendingStock.pnlsDownsampled=this.downsample(
           pnls.map(function(x) { return 100*x; }),
           100
         );

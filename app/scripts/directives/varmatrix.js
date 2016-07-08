@@ -108,7 +108,7 @@ angular.module('theVarApp')
           perc = perc.toFixed(2);
           getDivVar(
             varVal,
-            scope.a.pnls2[scope.a.pnls2.length-1]/100,
+            scope.a.pnls[scope.a.pnls.length-1],
             scope.a.pct/100*scope.portfolio.value,
             true
           ).appendTo(td);

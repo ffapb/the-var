@@ -90,10 +90,9 @@
             </button>
           </td>
           <td>
-            <div ng-if="!pendingStock.pnls2">Not available</div>
-            <div ng-if="!showJqplot2 && pendingStock.pnls2" jq-sparkline ng-model="pendingStock.pnls2" type="line"></div>
+            <div ng-if="!showJqplot2" jq-sparkline ng-model="pendingStock.pnlsDownsampled" type="line"></div>
             <!-- http://angular-ui.github.io/ui-chart/ -->
-            <div ng-if=" showJqplot2 && pendingStock.pnls2" ui-chart="[pendingStock.pnlsJqplot]" chart-options="myChartOpts.perc" ></div>
+            <div ng-if=" showJqplot2" ui-chart="[pendingStock.pnlsJqplot]" chart-options="myChartOpts.perc" ></div>
           </td>
         </tr>
         <tr>
