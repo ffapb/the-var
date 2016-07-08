@@ -118,6 +118,23 @@ angular.module('theVarApp')
       return tr;
     }
 
+    function getColumn(scope) {
+      var table = $('<table/>');
+
+      percentile.map(function(p) {
+        nday.map(function(nd) {
+          var ndText=nd2st(nd);
+          var tr=$('<tr/>');
+          $('<td/>',{text:'VaR '+p+'%, '+ndText}).appendTo(tr);
+          var varVal = 100*scope.calculateVaR(scope.pendingStock,p,nd);
+          varVal=varVal.toFixed(2);
+          $('<td/>',{text:varVal+' %'}).appendTo(tr);
+          tr.appendTo(table);
+        });
+      });
+      return table;
+    }
+
     return {
       restrict: 'EA',
       transclude: false,
@@ -149,6 +166,10 @@ angular.module('theVarApp')
             grb.find('td').appendTo(element);
             // compile to re-render the 'divvar' entry
             $compile(element.contents())(scope);
+            break;
+          case 'column':
+            grb = getColumn(scope);
+            grb.find('tr').appendTo(element); //.find('tbody:last'));
             break;
           default:
             //element.text('This is the varmatrix directive');

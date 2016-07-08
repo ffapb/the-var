@@ -74,4 +74,13 @@ describe('Directive: varmatrix', function () {
     expect(element.html()).toBe(expected);
   }));
 
+  it('column', inject(function ($compile) {
+    scope.calculateVaR=function() { return 1; };
+    element = angular.element('<table varmatrix type="column"><tr><td>bla</td></tr></table>');
+    element = $compile(element)(scope);
+    expect(element.find('tr').length).toBe(5);
+    var expected = '<table><tr><td>bla</td></table>';
+    expect(element.html()).toBe(expected);
+  }));
+
 });
