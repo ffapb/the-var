@@ -56,12 +56,15 @@ angular.module('theVarApp')
             }
           ]
         };
-        if(Settings.end!==moment().format('YYYY-MM-DD') || Settings.length.n!==1 || Settings.length.y!=='year') {
+        if(Settings.end.date!==moment().format('YYYY-MM-DD') || 
+          Settings.length.n!==1 ||
+          Settings.length.y!=='year') {
           // http://dev.markitondemand.com/MODApis/#interactive
           delete parameters.NumberOfDays;
           parameters.StartDate = Settings.start()+'T00:00:00-00';
-          parameters.EndDate = Settings.end+'T00:00:00-00';
+          parameters.EndDate = Settings.end.date+'T00:00:00-00';
         }
+        console.log('mod jsonp',parameters);
 
         return $http.jsonp(url, {
           params: {

@@ -10,17 +10,17 @@
 angular.module('theVarApp')
   .controller('SettingsCtrl', function ($scope,Settings) {
 
-    var ls = localStorage.getItem('settings');
-    if(!!ls) {
-      ls = angular.fromJson(ls);
-      Settings.setEnd(ls.end);
-      Settings.setLength(ls.length.n,ls.length.u);
-    }
-
     $scope.get = function() { return Settings; };
 
     $scope.saveToLs = function() { 
       localStorage.setItem('settings',angular.toJson(Settings));
+    };
+
+    $scope.setEnd=function() {
+      var type = Settings.end.type;
+      var date = Settings.end.date;
+      Settings.setEnd(type,date);
+      $scope.saveToLs();
     };
 
   });

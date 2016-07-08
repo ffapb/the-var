@@ -1,6 +1,10 @@
 <p>This is the Settings view.</p>
 <ul>
-<li>End date: <input type="text" ng-model="get().end" ng-change="saveToLs()"></li>
+<li>
+  End date:
+  <select ng-model="get().end.type" ng-change="setEnd()" ng-options="x for x in ['Today','Yesterday','Custom date']"></select>
+  <input type="text" ng-model="get().end.date" ng-change="saveToLs()" ng-disabled="get().end.type=='Today'||get().end.type=='Yesterday'">
+</li>
 <li>
   Length: 
   <select ng-options="x as x for x in [1,2,3,4,5,6,7,8,9,10,11]" ng-model="get().length.n" ng-change="saveToLs()"></select>

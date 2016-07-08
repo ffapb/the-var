@@ -130,12 +130,10 @@ angular.module('theVarApp')
             $compile(element.contents())(scope);
             break;
           case 'rowHeader':
-            console.log('rh',element.html());
             var grh = getRowHeader();
             grh.find('th').appendTo(element);
             break;
           case 'rowBodyPortfolio':
-            console.log('rb',element.html());
             var grb = getRowBodyPortfolio(scope);
             grb.find('td').appendTo(element);
             break;
@@ -147,7 +145,6 @@ angular.module('theVarApp')
 //            gr.find('tbody>tr>td').appendTo(element.find('tbody>tr'));
 //            break;
           case 'rowBodyAsset':
-            console.log('rb',element.html());
             grb = getRowBodyAsset(scope);
             grb.find('td').appendTo(element);
             // compile to re-render the 'divvar' entry
