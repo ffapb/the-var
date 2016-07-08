@@ -2,8 +2,10 @@
 * varcalc has no concept of dates
  * the `nday` it does is actually an `npoints`
 * divvar directive does not update with portfolio value nor asset weight
+ * fixing from varmatrix by watch, but didnt finish yet
+ * is this becoming slower?
 * add tooltip to portfoliolist varmatrix rowBodyPortfolio
-* settings/end date to be connected to today
+* portfolio var = current * (1-unallocated)
 
 # 2016-07-02
 * set up travis CI
