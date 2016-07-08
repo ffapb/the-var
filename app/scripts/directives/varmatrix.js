@@ -19,6 +19,15 @@ angular.module('theVarApp')
       return nd+'-day';
     }
 
+    function getDivVar(varisk,limit,usd,flip) {
+      return $('<divvar/>',{
+        varisk: varisk,
+        limit: limit,
+        usd: usd,
+        flip: flip
+      });
+    }
+
     function getMatrix(scope) {
       var table = $('<table/>',{
         class: 'table',
@@ -38,11 +47,12 @@ angular.module('theVarApp')
         $('<th/>',{text:ndText}).appendTo(tr);
         percentile.map(function(p) {
           var td = $('<td/>');
-          $('<divvar/>',{
-            varisk: scope.portfolioVaR(p,nd),
-            limit: -0.20,
-            usd: scope.portfolio.value
-          }).appendTo(td);
+          getDivVar(
+            scope.portfolioVaR(p,nd),
+            -0.20,
+            scope.portfolio.value,
+            false
+          ).appendTo(td);
           td.appendTo(tr);
         });
         tr.appendTo(table);
@@ -60,7 +70,7 @@ angular.module('theVarApp')
       return tr;
     }
 
-    function getRowBody(scope) {
+    function getRowBodyPortfolio(scope) {
       var tr = $('<tr/>');
       percentile.map(function(p) {
         nday.map(function(nd) {
@@ -77,13 +87,46 @@ angular.module('theVarApp')
       return tr;
     }
 
+//    function getRow(scope) {
+//      var table = $('<table/>');
+//      var thead = $('<thead/>');
+//      var tbody = $('<tbody/>');
+//      getRowHeader().appendTo(thead);
+//      getRowBodyPortfolio(scope).appendTo(tbody);
+//      thead.appendTo(table);
+//      tbody.appendTo(table);
+//      return table;
+//    }
+
+    function getRowBodyAsset(scope) {
+      var tr = $('<tr/>');
+      percentile.map(function(p) {
+        nday.map(function(nd) {
+          var varVal = scope.calculateVaR(scope.a,p,nd);
+          var td = $('<td nowrap/>');
+          var perc = 100*varVal;
+          perc = perc.toFixed(2);
+          getDivVar(
+            varVal,
+            scope.a.pnls2[scope.a.pnls2.length-1]/100,
+            scope.a.pct/100*scope.portfolio.value,
+            true
+          ).appendTo(td);
+          td.appendTo(tr);
+        });
+      });
+      return tr;
+    }
+
     return {
       restrict: 'EA',
+      transclude: false,
       link: function postLink(scope, element, attrs) {
         switch(attrs.type) {
           case 'matrix':
             var table = getMatrix(scope);
             table.appendTo(element);
+            // compile to re-render the 'divvar' entry
             $compile(element.contents())(scope);
             break;
           case 'rowHeader':
@@ -91,13 +134,27 @@ angular.module('theVarApp')
             var grh = getRowHeader();
             grh.find('th').appendTo(element);
             break;
-          case 'rowBody':
-            console.log('rb',element.html(),attrs.pid);
-            var grb = getRowBody(scope);
+          case 'rowBodyPortfolio':
+            console.log('rb',element.html());
+            var grb = getRowBodyPortfolio(scope);
             grb.find('td').appendTo(element);
             break;
+// row is useless because rowBodyPortfolio requires the portfolio from scope.p from ng-repeat="p in list()"
+//          case 'row':
+//            console.log('rb',element.html());
+//            var gr = getRow(scope);
+//            gr.find('thead>tr>th').appendTo(element.find('thead>tr'));
+//            gr.find('tbody>tr>td').appendTo(element.find('tbody>tr'));
+//            break;
+          case 'rowBodyAsset':
+            console.log('rb',element.html());
+            grb = getRowBodyAsset(scope);
+            grb.find('td').appendTo(element);
+            // compile to re-render the 'divvar' entry
+            $compile(element.contents())(scope);
+            break;
           default:
-            element.text('This is the varmatrix directive');
+            //element.text('This is the varmatrix directive');
             break;
         }
       }

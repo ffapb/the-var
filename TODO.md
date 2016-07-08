@@ -1,6 +1,8 @@
 # 2016-07-06
 * varcalc has no concept of dates
  * the `nday` it does is actually an `npoints`
+* divvar directive does not update with portfolio value nor asset weight
+* add tooltip to portfoliolist varmatrix rowBodyPortfolio
 
 # 2016-07-02
 * set up travis CI

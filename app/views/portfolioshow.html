@@ -48,61 +48,54 @@
       <th>Name</th>
       <th>Exchange</th>
       <th>Current P&amp;L</th>
-      <th>VaR 95%, 1-day</th>
-      <th>VaR 95%, 7-day</th>
-      <th>VaR 99%, 1-day</th>
-      <th>VaR 99%, 7-day</th>
       <th>Weight</th>
-      <th>&nbsp;</th>
       <th>History</th>
       <th>&nbsp;</th>
     </tr>
     <tr class="{{unallocated()<5?'warning':'danger'}}" ng-show="unallocated()!=0">
       <td colspan=2>&nbsp;</td>
-      <td colspan=9>Unallocated</td>
+      <td colspan=5>Unallocated</td>
       <td>
         <div>{{unallocated()|number:2}} %</div>
         <div>{{unallocated()/100*portfolio.value|number:2}} USD</div>
       </td>
-      <td colspan=3>&nbsp;</td>
+      <td colspan=9>&nbsp;</td>
     </tr>
-    <tr ng-repeat="a in alist track by $index" ng-show="!!a.history||showNoData"> <!--a.src+a.lookup.Symbol">-->
-      <td>{{$index+1}}</td>
-      <td><input type="checkbox" ng-model="a.selected" /></td>
-      <td>{{a.lookup.Symbol}}</td>
-      <td>{{a.lookup.SymbAlt.join(",")}}</td>
-      <td>{{a.lookup.Name}}</td>
-      <td>{{a.lookup.Exchange}}</td>
-      <td>{{a.pnls2[a.pnls2.length-1]|number:2}} % <br> ({{a.historyMeta.maxdate}})</td>
-      <td nowrap><divvar varisk="{{calculateVaR(a,95,1)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
-      <td nowrap><divvar varisk="{{calculateVaR(a,95,7)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
-      <td nowrap><divvar varisk="{{calculateVaR(a,99,1)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
-      <td nowrap><divvar varisk="{{calculateVaR(a,99,7)}}" limit="{{a.pnls2[a.pnls2.length-1]/100}}" usd="{{a.pct/100*portfolio.value}}" flip></divvar></td>
-
-      <td nowrap>
-        <input type="number" min=0 max=100 step=0.1 ng-value="a.pct?a.pct:0" style="width:5em" ng-model="a.pct" ng-change="assetPct(a)">
-        %
-        <div ng-show="a.src=='mf'" class="text-info">MF: {{a.pct|number:2}}</div>
-        <div>{{a.pct/100*portfolio.value|number:2}} USD</div>
-      </td>
-      <td nowrap>
-        <a class="btn btn-xs btn-info" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}" title="Show details" ng-disabled="!a.src || !a.lookup.Symbol">
-          <span class="glyphicon glyphicon-search"></span>
-        </a>
-        &nbsp;
-        <button class="btn btn-danger btn-xs" ng-click="delAsset(a)" title="Delete asset from portfolio">
-          <span class="glyphicon glyphicon-remove"></span>
-        </button>
-      </td>
-      <td>
-        {{a.history?a.history.length:0}} points
-        <br>
-        {{a.historyMeta.mindate}} .. {{a.historyMeta.maxdate}}
-      </td>
-      <td>
-        <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
-      </td>
-    </tr>
+    <tbody ng-repeat="a in alist track by $index">
+      <tr varmatrix type="rowBodyAsset" ng-show="!!a.history||showNoData"> <!--a.src+a.lookup.Symbol">-->
+        <td>{{$index+1}}</td>
+        <td nowrap>
+          <a class="btn btn-xs btn-info" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}?pid={{portfolio.id}}" title="Show details" ng-disabled="!a.src || !a.lookup.Symbol">
+            <span class="glyphicon glyphicon-search"></span>
+          </a>
+          &nbsp;
+          <button class="btn btn-danger btn-xs" ng-click="delAsset(a)" title="Delete asset from portfolio">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+          &nbsp;
+          <input type="checkbox" ng-model="a.selected" />
+        </td>
+        <td>{{a.lookup.Symbol}}</td>
+        <td>{{a.lookup.SymbAlt.join(",")}}</td>
+        <td>{{a.lookup.Name}}</td>
+        <td>{{a.lookup.Exchange}}</td>
+        <td>{{a.pnls2[a.pnls2.length-1]|number:2}} % <br> ({{a.historyMeta.maxdate}})</td>
+        <td nowrap>
+          <input type="number" min=0 max=100 step=0.1 ng-value="a.pct?a.pct:0" style="width:5em" ng-model="a.pct" ng-change="assetPct(a)">
+          %
+          <div ng-show="a.src=='mf'" class="text-info">MF: {{a.pct|number:2}}</div>
+          <div>{{a.pct/100*portfolio.value|number:2}} USD</div>
+        </td>
+        <td>
+          {{a.history?a.history.length:0}} points
+          <br>
+          {{a.historyMeta.mindate}} .. {{a.historyMeta.maxdate}}
+        </td>
+        <td>
+          <div jq-sparkline ng-model="a.pnlsEdf" type="bar" ng-if="a.pnlsEdf"></div>
+        </td>
+      </tr>
+    </tbody>
   </table>
 
 </div>

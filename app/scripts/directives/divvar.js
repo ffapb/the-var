@@ -30,11 +30,12 @@ angular.module('theVarApp')
 
     return {
       restrict: 'E',
+      transclude: true,
       link: function postLink(scope, element, attrs) {
         attrs.varisk = parseFloat(attrs.varisk);
         attrs.limit = parseFloat(attrs.limit);
         attrs.usd = parseFloat(attrs.usd);
-        attrs.flip = attrs.hasOwnProperty('flip');
+        attrs.flip = attrs.hasOwnProperty('flip') && (attrs.flip==='' || attrs.flip==='true');
 
         var d1 = $('<div/>',{
           style: 'color:'+color(100*attrs.varisk,100*attrs.limit,attrs.flip),
