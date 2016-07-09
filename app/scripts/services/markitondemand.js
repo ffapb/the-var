@@ -61,8 +61,11 @@ angular.module('theVarApp')
           Settings.length.y!=='year') {
           // http://dev.markitondemand.com/MODApis/#interactive
           delete parameters.NumberOfDays;
-          parameters.StartDate = Settings.start()+'T00:00:00-00';
-          parameters.EndDate = Settings.end.date+'T00:00:00-00';
+          parameters.StartDate = Settings.start()+'T23:00:00-00';
+          parameters.EndDate = Settings.end.date+'T23:00:00-00';
+          // if I had used 00:00:00-00 in start/end above,
+          // and if start date was 2015-07-07 and end was 2016-07-07,
+          // the result vector would have been closes of 2015-07-06 till 2016-07-06
         }
         console.log('mod jsonp',parameters);
 
