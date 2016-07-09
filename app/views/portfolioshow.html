@@ -55,7 +55,7 @@
     <tr class="{{unallocated()<5?'warning':'danger'}}" ng-show="unallocated()!=0">
       <td colspan=2>&nbsp;</td>
       <td colspan=5>Unallocated</td>
-      <td>
+      <td nowrap>
         <div>{{unallocated()|number:2}} %</div>
         <div>{{unallocated()/100*portfolio.value|number:2}} USD</div>
       </td>
@@ -72,8 +72,6 @@
           <button class="btn btn-danger btn-xs" ng-click="delAsset(a)" title="Delete asset from portfolio">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
-          &nbsp;
-          <input type="checkbox" ng-model="a.selected" />
         </td>
         <td>{{a.lookup.Symbol}}</td>
         <td>{{a.lookup.SymbAlt.join(",")}}</td>
