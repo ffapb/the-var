@@ -9,7 +9,7 @@
       <tr><td>Alternatives</td><td>{{pendingStock.lookup.SymbAlt.join(",")}}</td></tr>
       <tr><td>Name</td><td>{{pendingStock.lookup.Name}}</td></tr>
       <tr><td>Exchange</td><td>{{pendingStock.lookup.Exchange}}</td></tr>
-      <tbody varmatrix type="column">
+      <tbody>
         <tr>
           <td>History</td>
           <td ng-if="!pendingStock.history">
@@ -29,7 +29,7 @@
                 <td>First</td>
                 <td>{{pendingStock.historyMeta.mindate}}</td>
                 <td>{{pendingStock.historyMeta.firstprice}} USD</td>
-                <td>{{pendingStock.historyMeta.pnl.first|number:2}} %</td>
+                <td title="P&L till {{pendingStock.historyMeta.maxdate}}">{{pendingStock.historyMeta.pnl.first|number:2}} %</td>
               </tr>
               <tr>
                 <td>Prev EOY</td>
@@ -113,6 +113,10 @@
               </button>
             </div>
           </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td varmatrix type="column" />
         </tr>
       </tbody>
       <tbody>
