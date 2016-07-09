@@ -68,7 +68,6 @@ angular.module('theVarApp')
           }
 
           var url = config.endPoints.prices+'?format=json&tkr=["'+symbol2+'"]';
-          console.log('url',url);
           return $http.get(url).then(
             function(response) {
               console.log('res ass',url,response);

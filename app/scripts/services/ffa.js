@@ -86,7 +86,6 @@ angular.module('theVarApp')
         var a = config.accounts[a1];
         console.log('ca',config.accounts,a);
         var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a;
-        console.log('URL',url);
         $http.get(url).then(function(response) {
             if(abort) { pst.r=2; return; }
 
