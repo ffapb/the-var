@@ -14,7 +14,7 @@ angular.module('theVarApp')
         varisk=limit;
         limit=temp;
       }
-      if(varisk>limit) { return 'black'; }
+      if(varisk>limit) { return 'inherit'; }
       if(varisk<limit) { return 'red'; }
       return 'orange';
     }

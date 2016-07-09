@@ -21,11 +21,11 @@ describe('Directive: divvar', function () {
   it('color black', inject(function ($compile) {
     element = angular.element('<divvar varisk=10 limit=5 usd=100></divvar>');
     element = $compile(element)(scope);
-    expect(element.find('div').attr('style')).toBe('color:black');
+    expect(element.find('div').attr('style')).toBe('color:inherit');
 
     element = angular.element('<divvar varisk=10 limit=5 usd=100></divvar>');
     element = $compile(element)(scope);
-    expect(element.find('div').attr('style')).toBe('color:black');
+    expect(element.find('div').attr('style')).toBe('color:inherit');
   }));
 
   it('color red', inject(function ($compile) {
