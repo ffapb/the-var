@@ -34,21 +34,21 @@ angular.module('theVarApp')
         style: 'width:40%'
       });
 
-      $('<caption/>',{text:'PortfolioVaR'}).appendTo(table);
+      $('<caption/>',{text:'Portfolio VaR (with '+scope.unallocated()+' % unallocated)'}).appendTo(table);
       var tr = $('<tr/>');
       $('<th/>',{text:''}).appendTo(tr);
-      percentile.map(function(p) {
-        $('<th/>',{text:p+'%'}).appendTo(tr);
+      nday.map(function(nd) {
+        var ndText=nd2st(nd);
+        $('<th/>',{nowrap:'',text:ndText}).appendTo(tr);
       });
       tr.appendTo(table);
-      nday.map(function(nd) {
+      percentile.map(function(p) {
         tr=$('<tr/>');
-        var ndText=nd2st(nd);
-        $('<th/>',{text:ndText}).appendTo(tr);
-        percentile.map(function(p) {
-          var td = $('<td/>');
+        $('<th/>',{nowrap:'',text:'VaR '+p+' %'}).appendTo(tr);
+        nday.map(function(nd) {
+          var td = $('<td/>',{nowrap:''});
           getDivVar(
-            scope.portfolioVaR(p,nd),
+            scope.portfolioVaR(p,nd)*(100-scope.unallocated())/100,
             -0.20,
             scope.portfolio.value,
             false
@@ -77,7 +77,7 @@ angular.module('theVarApp')
       var tr = $('<tr/>');
       percentile.map(function(p) {
         nday.map(function(nd) {
-          var td = $('<td nowrap/>',{class:'varmatrix'});
+          var td = $('<td/>',{nowrap: '', class:'varmatrix'});
           var perc = 100*scope.portfolioVaR(p,scope.p,nd);
           perc = perc.toFixed(2);
           $('<div/>',{text: perc+' %'}).appendTo(td);
@@ -106,7 +106,7 @@ angular.module('theVarApp')
       percentile.map(function(p) {
         nday.map(function(nd) {
           var varVal = scope.calculateVaR(scope.a,p,nd);
-          var td = $('<td nowrap/>',{class:'varmatrix'});
+          var td = $('<td/>',{nowrap:'',class:'varmatrix'});
           var perc = 100*varVal;
           perc = perc.toFixed(2);
           getDivVar(
@@ -122,18 +122,27 @@ angular.module('theVarApp')
     }
 
     function getColumn(scope) {
-      var table = $('<table/>');
+      var table = $('<table/>',{class:'table varmatrix'});
 
+      // header
+      var tr=$('<tr/>');
+      $('<td/>').appendTo(tr);
+      nday.map(function(nd) {
+        var ndText=nd2st(nd);
+        $('<td/>',{text:ndText}).appendTo(tr);
+      });
+      tr.appendTo(table);
+
+      // body
       percentile.map(function(p) {
+        var tr=$('<tr/>');
+        $('<td/>',{text:'VaR '+p+'%'}).appendTo(tr);
         nday.map(function(nd) {
-          var ndText=nd2st(nd);
-          var tr=$('<tr/>',{class:'varmatrix'});
-          $('<td/>',{text:'VaR '+p+'%, '+ndText}).appendTo(tr);
           var varVal = 100*scope.calculateVaR(scope.pendingStock,p,nd);
           varVal=varVal.toFixed(2);
           $('<td/>',{text:varVal+' %'}).appendTo(tr);
-          tr.appendTo(table);
         });
+        tr.appendTo(table);
       });
       return table;
     }
@@ -142,8 +151,9 @@ angular.module('theVarApp')
       restrict: 'EA',
       transclude: false,
       link: function postLink(scope, element, attrs) {
-        scope.$watch('[a.pct]', function() {
+        scope.$watch('[unallocated(),a.pct,pendingStock.historyMeta.maxdate,pendingStock.historyMeta.mindate,portfolio.value,p.value]', function() {
           element.find('.varmatrix').remove();
+          var grb;
           switch(attrs.type) {
             case 'matrix':
               getMatrix(scope).appendTo(element);
@@ -151,20 +161,20 @@ angular.module('theVarApp')
               $compile(element.contents())(scope);
               break;
             case 'rowHeader':
-              var grh = getRowHeader();
-              grh.find('th').appendTo(element);
+              grb = getRowHeader();
+              grb.find('th').appendTo(element);
               break;
             case 'rowBodyPortfolio':
-              var grb = getRowBodyPortfolio(scope);
+              grb = getRowBodyPortfolio(scope);
               grb.find('td').appendTo(element);
               break;
-  // row is useless because rowBodyPortfolio requires the portfolio from scope.p from ng-repeat="p in list()"
-  //          case 'row':
-  //            console.log('rb',element.html());
-  //            var gr = getRow(scope);
-  //            gr.find('thead>tr>th').appendTo(element.find('thead>tr'));
-  //            gr.find('tbody>tr>td').appendTo(element.find('tbody>tr'));
-  //            break;
+// row is useless because rowBodyPortfolio requires the portfolio from scope.p from ng-repeat="p in list()"
+//          case 'row':
+//            console.log('rb',element.html());
+//            var gr = getRow(scope);
+//            gr.find('thead>tr>th').appendTo(element.find('thead>tr'));
+//            gr.find('tbody>tr>td').appendTo(element.find('tbody>tr'));
+//            break;
             case 'rowBodyAsset':
               grb = getRowBodyAsset(scope);
               grb.find('td').appendTo(element);
@@ -173,7 +183,7 @@ angular.module('theVarApp')
               break;
             case 'column':
               grb = getColumn(scope);
-              grb.find('tr').appendTo(element); //.find('tbody:last'));
+              grb.appendTo(element); //.find('tbody:last'));
               break;
             default:
               //element.text('This is the varmatrix directive');
