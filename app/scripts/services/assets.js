@@ -162,7 +162,6 @@ angular.module('theVarApp')
         pendingStock.pnlsSort=pnlsSort;
 
         pendingStock.pnlsEdf=varCalc.edf(pnls,1/100);
-        pendingStock.selected=true;
         return pendingStock;
       },
 

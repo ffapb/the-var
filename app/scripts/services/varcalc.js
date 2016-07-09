@@ -83,9 +83,7 @@ angular.module('theVarApp')
         if(!portfolio) { return; }
         if(!nday || nday<=0) { return; }
 
-        var portSelKeys = Object.keys(portfolio).filter(function(x) {
-          return !!portfolio[x].selected;
-        });
+        var portSelKeys = Object.keys(portfolio);
         if(portSelKeys.length===0) { return 0; }
 
         var totalPct = portSelKeys.map(function(k) {
