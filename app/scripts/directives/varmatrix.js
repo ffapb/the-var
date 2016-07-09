@@ -7,7 +7,7 @@
  * # varmatrix
  */
 angular.module('theVarApp')
-  .directive('varmatrix', function ($compile) {
+  .directive('varmatrix', function ($compile,Portfolios) {
 
     var percentile=[95,99];
     var nday=[1,5,250]; // business days
@@ -78,12 +78,14 @@ angular.module('theVarApp')
       percentile.map(function(p) {
         nday.map(function(nd) {
           var td = $('<td/>',{nowrap: '', class:'varmatrix'});
-          var perc = 100*scope.portfolioVaR(p,scope.p,nd);
-          perc = perc.toFixed(2);
-          $('<div/>',{text: perc+' %'}).appendTo(td);
-          var usd = scope.p.value*scope.portfolioVaR(p,scope.p,nd);
-          usd=usd.toFixed(2);
-          $('<div/>',{text: usd+' USD'}).appendTo(td);
+          var varVal = scope.portfolioVaR(p,scope.p,nd);
+          var unal = Portfolios.unallocated(scope.p.id);
+          getDivVar(
+            varVal*(100-unal)/100,
+            -0.2,
+            varVal*scope.p.value,
+            false
+          ).appendTo(td);
           td.appendTo(tr);
         });
       });
@@ -107,8 +109,6 @@ angular.module('theVarApp')
         nday.map(function(nd) {
           var varVal = scope.calculateVaR(scope.a,p,nd);
           var td = $('<td/>',{nowrap:'',class:'varmatrix'});
-          var perc = 100*varVal;
-          perc = perc.toFixed(2);
           getDivVar(
             varVal,
             scope.a.pnls[scope.a.pnls.length-1],
@@ -167,6 +167,8 @@ angular.module('theVarApp')
             case 'rowBodyPortfolio':
               grb = getRowBodyPortfolio(scope);
               grb.find('td').appendTo(element);
+              // compile to re-render the 'divvar' entry
+              $compile(element.contents())(scope);
               break;
 // row is useless because rowBodyPortfolio requires the portfolio from scope.p from ng-repeat="p in list()"
 //          case 'row':
