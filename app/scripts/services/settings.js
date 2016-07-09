@@ -14,20 +14,19 @@ angular.module('theVarApp')
     function today() { return moment().format('YYYY-MM-DD'); }
     function yesterday() { return moment().subtract(1,'day').format('YYYY-MM-DD'); }
 
-    var end = {type:'Today',date:today()};
-    var length = {n:3,u:'year'};
+    // object
+    var o = {
+      init: function() {
+        this.end = {type:'Today',date:today()};
+        this.length = {n:3,u:'year'};
 
-    var ls = localStorage.getItem('settings');
-    if(!!ls) {
-      ls = angular.fromJson(ls);
-      end = ls.end;
-      length.n = ls.length.n;
-      length.u = ls.length.u;
-    }
-
-    return {
-      end: end,
-      length: length,
+        var ls = localStorage.getItem('settings');
+        if(!!ls) {
+          ls = angular.fromJson(ls);
+          this.setEnd(ls.end.type,ls.end.date);
+          this.setLength(ls.length.n,ls.length.u);
+        }
+      },
       start: function() {
         return moment(this.end.date,'YYYY-MM-DD')
           .subtract(this.length.n,this.length.u)
@@ -40,4 +39,6 @@ angular.module('theVarApp')
       },
       setLength: function(n,u) { this.length.n=n; this.length.u=u; },
     };
+    o.init();
+    return o;
   });
