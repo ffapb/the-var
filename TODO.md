@@ -2,18 +2,28 @@
 * varcalc has no concept of dates
  * the `nday` it does is actually an `npoints`
 * for short positions, varcalc should use the right tail as VaR instead of the left tail
+* check currencies (currently hardcoded USD)
 
 # 2016-07-02
 * set up travis CI
  * http://stackoverflow.com/questions/19255976/how-to-make-travis-execute-angular-tests-on-chrome-please-set-env-variable-chr#19416096
 * integrate tarek list of feedback in email
+ * add tab sandbox
+ * average cost in security details
+ * portfolio list: add prev eoy, eom, avg cost (in % and usd)
+ * portfolio list: date of last price update
+ * refresh all prices
+ * portfolio show: hide illiquid asset: illiquidity = extracted prices / total existing prices
+ * export to excel
+ * add asset from bbg
+ * tab for documentation
 
 # 2016-04-19
 * Desirable features todo
  * 20% drop since inception
  * 10% of portfolio value as var limit
  * 20% of bank capital as var limit
- * display YTD, MTD, inception to date
+ * display inception to date
  * add asset class (pie chart distribution)
  * FFA120
 * how to add returns of unequal lengths?
@@ -51,9 +61,3 @@
  * similar to dis-man upload to repo
 * add link to list of securities?
 
-# 2016-03-01
-* add grunt task to publish the app to github-pages by copying to the gh-pages branch
-* add link to a facebook page
-* add settings page with an endpoint for linked portfolios
- * this will require a 'sync' button
- * also add automatic detection that app is open in ffa and search for endpoint
