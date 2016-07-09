@@ -1,7 +1,7 @@
 # 2016-07-06
 * varcalc has no concept of dates
  * the `nday` it does is actually an `npoints`
-* add tooltip to portfoliolist varmatrix rowBodyPortfolio
+* for short positions, varcalc should use the right tail as VaR instead of the left tail
 
 # 2016-07-02
 * set up travis CI

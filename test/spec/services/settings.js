@@ -16,7 +16,7 @@ describe('Service: Settings', function () {
   });
 
   it('start date', function () {
-    Settings.setEnd('2016-01-02');
+    Settings.setEnd('Custom','2016-01-02');
     Settings.setLength(1,'year');
     expect(Settings.start()).toBe('2015-01-02');
     Settings.setLength(2,'year');
