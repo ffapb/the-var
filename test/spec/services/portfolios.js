@@ -74,4 +74,23 @@ describe('Service: Portfolios', function () {
     expect(p1.name==='portfolio 3');
   });
  
+  it('unallocated', function () {
+    expect(Portfolios.unallocated()).toBe(false);
+    var pid=Portfolios.add('manual 2','portfolio 2',[]);
+    expect(Portfolios.unallocated(pid)).toBe(100);
+    console.log('pipi',Portfolios.list()[pid].assets);
+    var a1 = {src:'mod',lookup:{Symbol:'symbol1'},pct:10};
+    Portfolios.addAsset(pid,a1);
+    Portfolios.assetPct(pid,a1);
+    console.log('pipi',Portfolios.list()[pid].assets);
+    expect(Portfolios.unallocated(pid)).toBe(90);
+    var a2 = {src:'mod',lookup:{Symbol:'symbol2'},pct:10};
+    Portfolios.addAsset(pid,a2);
+    Portfolios.assetPct(pid,a2);
+    expect(Portfolios.unallocated(pid)).toBe(80);
+    a2.pct=20;
+    Portfolios.assetPct(pid,a2);
+    expect(Portfolios.unallocated(pid)).toBe(70);
+  });
+
 });

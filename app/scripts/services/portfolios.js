@@ -172,7 +172,7 @@ angular.module('theVarApp')
           console.error('unallocated: Invalid portfolio ID '+pid);
           return false;
         }
-        var alist = this.listAssets(pid);
+        var alist = ppp[pid].assets;
         return 100-alist
           .map(function(a) { return a.pct?a.pct:0; })
           .reduce(function(a,b) { return a+b; },0);
