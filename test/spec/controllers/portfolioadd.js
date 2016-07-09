@@ -8,7 +8,8 @@ describe('Controller: PortfolioaddCtrl', function () {
   var PortfolioaddCtrl, scope, location;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, $location) {
+  beforeEach(inject(function ($controller, $rootScope, $location, $window) {
+    $window.localStorage.clear();
     scope = $rootScope.$new();
     PortfolioaddCtrl = $controller('PortfolioaddCtrl', {
       $scope: scope
