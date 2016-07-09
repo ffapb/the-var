@@ -40,7 +40,7 @@ describe('Controller: PortfolioshowCtrl', function () {
   });
 
   it('calculateVaR', function () {
-    var p1 = { pnls: [2], history2: [1,1,1,1,1,1,1,1] };
+    var p1 = { pnls: [2], historyDateless: [1,1,1,1,1,1,1,1] };
     expect(scope.calculateVaR(p1,95,1)).toBe(0);
   });
 

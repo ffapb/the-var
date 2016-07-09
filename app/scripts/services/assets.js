@@ -106,7 +106,7 @@ angular.module('theVarApp')
         }
         var pendingStock = {};
         pendingStock.history = o;
-        pendingStock.history2 = prices; // end up with 100 points
+        pendingStock.historyDateless = prices;
         pendingStock.historyDownsampled = this.downsample(prices,100); // end up with 100 points
 
         var prevEom = this.findPrevEom(dates,'month');

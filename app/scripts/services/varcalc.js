@@ -11,21 +11,27 @@ angular.module('theVarApp')
   .service('varCalc', function () {
     // AngularJS will instantiate a singleton by calling "new" on this function
     return {
-      // https://gist.github.com/deenar/f97d517d3188fc7b5302
-      calculateVaR: function(p,percentile,nday) {
-        if(!p.history2) { return; }
-        if(p.history2.length===0) { return; }
-        if(nday<=0) { return; }
-        if(p.history2.length<nday) { return; } // insufficient points
-
-        // calculate n-day returns (including 1-day)
+      // calculate n-day returns (including 1-day)
+      prices2pnls: function(prices,nday) {
+        if(prices.length-1<nday) { return []; } // insufficient data
         var pnls =[];
         //pnls.push(0);
-        for(var i=1;i<p.history2.length;i++) {
+        for(var i=nday;i<prices.length;i++) {
           if ( ( i % nday ) === 0 ) {
-            pnls.push((p.history2[i]/p.history2[i-nday]-1)); // to be able to compare /nday
+            pnls.push((prices[i]/prices[i-nday]-1)); // to be able to compare /nday
           }
         }
+        return pnls;
+      },
+      // https://gist.github.com/deenar/f97d517d3188fc7b5302
+      calculateVaR: function(p,percentile,nday) {
+        if(!p.historyDateless) { return; }
+        if(p.historyDateless.length===0) { return; }
+        if(nday<=0) { return; }
+        if(p.historyDateless.length<nday) { return; } // insufficient points
+
+        // calculate n-day returns (including 1-day)
+        var pnls =this.prices2pnls(p.historyDateless,nday);
 
         if(pnls.length===0) { return; }
 
@@ -93,10 +99,16 @@ angular.module('theVarApp')
         }, 0);
 
         // multiply pnls by weights of assets
+        var self = this;
         var pnlsWeighted = portSelKeys.map(function(k) {
           if(!portfolio[k].pct||!totalPct) {
             return [];
           } else {
+            // calculate pnls
+            portfolio[k].pnls = self.prices2pnls(
+              portfolio[k].historyDateless,
+              nday);
+
             // This was the 1st implementation
             // https://gist.github.com/deenar/f97d517d3188fc7b5302
             //return portfolio[k].pnlsSort.map(function(y) {
@@ -136,9 +148,9 @@ angular.module('theVarApp')
         if(!pnlsTotal.length) { return 0; }
 
         // construct hypothetical re-based prices for portfolio from pnlsTotals
-        pnlsTotal = this.pnls2prices(pnlsTotal);
+        var fakePrices = this.pnls2prices(pnlsTotal);
 
-        return this.calculateVaR({history2: pnlsTotal}, percentile,nday);
+        return this.calculateVaR({historyDateless: fakePrices}, percentile,1); // use 1 here instead of nday because prices2pnls above already accounts for nday
       }, // end of function
 
       pnls2prices: function(pnls) {
