@@ -8,7 +8,7 @@
  * Service in the theVarApp.
  */
 angular.module('theVarApp')
-  .service('Portfolios', function () {
+  .service('Portfolios', function (Assets) {
     // AngularJS will instantiate a singleton by calling 'new' on this function
 
     var ppp = {};
@@ -53,7 +53,6 @@ angular.module('theVarApp')
         this.saveToLs();
       },
       saveToLs: function() {
-        console.log('save to ls',ppp);
         localStorage.setItem('ppp',angular.toJson(ppp));
       },
       addAsset: function(pid,aaa) {
@@ -144,6 +143,40 @@ angular.module('theVarApp')
 
         ppp[pid].value=value;
         this.saveToLs();
+      },
+
+      listAssets: function(pid) {
+        if(!ppp.hasOwnProperty(pid)) {
+          console.error('listAssets: Invalid portfolio ID '+pid);
+          return [];
+        }
+
+        var a = ppp[pid].assets;
+        if(!a) { return []; }
+        var al = Assets.list();
+        var o = a.map(function(x) {
+          if(al.hasOwnProperty(x.src)) {
+            if(al[x.src].hasOwnProperty(x.symbol)) {
+              var o2 = al[x.src][x.symbol];
+              o2.pct = x.pct;
+              return o2;
+            }
+          }
+          return null;
+        }).filter(function(x) { return !!x; });
+        return o;
+      },
+
+      unallocated: function(pid) {
+        if(!ppp.hasOwnProperty(pid)) {
+          console.error('unallocated: Invalid portfolio ID '+pid);
+          return false;
+        }
+        var alist = this.listAssets(pid);
+        return 100-alist
+          .map(function(a) { return a.pct?a.pct:0; })
+          .reduce(function(a,b) { return a+b; },0);
       }
+
     };
   });

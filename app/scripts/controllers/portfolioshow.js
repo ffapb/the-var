@@ -24,7 +24,7 @@ angular.module('theVarApp')
       pl = Portfolios.list();
       if(!pl.hasOwnProperty(pid)) {
         window.location.href='#/portfolioList';
-        console.error('Invalid portfolio id '+pid);
+        console.error('portfolioshowctrl/set: Invalid portfolio id '+pid);
         return;
       }
       $scope.portfolio = pl[pid];
@@ -32,22 +32,7 @@ angular.module('theVarApp')
     };
 
     $scope.list = function() {
-      var a = $scope.portfolio.assets;
-      if(!a) {
-        return false;
-      }
-      var al = Assets.list();
-      var o = a.map(function(x) {
-        if(al.hasOwnProperty(x.src)) {
-          if(al[x.src].hasOwnProperty(x.symbol)) {
-            var o2 = al[x.src][x.symbol];
-            o2.pct = x.pct;
-            return o2;
-          }
-        }
-        return null;
-      }).filter(function(x) { return !!x; });
-      return o;
+      return Portfolios.listAssets($scope.portfolio.id);
     };
 
     $scope.set($routeParams.pid);
@@ -92,9 +77,7 @@ angular.module('theVarApp')
     };
 
     $scope.unallocated = function() {
-      return 100-$scope.alist
-        .map(function(a) { return a.pct?a.pct:0; })
-        .reduce(function(a,b) { return a+b; },0);
+      return Portfolios.unallocated($scope.portfolio.id);
     };
 
   });
