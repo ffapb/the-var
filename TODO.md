@@ -8,6 +8,23 @@
  * pct0 is non-editable, whereas pct is editable (like the manual)
 
 # MEDIUM Priority
+2016-07-11
+* here are some R packages that calculate VaR
+ * PerformanceAnalytics
+  * https://cran.r-project.org/web/packages/PerformanceAnalytics/
+  * http://rinfinance.com/RinFinance2009/presentations/PA%20Workshop%20Chi%20RFinance%202009-04.pdf
+  * is a package for portfolio analysis in R
+  * includes VaR as one of the functions
+ * VaRes
+  * https://cran.r-project.org/web/packages/VaRES/index.html
+  * package specialized in lots of different calculations of VaR
+  * very advanced mathematically
+  * doesnt look like it calculates VaR for a portfolio
+* fabric engine seems to have published a javascript library for VaR
+ * [blog post](http://fabricengine.com/benchmark-node-js-value-at-risk-web-service/) referencing it
+ * the gitub link to the web service is broken
+ * I sent them an email asking how I can reach the code
+
 2016-07-06
 * varcalc has no concept of dates
  * the `nday` it does is actually an `npoints`
