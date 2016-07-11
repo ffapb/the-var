@@ -33,6 +33,17 @@ angular.module('theVarApp')
       list: function() {
         return aaa;
       },
+      listFlat: function() {
+        var al = this.list();
+        // flatten
+        var o = [];
+        Object.keys(al).map(function(src) {
+          Object.keys(al[src]).map(function(symbol) {
+            o.push(al[src][symbol]);
+          });
+        });
+        return o;
+      },
       saveToLs: function() {
         localStorage.setItem('aaa',angular.toJson(aaa));
       },
@@ -212,6 +223,23 @@ angular.module('theVarApp')
           aaa[newA.src][newA.lookup.Symbol]=newA;
         }
         this.saveToLs();
+      },
+
+      getChartAndUpdate: function(newA,config) {
+        var self = this;
+        return this.getChart(newA.src,newA.lookup.Symbol,config)
+          .then(function(ps) {
+            if(newA.src==='mod') { ps={'test':ps}; }
+            console.log('ps',ps);
+            for(var s in ps) {
+              // http://stackoverflow.com/a/171256/4126114
+              for(var attrname in ps[s]) {
+                newA[attrname] = ps[s][attrname];
+              }
+              self.update(newA);
+            }
+          });
+
       }
 
     };

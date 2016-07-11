@@ -8,7 +8,7 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('AssetlistCtrl', function ($scope,Assets,Portfolios,ActivateNavBar) {
+  .controller('AssetlistCtrl', function ($scope,Assets,Portfolios,ActivateNavBar,AssetsRefresher) {
 
     ActivateNavBar.assets();
 
@@ -17,16 +17,7 @@ angular.module('theVarApp')
     };
 
     $scope.list=function() {
-      var al = Assets.list();
-      // flatten
-      var o = [];
-      Object.keys(al).map(function(src) {
-        Object.keys(al[src]).map(function(symbol) {
-          o.push(al[src][symbol]);
-        });
-      });
-
-      return o;
+      return Assets.listFlat();
     };
 
     $scope.del=function(id) {
@@ -39,4 +30,7 @@ angular.module('theVarApp')
       // reverse lookup
       return Portfolios.holdingAsset(src,symbol).length;
     };
+
+    $scope.assetsRefresher = AssetsRefresher;
+
   });

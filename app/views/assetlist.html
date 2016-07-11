@@ -1,6 +1,3 @@
-<a class="btn btn-primary" href="#/assetAdd">
-  <span class="glyphicon glyphicon-plus"></span>
-</a>
 
 <div ng-show="!na()" role="alert">
   No assets
@@ -8,11 +5,24 @@
 
 <table class="table" ng-show="na()">
   <caption>Assets &nbsp; <span class="badge">{{np()}}</span></caption>
-  <tr ng-repeat="a in list()">
+  <tr>
+    <td colspan=4>
+      <a class="btn btn-primary" href="#/assetAdd">
+        <span class="glyphicon glyphicon-plus"></span>
+      </a>
+    </td>
+    <td>
+      <button class="btn btn-info" ng-click="assetsRefresher.run()" ng-disabled="assetsRefresher.isRunning()" title="Refresh all prices">
+        <span class="glyphicon glyphicon-refresh"></span>
+      </button>
+    </td>
+  </tr>
+  <tr ng-repeat="a in list()" class="{{!!a.retrieving?'alert alert-warning':''}}">
     <td>{{a.src}}
     <td>{{a.lookup.Symbol}}</td>
     <td>{{a.lookup.Name}}</td>
     <td><span class="badge">{{nport(a.src,a.lookup.Symbol)}}</span></td>
+    <td>{{a.historyMeta.mindate}} .. {{a.historyMeta.maxdate}}</td>
     <td>
       <a class="btn btn-xs btn-default" ng-href="#/assetShow/{{a.src}}/{{a.lookup.Symbol}}">
         <span class="glyphicon glyphicon-pencil"></span>
