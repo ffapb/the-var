@@ -13,8 +13,11 @@ The data comes from [markit on demand Apis v2](http://dev.markitondemand.com/MOD
 * asset VaR and portfolio VaR
 * asset percentage of portfolio
 * get portfolios from FFA backend if available
-* edit portfolio name
-* VaR: 95%, 99%, 1-day, 7-day
+* VaR: 95%, 99%, 1-day, 1-week, 1-year
+* set dates in settings and clear local data
+* portfolio USD value
+* refresh all prices button
+* detailed prices/p&l plots or summary plot
 
 # Similar apps
 Similar applications/documentation exist online, but they had some limits:

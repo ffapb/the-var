@@ -11,4 +11,5 @@
   <select ng-options="x as x for x in ['year','month']" ng-model="get().length.u" ng-change="saveToLs()"></select>
 </li>
 <li>Start date: {{get().start()}}</li>
+<li><button class="btn btn-danger" ng-click="reset()">Clear all data</button></li>
 </ul>

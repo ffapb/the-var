@@ -8,7 +8,7 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('SettingsCtrl', function ($scope,Settings) {
+  .controller('SettingsCtrl', function ($scope,Settings,$window) {
 
     $scope.get = function() { return Settings; };
 
@@ -21,6 +21,13 @@ angular.module('theVarApp')
       var date = Settings.end.date;
       Settings.setEnd(type,date);
       $scope.saveToLs();
+    };
+
+    $scope.reset=function() {
+      if(window.confirm('Are you sure you want to clear all your local data?')) {
+        localStorage.clear();
+        $window.location.reload();
+      }
     };
 
   });

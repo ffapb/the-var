@@ -48,7 +48,6 @@
  * average cost in security details
  * portfolio list: add prev eoy, eom, avg cost (in % and usd)
  * portfolio list: date of last price update
- * refresh all prices
  * portfolio show: hide illiquid asset: illiquidity = extracted prices / total existing prices
  * export to excel
  * add asset from bbg
@@ -68,15 +67,12 @@
 
 2016-03-06
 * how to show in portfolioshow that dates of the security prices used
-* add "clear all localstorage" somewhere
 * assetadd show json format result
-* refresh prices from portfolioshow
 * GE listed on NYSE and BATS ... how to pass exchange to assetshow?
 
 2016-03-03
 * add NAV button for portfolios
-* automatic refresh of prices
-* simplify postprocessing after getting interactive chart data
+* simplify postprocessing (function `treatChart`) after getting interactive chart data
 * work on unit tests
 * add ability to upload data to a server 
  * similar to dis-man upload to repo
