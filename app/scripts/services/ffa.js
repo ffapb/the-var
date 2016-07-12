@@ -8,7 +8,7 @@
  * Service in the theVarApp.
  */
 angular.module('theVarApp')
-  .service('ffa', ['$http','$base64','Portfolios','Assets','$q','$timeout', function ($http,$base64,Portfolios,Assets,$q,$timeout) {
+  .service('ffa', ['$http','$base64','Portfolios','Assets','$q','$timeout', 'moment', function ($http,$base64,Portfolios,Assets,$q,$timeout,moment) {
     // AngularJS will instantiate a singleton by calling 'new' on this function
 
     var fff={};
@@ -18,6 +18,7 @@ angular.module('theVarApp')
     var al; // temp variable for looping
     var available = 0;
     var self;
+    var configUrl = '/the-var-config.json?ts='+moment().format('x');  // append unix timestamp to avoid cache
 
     return {
       np: function() { return Object.keys(fff).length; },
@@ -27,7 +28,7 @@ angular.module('theVarApp')
       },
       checkAvailable: function() {
         available=1;
-        return $http.get('/the-var-config.json')
+        return $http.get(configUrl)
           .then(function() {
             available = 2;
           }, function() {
@@ -38,7 +39,7 @@ angular.module('theVarApp')
         if(!config) {
           return this.checkAvailable().then(function() {
             if(!available) { return false; }
-            return $http.get('/the-var-config.json').then(function(response) {
+            return $http.get(configUrl).then(function(response) {
               console.log('fc11',response.data);
               config = response.data;
               return config;

@@ -63,7 +63,7 @@ angular.module('theVarApp')
       },
 
       getChart: function(src,symbol,config) {
-        console.log('Getting prices for '+src+': '+symbol); 
+        console.log('Getting prices',src,symbol); 
         gcs=1;
         var self=this;
         if(src==='mod') {
@@ -75,10 +75,11 @@ angular.module('theVarApp')
         } else if(src==='FFA MF') {
           var symbol2=symbol;
           if( typeof symbol !== 'string' && src==='FFA MF' && Object.prototype.toString.call(symbol) === '[object Array]' ) {
-            symbol2=symbol.join('','');
+            symbol2=symbol.join('","');
           }
 
           var url = config.endPoints.prices+'?format=json&tkr=["'+symbol2+'"]';
+          console.log('assets get chart',url);
           return $http.get(url).then(
             function(response) {
               console.log('res ass',url,response);
