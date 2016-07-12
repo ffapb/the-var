@@ -101,7 +101,7 @@ angular.module('theVarApp')
         // multiply pnls by weights of assets
         var self = this;
         var pnlsWeighted = portSelKeys.map(function(k) {
-          if(!portfolio[k].pct||!totalPct) {
+          if(!portfolio[k].pct||!totalPct||!portfolio[k].historyDateless) {
             return [];
           } else {
             // calculate pnls

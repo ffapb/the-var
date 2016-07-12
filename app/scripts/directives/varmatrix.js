@@ -109,12 +109,16 @@ angular.module('theVarApp')
         nday.map(function(nd) {
           var varVal = scope.calculateVaR(scope.a,p,nd);
           var td = $('<td/>',{nowrap:'',class:'varmatrix'});
-          getDivVar(
-            varVal,
-            scope.a.pnls[scope.a.pnls.length-1],
-            scope.a.pct/100*scope.portfolio.value,
-            true
-          ).appendTo(td);
+          if(!scope.a.pnls) {
+            $('<span/>',{text:'N/A'}).appendTo(td);
+          } else {
+            getDivVar(
+              varVal,
+              scope.a.pnls[scope.a.pnls.length-1],
+              scope.a.pct/100*scope.portfolio.value,
+              true
+            ).appendTo(td);
+          }
           td.appendTo(tr);
         });
       });

@@ -1,0 +1,9 @@
+{
+  "endPoints": {
+    "portfolios": "/test/portfolios.json",
+    "prices": "/test/prices.json"
+  },
+  "accounts": [
+    { "base": "Lebanon", "a": "FFAI00" }
+  ]
+}

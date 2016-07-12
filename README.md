@@ -30,6 +30,24 @@ Similar applications/documentation exist online, but they had some limits:
 # Logo
 The logo is the VaR diagram posted on [wikipedia](https://en.wikipedia.org/wiki/File:VaR_diagram.JPG)
 
+# Linking to custom endpoints
+Place a file called `the-var-config.json` in the `app` folder.
+Its structure should be as follows:
+```json
+{
+  "endPoints": {
+    "portfolios": "url/to/accounts/endpoint",
+    "prices": "url/to/prices/endpoint"
+  },
+  "accounts": [
+    { "base": "Lebanon", "a": "FFAI00" }
+  ]
+}
+```
+
+To test, copy the file in `app/test/the-var-config.json` to `app` and run `grunt serve`.
+This will allow the `Fetch FFA portfolios/prices` buttons to be enabled and get the corresponding json data
+
 # Development
 ## Under the hood
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)

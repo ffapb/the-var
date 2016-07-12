@@ -1,0 +1,14 @@
+[
+  {
+    "TIT_ISIN_BBG": "tit1bbg",
+    "TIT_REU_COD": "tit1reu",
+    "TIT_COD": "tit1cod",
+    "TIT_NOM": "tit1nom"
+  },
+  {
+    "TIT_ISIN_BBG": "tit2bbg",
+    "TIT_REU_COD": "tit2reu",
+    "TIT_COD": "tit2cod",
+    "TIT_NOM": "tit2nom"
+  }
+]
