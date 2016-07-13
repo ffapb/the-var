@@ -38,6 +38,11 @@ angular.module('theVarApp')
         this.end = {type:type,date:date};
       },
       setLength: function(n,u) { this.length.n=n; this.length.u=u; },
+      dashless: function() {
+        var st2 = moment(this.start(), 'YYYY-MM-DD').format('YYYYMMDD');
+        var en2 = moment(this.end.date,'YYYY-MM-DD').format('YYYYMMDD');
+        return {start:st2,end:en2};
+      }
     };
     o.init();
     return o;

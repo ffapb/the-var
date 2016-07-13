@@ -8,7 +8,7 @@
  * Service in the theVarApp.
  */
 angular.module('theVarApp')
-  .service('Assets', function (markitOnDemand,varCalc,$http,moment) {
+  .service('Assets', function (markitOnDemand,varCalc,$http,moment,Settings) {
     // AngularJS will instantiate a singleton by calling 'new' on this function
     var aaa={};
     if(localStorage.getItem('aaa')) {
@@ -78,7 +78,7 @@ angular.module('theVarApp')
             symbol2=symbol.join('","');
           }
 
-          var url = config.endPoints.prices+'?format=json&tkr=["'+symbol2+'"]';
+          var url = config.endPoints.prices+'?format=json&tkr=["'+symbol2+'"]'+'&start='+Settings.dashless().start+'&end='+Settings.dashless().end;
           console.log('assets get chart',url);
           return $http.get(url).then(
             function(response) {
