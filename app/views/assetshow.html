@@ -9,10 +9,10 @@
       <tr><td>Alternatives</td><td>{{pendingStock.lookup.SymbAlt.join(",")}}</td></tr>
       <tr><td>Name</td><td>{{pendingStock.lookup.Name}}</td></tr>
       <tr><td>Exchange</td><td>{{pendingStock.lookup.Exchange}}</td></tr>
-      <tbody>
+      <tbody ng-if="!pendingStock.history">
         <tr>
           <td>History</td>
-          <td ng-if="!pendingStock.history">
+          <td>
             <span class="text-warning text-center">No close prices available</span>
             &nbsp;
             <button class="btn btn-xs" ng-click="getChart()" ng-disabled="gcs()==1">
@@ -22,7 +22,12 @@
             <span ng-show="gcs()==1">Loading prices...</span>
             <span ng-show="gcs()==2">Error in prices</span>
           </td>
-          <td ng-if="pendingStock.history">
+        </tr>
+      </tbody>
+      <tbody ng-if="!!pendingStock.history">
+        <tr>
+          <td>History</td>
+          <td>
             <div>{{pendingStock.history.length}} points</div>
             <table class="table">
               <tr>
@@ -75,7 +80,7 @@
             </button>
           </td>
           <td>
-            <div ng-if="!showJqplot1 && !!pendingStock.historyDownsampled" jq-sparkline ng-model="pendingStock.historyDownsampled" type="line" ng-if="pendingStock.historyDownsampled"></div>
+            <div ng-if="!showJqplot1" jq-sparkline ng-model="pendingStock.historyDownsampled" type="line"></div>
             <!-- http://angular-ui.github.io/ui-chart/ -->
             <div ng-if=" showJqplot1" ui-chart="[pendingStock.historyJqplot]" chart-options="myChartOpts.usd" ></div>
           </td>
@@ -90,7 +95,7 @@
             </button>
           </td>
           <td>
-            <div ng-if="!showJqplot2 && !!pendingStock.pnlsDownsampled" jq-sparkline ng-model="pendingStock.pnlsDownsampled" type="line"></div>
+            <div ng-if="!showJqplot2" jq-sparkline ng-model="pendingStock.pnlsDownsampled" type="line"></div>
             <!-- http://angular-ui.github.io/ui-chart/ -->
             <div ng-if=" showJqplot2" ui-chart="[pendingStock.pnlsJqplot]" chart-options="myChartOpts.perc" ></div>
           </td>
@@ -98,7 +103,7 @@
         <tr>
           <td>Empirical distribution</td>
           <td>
-            <div ng-if="!!pendingStock.pnlsEdf" jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar" ng-if="pendingStock.pnlsEdf"></div>
+            <div jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar"></div>
           </td>
         </tr>
         <tr>
