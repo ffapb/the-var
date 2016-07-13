@@ -87,7 +87,9 @@ angular.module('theVarApp')
         var a = config.accounts[a1];
         console.log('ca',config.accounts,a);
         var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a;
-        $http.get(url).then(function(response) {
+        $http.get(url)
+          // set portfolio
+          .then(function(response) {
             if(abort) { pst.r=2; return; }
 
             console.log('fc13',response);
@@ -279,6 +281,25 @@ angular.module('theVarApp')
         console.log('finished looping');
         self.mwpPost();
       }
+    },
+
+    getNav: function(account) {
+      // TODO WORK IN PROGRESS
+          return $http.get(url).then(
+            function(response) {
+              console.log('res ass',url,response);
+              gcs=0;
+              var x={};
+              for(var i in response.data) {
+                console.log('_____',i,response.data[i]);
+                x[i]=self.treatChart(response.data[i]);
+              }
+
+              return(x);
+            },
+            function() { gcs=2; }
+          );
+
     }
 
   };
