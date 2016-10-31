@@ -82,7 +82,12 @@ Commit and push, then `grunt build`, and finally run `grunt gh-pages`
 
 ## Add dependencies
 Add a new package
+
 ```bower install angular-ui-chart --save```
+
+or
+
+```bower install angular-ui-chart#master --save```
 
 If it is not automatically loaded into the app,
 add it to the `overrides` section in `bower.json`,

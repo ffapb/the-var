@@ -35,6 +35,7 @@ module.exports = function(config) {
       'bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.min.js',
       'bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min.js',
       'bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min.js',
+      'bower_components/angular-ui-chart/src/chart.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
