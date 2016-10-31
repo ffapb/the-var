@@ -1,4 +1,10 @@
 # HIGH PRIORITY
+2016-10-31
+* Interactive Chart API does not return any elements
+ * https://github.com/markitondemand/DataApis/issues/45
+* `$log.debug` and `$logProvider...` in `app/scripts/app.js` dont seem to work with enabled debug
+* continue tests of getNav in `app/scripts/service/ffa.js` and `test/.../ffa.js`
+
 2016-04-19
 * how to add returns of unequal lengths?
 

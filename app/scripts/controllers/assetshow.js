@@ -8,7 +8,7 @@
  * Controller of the theVarApp
  */
 angular.module('theVarApp')
-  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios,ActivateNavBar,ffa,$location) {
+  .controller('AssetshowCtrl', function ($routeParams,markitOnDemand,varCalc,Assets,$scope,Portfolios,ActivateNavBar,ffa,$location,$log) {
 
     ActivateNavBar.assets();
 
@@ -84,7 +84,7 @@ angular.module('theVarApp')
         var fc = ffa.ffaConfig1();
         if(!!fc) {
           fc.then(function(config) {
-            console.log('conf',config);
+            $log.debug('conf',config);
             return $scope.getChartCore(config);
           });
         } else {
@@ -100,7 +100,7 @@ angular.module('theVarApp')
     };
 
     $scope.showChart=function(p) {
-      console.log(p);
+      $log.debug(p);
     };
 
     $scope.calculateVaR = function(p,percentile,nday) {
@@ -146,6 +146,6 @@ angular.module('theVarApp')
     $scope.myChartOpts.perc = angular.fromJson(angular.toJson($scope.myChartOpts.usd));
     $scope.myChartOpts.perc.axes.xaxis.renderer = $.jqplot.DateAxisRenderer;
     $scope.myChartOpts.perc.axes.yaxis.tickOptions.formatString='%%%.2f';
-    console.log($scope.myChartOpts.perc);
+    $log.debug($scope.myChartOpts.perc);
 
   });

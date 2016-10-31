@@ -50,7 +50,7 @@ describe('Service: AssetsRefresher', function () {
     AssetsRefresher.run().then(function() {
       for(var src in aaa) {
         for(var symbol in aaa[src]) {
-          console.log('aaa',src,symbol,aaa[src][symbol]);
+          //console.log('aaa',src,symbol,aaa[src][symbol]);
           expect(aaa[src][symbol].price).toBe(1);
         }
       }

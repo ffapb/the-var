@@ -67,7 +67,7 @@ angular.module('theVarApp')
           // and if start date was 2015-07-07 and end was 2016-07-07,
           // the result vector would have been closes of 2015-07-06 till 2016-07-06
         }
-        console.log('mod jsonp',parameters);
+        //console.log('mod jsonp',parameters);
 
         return $http.jsonp(url, {
           params: {

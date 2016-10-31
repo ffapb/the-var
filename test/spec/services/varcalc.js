@@ -113,7 +113,7 @@ describe('Service: varCalc', function () {
     expect(e1b).toBe(r1b);
 
     // check that 5-day var of single asset = 5-day var of portfolio comprised of 1 asset
-    console.log(p1.symbol1.historyDateless);
+    //console.log(p1.symbol1.historyDateless);
     nday = 5;
     var e5 = varCalc.portfolioVaR(95,p1,nday);
     var r5 = varCalc.calculateVaR(p1.symbol1,95,nday);

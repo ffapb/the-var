@@ -8,7 +8,7 @@
  * Service in the theVarApp.
  */
 angular.module('theVarApp')
-  .service('Assets', function (markitOnDemand,varCalc,$http,moment,Settings) {
+  .service('Assets', function (markitOnDemand,varCalc,$http,moment,Settings,$log) {
     // AngularJS will instantiate a singleton by calling 'new' on this function
     var aaa={};
     if(localStorage.getItem('aaa')) {
@@ -63,7 +63,7 @@ angular.module('theVarApp')
       },
 
       getChart: function(src,symbol,config) {
-        console.log('Getting prices',src,symbol); 
+        $log.debug('Getting prices',src,symbol); 
         gcs=1;
         var self=this;
         if(src==='mod') {
@@ -79,14 +79,14 @@ angular.module('theVarApp')
           }
 
           var url = config.endPoints.prices+'?format=json&tkr=["'+symbol2+'"]'+'&start='+Settings.dashless().start+'&end='+Settings.dashless().end;
-          console.log('assets get chart',url);
+          $log.debug('assets get chart',url);
           return $http.get(url).then(
             function(response) {
-              console.log('res ass',url,response);
+              $log.debug('res ass',url,response);
               gcs=0;
               var x={};
               for(var i in response.data) {
-                console.log('_____',i,response.data[i]);
+                $log.debug('_____',i,response.data[i]);
                 x[i]=self.treatChart(response.data[i]);
               }
 
@@ -100,8 +100,8 @@ angular.module('theVarApp')
       },
 
       treatChart: function(response) {
-        console.log('treat chart',response);
-        console.log(response);
+        $log.debug('treat chart',response);
+        $log.debug(response);
         if(response.Elements.length===0) {
           //window.alert('No data');
           return;
@@ -231,7 +231,7 @@ angular.module('theVarApp')
         return this.getChart(newA.src,newA.lookup.Symbol,config)
           .then(function(ps) {
             if(newA.src==='mod') { ps={'test':ps}; }
-            console.log('ps',ps);
+            $log.debug('ps',ps);
             for(var s in ps) {
               // http://stackoverflow.com/a/171256/4126114
               for(var attrname in ps[s]) {

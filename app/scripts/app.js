@@ -17,7 +17,7 @@ angular
     'ui.chart',
     'angularMoment'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider,$logProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -62,5 +62,8 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+
+
+      $logProvider.debugEnabled(true);
   });
 
