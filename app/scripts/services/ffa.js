@@ -19,9 +19,12 @@ angular.module('theVarApp')
     var available = 0;
     var self;
     var configUrl = '/the-var-config.json?ts='+moment().format('x');  // append unix timestamp to avoid cache
+    var N=60; // number of security prices to retrieve at a time
 
     return {
-      np: function() { return Object.keys(fff).length; },
+      np: function() {
+        return Object.keys(fff).length;
+      },
 
       getAvailable: function() {
         return available;
@@ -40,11 +43,10 @@ angular.module('theVarApp')
           return this.checkAvailable().then(function() {
             if(!available) { return false; }
             return $http.get(configUrl).then(function(response) {
-              $log.debug('fc11',response.data);
               config = response.data;
               return config;
             }, function(response) {
-              console.error('fc12',response);
+              console.error('error getting config from '+configUrl,response);
             });
           });
         } else {
@@ -61,38 +63,40 @@ angular.module('theVarApp')
         pst.r = 1;
         self=this;
         if(!config) {
-          this.ffaConfig1()
+          return this.ffaConfig1()
             .then(function() {
-              self.portfolios();
+              return self.portfolios();
             });
-          return;
         }
 
         if(config.accounts.length===0) { return; }
 
         fff={}; // reset before retrieval
-        this.pstart(0);
+        return this.pstart(0);
       },
 
-      setAbort: function() { abort=true; console.error('Will abort'); },
+      setAbort: function() {
+        abort=true;
+        console.error('Will abort');
+      },
 
       pstart: function(a1) {
         self=this;
-        if(abort) { pst.r=2; return; }
-
-        $log.debug('pst',a1);
-        var nac = config.accounts.length;
-        if(a1>=nac) { return; }
+        if(abort) {
+          pst.r=2;
+          abort=false;
+          return;
+        }
 
         var a = config.accounts[a1];
-        $log.debug('ca',config.accounts,a);
+
+        console.log('pst',a1,config.accounts,a);
+
         var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a;
-        $http.get(url)
+        return $http.get(url)
           // set portfolio
           .then(function(response) {
-            if(abort) { pst.r=2; return; }
-
-            $log.debug('fc13',response);
+            console.log('fc13',response);
             var k=a.base+'-'+a.a;
             fff[k]={acc: a, port: response.data }; // .slice(1,20) // slice only for testing purposes
 
@@ -114,7 +118,7 @@ angular.module('theVarApp')
             });
  
             var assets = fff[k].port.map(function(x) {
-              return {src: 'FFA MF', symbol:x.symbolMain, pct: 1};
+              return {src: 'FFA MF', symbol:x.symbolMain, pct: 1}; // TODO get pct from mf
             });
 
             Portfolios.add('FFA MF',k,assets);
@@ -131,13 +135,13 @@ angular.module('theVarApp')
               Assets.add(newA);
             });
 
-            if(self.np()<nac) {
-              self.pstart(a1+1);
+            if(self.np()<config.accounts.length) {
+              return self.pstart(a1+1);
             } else {
               pst.r=0;
             }
           }, function(response) {
-            console.error('fc14',response);
+            console.error('error in getting portfolio of account',response);
             pst.r=2;
           });
     },
@@ -146,7 +150,7 @@ angular.module('theVarApp')
       var self=this;
       if(!config) { return false; }
       var nac = config.accounts.length;
-      $log.debug('abc',self.np(),Object.keys(fff).length,fff,nac);
+      console.log('abc',self.np(),Object.keys(fff).length,fff,nac);
       return(self.np()===nac);
     },
 
@@ -178,7 +182,7 @@ angular.module('theVarApp')
     },
 
     mwpSingle: function(ki,self) {
-      $log.debug('mwpsingle',fff,ki,abort);
+      console.log('mwpsingle',fff,ki,abort);
       if(abort) { pst.r=2; return; }
       var k = Object.keys(fff)[ki];
 
@@ -192,7 +196,7 @@ angular.module('theVarApp')
     },
 
     mwpSingle2: function(ki,self) {
-      $log.debug('fdasfdsafdas',fff,ki,Object.keys(fff)[ki]);
+      console.log('fdasfdsafdas',fff,ki,Object.keys(fff)[ki]);
 
       var k = Object.keys(fff)[ki];
       al = fff[k].port.filter(function(a) {
@@ -200,7 +204,7 @@ angular.module('theVarApp')
       });
       if(al.length===0) { return; }
 
-      $log.debug('fsdafdsa234234',k,al);
+      console.log('fsdafdsa234234',k,al);
       self.getChart(0,self,ki);
     },
 
@@ -208,17 +212,16 @@ angular.module('theVarApp')
       var al2=al.map(function(x) { return x.symbolMain; });
 
       // iterate in steps of N
-      var N=60;
       if(al2i>Math.floor(al2.length/N)) {
         console.error('Should not have gotten here',al2i,al2.length,N,Math.floor(al2.length/N));
         return;
       }
       var al2s=al2.slice(al2i*N,al2i*N+N); // if al2i=0 and N=10, this will be 0,10 but will return the items from index 0 to index 9 inclusive
-      $log.debug('subset',al2i,al2s,self);
+      console.log('subset',al2i,al2s,self);
 
       Assets.getChart('FFA MF',al2s,config)
         .then(function(psa) {
-          $log.debug('res',psa,fff,al2s,self);
+          console.log('res',psa,fff,al2s,self);
           // count failed codes
           pst.i+=al2s.length - Object.keys(psa).length;
           var myfilter=function(x) { return x.symbolMain===psk; };
@@ -229,7 +232,7 @@ angular.module('theVarApp')
             if(al3.length >1) { console.error('Found more than one code '+psk+' ... what?'); return; }
             var a=al3[0];
 
-            $log.debug('Doing',a.symbolMain);
+            console.log('Doing',a.symbolMain);
 
             var newA = {
               src: 'FFA MF',
@@ -257,7 +260,7 @@ angular.module('theVarApp')
             self.mwpPost();
           }
 
-          $log.debug('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
+          console.log('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
           if(al2i+1>Math.floor(al2.length/N)) {
             self.mwpS2Post(ki,self);
           } else {
@@ -272,13 +275,13 @@ angular.module('theVarApp')
     },
 
     mwpS2Post: function(ki,self) {
-      $log.debug('fffffff',fff);
+      console.log('fffffff',fff);
 
-      $log.debug('moving to next',ki,fff);
+      console.log('moving to next',ki,fff);
       if(ki+1<Object.keys(fff).length) {
         self.mwpSingle(ki+1,self);
       } else {
-        $log.debug('finished looping');
+        console.log('finished looping');
         self.mwpPost();
       }
     },
@@ -287,11 +290,11 @@ angular.module('theVarApp')
       // TODO WORK IN PROGRESS
       return $http.get(url).then(
         function(response) {
-          $log.debug('res ass',url,response);
+          console.log('res ass',url,response);
           gcs=0;
           var x={};
           for(var i in response.data) {
-            $log.debug('_____',i,response.data[i]);
+            console.log('_____',i,response.data[i]);
             x[i]=self.treatChart(response.data[i]);
           }
 
@@ -305,7 +308,7 @@ angular.module('theVarApp')
   };
 
 /*    $scope.ffaConfig2 = function() {
-      $log.debug('ffa config');
+      console.log('ffa config');
       var un = window.prompt('Username');
       if(un) {
         var pw = window.prompt('Password');
@@ -324,7 +327,7 @@ angular.module('theVarApp')
               return;
             }
 
-            $log.debug('portfoliosEndPoint',response.data);
+            console.log('portfoliosEndPoint',response.data);
           }, function(response) {
             console.error('Search for FFA the-var failed. '+angular.toJson(response));
           });
