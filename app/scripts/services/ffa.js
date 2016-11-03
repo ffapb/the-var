@@ -169,7 +169,7 @@ angular.module('theVarApp')
           }, 0);
 
       // run core
-      this.mwpSingle(0,this);
+      return this.mwpSingle(0,this);
     },
 
     mwpPost: function(x) {
@@ -191,8 +191,9 @@ angular.module('theVarApp')
         return !a.symbolMain;
       }).length;
       // continue
-      self.mwpSingle2(ki,self);
-      self.mwpPost();
+      return self.mwpSingle2(ki,self).then(function() {
+        self.mwpPost();
+      });
     },
 
     mwpSingle2: function(ki,self) {
@@ -205,7 +206,7 @@ angular.module('theVarApp')
       if(al.length===0) { return; }
 
       console.log('fsdafdsa234234',k,al);
-      self.getChart(0,self,ki);
+      return self.getChart(0,self,ki);
     },
 
     getChart: function(al2i,self,ki) {
@@ -219,7 +220,7 @@ angular.module('theVarApp')
       var al2s=al2.slice(al2i*N,al2i*N+N); // if al2i=0 and N=10, this will be 0,10 but will return the items from index 0 to index 9 inclusive
       console.log('subset',al2i,al2s,self);
 
-      Assets.getChart('FFA MF',al2s,config)
+      return Assets.getChart('FFA MF',al2s,config)
         .then(function(psa) {
           console.log('res',psa,fff,al2s,self);
           // count failed codes
@@ -262,15 +263,14 @@ angular.module('theVarApp')
 
           console.log('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
           if(al2i+1>Math.floor(al2.length/N)) {
-            self.mwpS2Post(ki,self);
-          } else {
-            self.getChart(al2i+1,self,ki);
+            return self.mwpS2Post(ki,self);
           }
 
+          return self.getChart(al2i+1,self,ki);
         }, function(err) {
           console.error('Error',err);
           self.mwpPost(al2s.length);
-          self.mwpS2Post(ki,self);
+          return self.mwpS2Post(ki,self);
         });
     },
 
@@ -279,7 +279,7 @@ angular.module('theVarApp')
 
       console.log('moving to next',ki,fff);
       if(ki+1<Object.keys(fff).length) {
-        self.mwpSingle(ki+1,self);
+        return self.mwpSingle(ki+1,self);
       } else {
         console.log('finished looping');
         self.mwpPost();

@@ -5,3 +5,4 @@
 /bower_components
 /.grunt
 /app/the-var-config.json
+*.swp
