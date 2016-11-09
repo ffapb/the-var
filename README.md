@@ -1,5 +1,7 @@
 # the-var
 
+[![Build Status](https://travis-ci.org/shadiakiki1986/the-var.svg?branch=master)](https://travis-ci.org/shadiakiki1986/the-var)
+
 This project allows a user to build a portfolio and calculate its VaR.
 
 It will be published at http://shadiakiki1986.github.io/the-var/
