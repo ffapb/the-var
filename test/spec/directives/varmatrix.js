@@ -9,6 +9,14 @@ describe('Directive: varmatrix', function () {
     scope,
     PortfoliosM;
 
+  function compileAndDigest(element,scope,$compile) {
+    element = $compile(element)(scope);
+    // call digest to fire watch function
+    // http://stackoverflow.com/a/24243128/4126114
+    scope.$digest();
+    return element;
+  }
+
   beforeEach(inject(function ($rootScope,Portfolios) {
     scope = $rootScope.$new();
     PortfoliosM=Portfolios;
@@ -72,13 +80,5 @@ describe('Directive: varmatrix', function () {
       '</tbody></table>';
     expect(element.html()).toBe(expected);
   }));
-
-  function compileAndDigest(element,scope,$compile) {
-    element = $compile(element)(scope);
-    // call digest to fire watch function
-    // http://stackoverflow.com/a/24243128/4126114
-    scope.$digest();
-    return element;
-  }
 
 });
