@@ -31,10 +31,10 @@ var portfolios = {
 
 // prices for securities
 var prices = {
-  'x11': { 'x11': { 'Elements': { 'close': 100 }, 'Dates': ['2015-01-01'] } },
-  'x21': { 'x21': { 'Elements': { 'close': 100 }, 'Dates': ['2015-01-01'] } },
-  'x22': { 'x22': { 'Elements': { 'close': 100 }, 'Dates': ['2015-01-01'] } },
-  'x31': { 'x31': { 'Elements': { 'close': 100 }, 'Dates': ['2015-01-01'] } }
+  'x11': { 'x11': { 'Elements': [{'DataSeries':{'close':{'values':100}}}], 'Dates': ['2015-01-01'] } },
+  'x21': { 'x21': { 'Elements': [{'DataSeries':{'close':{'values':100}}}], 'Dates': ['2015-01-01'] } },
+  'x22': { 'x22': { 'Elements': [{'DataSeries':{'close':{'values':100}}}], 'Dates': ['2015-01-01'] } },
+  'x31': { 'x31': { 'Elements': [{'DataSeries':{'close':{'values':100}}}], 'Dates': ['2015-01-01'] } }
 };
 
 // tests
@@ -44,10 +44,12 @@ describe('Service: ffa', function () {
   beforeEach(module('theVarApp'));
 
   // instantiate service
-  var ffa, http;
-  beforeEach(inject(function (_ffa_, $httpBackend) {
+  var ffa, http, Assets, Portfolios;
+  beforeEach(inject(function (_ffa_, $httpBackend, _Assets_, _Portfolios_) {
     ffa = _ffa_;
     http = $httpBackend;
+    Assets = _Assets_;
+    Portfolios = _Portfolios_;
   }));
 
   function httpExpectGet(withPrices) {
@@ -71,13 +73,13 @@ describe('Service: ffa', function () {
     // iterate over securities
     if(withPrices) {
       for(var ac in config.accounts) {
-        console.log("http expect -------------- "+(withPrices?'true':'false') );
+        var account = config.accounts[ac];
         var portfolio = portfolios[account.base][account.a];
         // 4th get prices of securities
-        var re2 = new RegExp(config.endPoints.prices);
         for(var sec in portfolio) {
-          var price = prices[portfolio[sec].TIT_ISIN_BBG];
-          console.log("expect prices",re2);
+          var isin = portfolio[sec].TIT_ISIN_BBG;
+          var re2 = new RegExp(config.endPoints.prices+".*"+isin);
+          var price = prices[isin];
           http.expectGET(re2).respond(price);
         }
       }
@@ -99,15 +101,20 @@ describe('Service: ffa', function () {
   });
 
   it('can get portfolios', function (done) {
+    Portfolios.clear();
+    expect(Portfolios.np()).toEqual(0);
     httpExpectGet(false);
     ffa.portfolios().then(function() {
       expect(ffa.np()).toEqual(2);
+      expect(Portfolios.np()).toEqual(2);
       done();
     });
     http.flush();
   });
 
   it('can abort getting portfolios and resume again later', function (done) {
+    Portfolios.clear();
+    Assets.clear();
     httpExpectGet(false);
 
     // call abort
@@ -119,10 +126,14 @@ describe('Service: ffa', function () {
     ffa.portfolios().then(function() {
       // should not have gotten anything
       expect(ffa.np()).toEqual(0);
+      expect(Assets.na()).toEqual(0);
+      expect(Portfolios.np()).toEqual(0);
       // now try to get portfolios again
       ffa.portfolios().then(function() {
         // now got 2 portfolios
         expect(ffa.np()).toEqual(2);
+        expect(Assets.na()).toEqual(3);
+        expect(Portfolios.np()).toEqual(2);
         done();
       });
     });
@@ -130,16 +141,27 @@ describe('Service: ffa', function () {
   });
 
   it('can get prices of portfolio securities', function (done) {
+    Portfolios.clear();
+    Assets.clear();
+    expect(Assets.na()).toEqual(0);
+    expect(ffa.np()).toEqual(0);
+    expect(Portfolios.np()).toEqual(0);
+
     httpExpectGet(true);
 
     // run portfolios
     ffa.portfolios().then(function() {
       // assert that we got 2 portfolios
       expect(ffa.np()).toEqual(2);
+      expect(Portfolios.np()).toEqual(2);
       // assert that we are ready for prices
       expect(ffa.readyForPrices()).toBe(true);
       // get security prices
       ffa.portfolioPrices().then(function() {
+        expect(Assets.na()).toEqual(3);
+        expect(Assets.exists('FFA MF','x11')).toBe(true);
+        expect(Assets.list()['FFA MF']['x11'].historyMeta.mindate).toBe('2015-01-01');
+        expect(Assets.list()['FFA MF']['x11'].history.length).toBe(1);
         done();
       });
     });

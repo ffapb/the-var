@@ -35,7 +35,9 @@ angular.module('theVarApp')
       return Portfolios.listAssets($scope.portfolio.id);
     };
 
-    $scope.set($routeParams.pid);
+    if(!!$routeParams.pid) {
+      $scope.set($routeParams.pid);
+    }
 
     $scope.calculateVaR = function(p,percentile,nday) {
       return varCalc.calculateVaR(p,percentile,nday);

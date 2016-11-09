@@ -25,25 +25,29 @@ describe('Service: Assets', function () {
 
   it('set list na', function () {
     expect(!!Assets).toBe(true);
-    expect(Assets.na()===0);
+    Assets.clear();
+    expect(Assets.na()).toBe(0);
     Assets.setAAA(aaa);
-    expect(Assets.na()===1);
+    expect(Assets.na()).toBe(4);
   });
 
   it('add del asset', function () {
+    Assets.clear();
     // add new portfolio
     var n0 = Assets.na();
     var a1={src:'mod',lookup:{Symbol:'symbol5'}};
     expect(Assets.exists(a1.src,a1.lookup.Symbol)).toBe(false);
-    expect(Assets.na()===n0+1);
+    expect(Assets.na()).toBe(n0);
     Assets.add(a1); // var pid1 = ...
     expect(Assets.exists(a1.src,a1.lookup.Symbol)).toBe(true);
+    expect(Assets.na()).toBe(n0+1);
     // add existing
+    console.log("Expect error: assets already contain...");
     Assets.add(a1);
-    expect(Assets.na()===n0+1);
+    expect(Assets.na()).toBe(n0+1);
     // del
     Assets.del('mod','symbol5');
-    expect(Assets.na()===n0);
+    expect(Assets.na()).toBe(n0);
     expect(Assets.exists(a1.src,a1.lookup.Symbol)).toBe(false);
   });
 

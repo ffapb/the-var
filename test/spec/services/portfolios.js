@@ -35,20 +35,24 @@ describe('Service: Portfolios', function () {
   });
 
   it('add del portfolio', function () {
+    Portfolios.clear();
     // add new portfolio
     var n0 = Portfolios.np();
     var pid1=Portfolios.add('portfolio 2','mod',[]);
-    expect(Portfolios.np()===n0+1);
+    expect(Portfolios.np()).toBe(n0+1);
     // add existing
+    console.log("expect error: portfolio already contains");
     var pid2 = Portfolios.add('portfolio 2','mod',[]);
-    expect(pid1===pid2);
-    expect(Portfolios.np()===n0+1);
+    expect(pid1).toBe(pid2);
+    expect(Portfolios.np()).toBe(n0+1);
     // del
     Portfolios.del(pid1);
-    expect(Portfolios.np()===n0);
+    expect(Portfolios.np()).toBe(n0);
   });
 
   it('add rm asset', function () {
+    Portfolios.clear();
+
     var aaa1={src:'mod',lookup:{Symbol:'symbol1'}};
     // add new portfolio
     expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false).length===0);
@@ -67,6 +71,8 @@ describe('Service: Portfolios', function () {
   });
 
   it('update name', function () {
+    Portfolios.clear();
+
     var pid=Portfolios.add('portfolio 2','mod',[]);
     var p1=Portfolios.list()[pid];
     expect(p1.name==='portfolio 2');

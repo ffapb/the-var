@@ -77,7 +77,7 @@ angular.module('theVarApp')
 
       setAbort: function() {
         abort=true;
-        console.error('Will abort');
+        $log.error('Will abort');
       },
 
       pstart: function(a1) {
@@ -90,13 +90,13 @@ angular.module('theVarApp')
 
         var a = config.accounts[a1];
 
-        console.log('pst',a1,config.accounts,a);
+        $log.debug('pst',a1,config.accounts,a);
 
         var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a;
         return $http.get(url)
           // set portfolio
           .then(function(response) {
-            console.log('fc13',response);
+            $log.debug('fc13',response);
             var k=a.base+'-'+a.a;
             fff[k]={acc: a, port: response.data }; // .slice(1,20) // slice only for testing purposes
 
@@ -150,7 +150,7 @@ angular.module('theVarApp')
       var self=this;
       if(!config) { return false; }
       var nac = config.accounts.length;
-      console.log('abc',self.np(),Object.keys(fff).length,fff,nac);
+      $log.debug('abc',self.np(),Object.keys(fff).length,fff,nac);
       return(self.np()===nac);
     },
 
@@ -182,7 +182,7 @@ angular.module('theVarApp')
     },
 
     mwpSingle: function(ki,self) {
-      console.log('mwpsingle',fff,ki,abort);
+      $log.debug('mwpsingle',fff,ki,abort);
       if(abort) { pst.r=2; return; }
       var k = Object.keys(fff)[ki];
 
@@ -197,7 +197,7 @@ angular.module('theVarApp')
     },
 
     mwpSingle2: function(ki,self) {
-      console.log('fdasfdsafdas',fff,ki,Object.keys(fff)[ki]);
+      $log.debug('fdasfdsafdas',fff,ki,Object.keys(fff)[ki]);
 
       var k = Object.keys(fff)[ki];
       al = fff[k].port.filter(function(a) {
@@ -205,7 +205,7 @@ angular.module('theVarApp')
       });
       if(al.length===0) { return; }
 
-      console.log('fsdafdsa234234',k,al);
+      $log.debug('fsdafdsa234234',k,al);
       return self.getChart(0,self,ki);
     },
 
@@ -218,11 +218,11 @@ angular.module('theVarApp')
         return;
       }
       var al2s=al2.slice(al2i*N,al2i*N+N); // if al2i=0 and N=10, this will be 0,10 but will return the items from index 0 to index 9 inclusive
-      console.log('subset',al2i,al2s,self);
+      // console.log('subset',al2i,al2s,self);
 
       return Assets.getChart('FFA MF',al2s,config)
         .then(function(psa) {
-          console.log('res',psa,fff,al2s,self);
+          $log.debug('res',psa,fff,al2s,self);
           // count failed codes
           pst.i+=al2s.length - Object.keys(psa).length;
           var myfilter=function(x) { return x.symbolMain===psk; };
@@ -233,7 +233,7 @@ angular.module('theVarApp')
             if(al3.length >1) { console.error('Found more than one code '+psk+' ... what?'); return; }
             var a=al3[0];
 
-            console.log('Doing',a.symbolMain);
+            $log.debug('Doing',a.symbolMain);
 
             var newA = {
               src: 'FFA MF',
@@ -261,7 +261,7 @@ angular.module('theVarApp')
             self.mwpPost();
           }
 
-          console.log('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
+          $log.debug('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
           if(al2i+1>Math.floor(al2.length/N)) {
             return self.mwpS2Post(ki,self);
           }
@@ -275,13 +275,13 @@ angular.module('theVarApp')
     },
 
     mwpS2Post: function(ki,self) {
-      console.log('fffffff',fff);
+      $log.debug('fffffff',fff);
 
-      console.log('moving to next',ki,fff);
+      $log.debug('moving to next',ki,fff);
       if(ki+1<Object.keys(fff).length) {
         return self.mwpSingle(ki+1,self);
       } else {
-        console.log('finished looping');
+        $log.debug('finished looping');
         self.mwpPost();
       }
     },
@@ -290,11 +290,11 @@ angular.module('theVarApp')
       // TODO WORK IN PROGRESS
       return $http.get(url).then(
         function(response) {
-          console.log('res ass',url,response);
+          $log.debug('res ass',url,response);
           gcs=0;
           var x={};
           for(var i in response.data) {
-            console.log('_____',i,response.data[i]);
+            $log.debug('_____',i,response.data[i]);
             x[i]=self.treatChart(response.data[i]);
           }
 
@@ -308,7 +308,7 @@ angular.module('theVarApp')
   };
 
 /*    $scope.ffaConfig2 = function() {
-      console.log('ffa config');
+      $log.debug('ffa config');
       var un = window.prompt('Username');
       if(un) {
         var pw = window.prompt('Password');
@@ -327,7 +327,7 @@ angular.module('theVarApp')
               return;
             }
 
-            console.log('portfoliosEndPoint',response.data);
+            $log.debug('portfoliosEndPoint',response.data);
           }, function(response) {
             console.error('Search for FFA the-var failed. '+angular.toJson(response));
           });

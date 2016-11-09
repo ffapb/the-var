@@ -55,6 +55,10 @@ angular.module('theVarApp')
       saveToLs: function() {
         localStorage.setItem('ppp',angular.toJson(ppp));
       },
+      clear: function() {
+        localStorage.removeItem('ppp');
+        ppp={};
+      },
       addAsset: function(pid,aaa) {
         if(!ppp.hasOwnProperty(pid)) {
           console.error('Invalid portfolio ID '+pid);
@@ -168,6 +172,7 @@ angular.module('theVarApp')
       },
 
       unallocated: function(pid) {
+        if(!pid) return false;
         if(!ppp.hasOwnProperty(pid)) {
           console.error('unallocated: Invalid portfolio ID '+pid);
           return false;

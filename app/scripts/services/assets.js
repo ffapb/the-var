@@ -48,7 +48,7 @@ angular.module('theVarApp')
         localStorage.setItem('aaa',angular.toJson(aaa));
       },
       na: function() {
-        return Object.keys(aaa).length;
+        return this.listFlat().length;
       },
       del: function(src,symbol) {
         if(!this.exists(src,symbol)) { return; }
@@ -241,6 +241,10 @@ angular.module('theVarApp')
             }
           });
 
+      },
+
+      clear: function() {
+        aaa={};
       }
 
     };
