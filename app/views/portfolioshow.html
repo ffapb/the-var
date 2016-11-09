@@ -47,7 +47,12 @@
       <th>Alternatives</th>
       <th>Name</th>
       <th>Exchange</th>
-      <th>Current P&amp;L</th>
+      <th>
+        Price
+        <br>Max date
+        <br>P&amp;L
+      </th>
+      <th>Qty</th>
       <th>Weight</th>
       <th>History</th>
       <th>&nbsp;</th>
@@ -55,6 +60,7 @@
     <tr class="{{unallocated()<5?'warning':'danger'}}" ng-show="unallocated()!=0">
       <td colspan=2>&nbsp;</td>
       <td colspan=5>Unallocated</td>
+      <td nowrap>&nbsp;</td>
       <td nowrap>
         <div>{{unallocated()|number:2}} %</div>
         <div>{{unallocated()/100*portfolio.value|number:2}} USD</div>
@@ -77,12 +83,20 @@
         <td>{{a.lookup.SymbAlt.join(",")}}</td>
         <td>{{a.lookup.Name}}</td>
         <td>{{a.lookup.Exchange}}</td>
-        <td>{{a.historyMeta.pnl.last|number:2}} % <br> ({{a.historyMeta.maxdate}})</td>
+        <td>
+          {{a.historyMeta.lastprice|number:2}} USD
+          <br>{{a.historyMeta.maxdate}}
+          <br>{{a.historyMeta.pnl.last|number:2}} %
+        </td>
+
         <td nowrap>
-          <input type="number" step=0.1 ng-value="a.pct?a.pct:0" style="width:5em" ng-model="a.pct" ng-change="assetPct(a)">
-          %
-          <div ng-show="a.src=='mf'" class="text-info">MF: {{a.pct|number:2}}</div>
-          <div>{{a.pct/100*portfolio.value|number:2}} USD</div>
+          <input type="number" step=0.1 ng-value="a.qty?a.qty:0" style="width:5em" ng-model="a.qty" ng-change="assetPct(a)">
+          share(s)
+          <div>{{a.qty*a.historyMeta.lastprice|number:2}} USD</div>
+        </td>
+
+        <td nowrap>
+          {{a.pct?a.pct:0}} %
         </td>
         <td>
           {{a.history?a.history.length:0}} points

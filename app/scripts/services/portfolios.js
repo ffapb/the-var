@@ -16,6 +16,10 @@ angular.module('theVarApp')
       ppp = angular.fromJson(localStorage.getItem('ppp'));
     }
 
+    var qty2pct = function(qty,val,total) {
+      return qty*val/total*100;
+    };
+
     return {
       set: function(xxx) { ppp=xxx; },
       list: function() {
@@ -124,7 +128,8 @@ angular.module('theVarApp')
 
         ppp[pid].assets = ppp[pid].assets.map(function(x) {
           if(x.src===aaa.src && x.symbol===aaa.lookup.Symbol) {
-            x.pct = aaa.pct;
+            x.qty = aaa.qty;
+            x.pct = qty2pct(aaa.qty, aaa.historyMeta.lastprice, ppp[pid].value);
           }
           return x;
         });
@@ -162,7 +167,8 @@ angular.module('theVarApp')
           if(al.hasOwnProperty(x.src)) {
             if(al[x.src].hasOwnProperty(x.symbol)) {
               var o2 = al[x.src][x.symbol];
-              o2.pct = x.pct;
+              o2.qty = x.qty;
+              o2.pct = qty2pct(o2.qty, o2.historyMeta.lastprice, ppp[pid].value);
               return o2;
             }
           }

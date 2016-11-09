@@ -137,7 +137,7 @@ angular.module('theVarApp')
             });
  
             var assets = fff[k].port.map(function(x) {
-              return {src: 'FFA MF', symbol:x.symbolMain, pct: 1}; // TODO get pct from mf
+              return {src: 'FFA MF', symbol:x.symbolMain, pct: 0, qty: 0}; // TODO get pct/qty from mf
             });
 
             Portfolios.add('FFA MF',k,assets);
