@@ -246,8 +246,9 @@ angular.module('theVarApp')
           $log.debug('res',psa,fff,al2s,self);
           // count failed codes
           pst.i+=al2s.length - Object.keys(psa).length;
+          var psk;
           var myfilter=function(x) { return x.symbolMain===psk; };
-          for(var psk in psa) {
+          for(psk in psa) {
             var ps=psa[psk];
             var al3=al.filter(myfilter);
             if(al3.length===0) { console.error('Did not find the code '+psk+' ... what?'); return; }

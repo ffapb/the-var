@@ -24,18 +24,6 @@ angular.module('theVarApp')
                  //TODO: Use $eval to get the object
                 opts.type = attrs.type || 'line';
 
-                scope.$watch(attrs.ngModel, function () {
-                  $timeout(function() {
-                    render();
-                  },100);
-                });
-                
-                scope.$watch(attrs.opts, function(){
-                  $timeout(function() {
-                    render();
-                  },100);
-                }
-                  );
                 var render = function () {
                     var model;
                     if(attrs.opts) {
@@ -57,6 +45,19 @@ angular.module('theVarApp')
                     }
                     $(elem).sparkline(data, opts);
                 };
+
+                scope.$watch(attrs.ngModel, function () {
+                  $timeout(function() {
+                    render();
+                  },100);
+                });
+                
+                scope.$watch(attrs.opts, function(){
+                  $timeout(function() {
+                    render();
+                  },100);
+                }
+                  );
             }
         };
 

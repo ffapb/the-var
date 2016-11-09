@@ -13,24 +13,6 @@ angular.module('theVarApp')
 
     var config, al, srcA=[], srcV, symbolA=[];
 
-    function core() {
-      al = Assets.list();
-      $log.debug('srca',srcA.length);
-      srcA=Object.keys(al);
-      //$log.debug('src init: '+srcA.length);
-      return recurseKeys();
-    }
-
-    function recurseKeys() {
-      // terminal condition
-      //$log.debug('src left: '+srcA.length);
-      if(srcA.length===0) { return; }
-      srcV = srcA.pop();
-      symbolA=Object.keys(al[srcV]);
-      //$log.debug('symbol init: '+symbolA.length);
-      return recurseSymbols();
-    }
-
     function recurseSymbols() {
       // terminal condition
       //$log.debug('symbol left: '+symbolA.length);
@@ -44,6 +26,24 @@ angular.module('theVarApp')
           Assets.saveToLs();
           return recurseSymbols();
         });
+    }
+
+    function recurseKeys() {
+      // terminal condition
+      //$log.debug('src left: '+srcA.length);
+      if(srcA.length===0) { return; }
+      srcV = srcA.pop();
+      symbolA=Object.keys(al[srcV]);
+      //$log.debug('symbol init: '+symbolA.length);
+      return recurseSymbols();
+    }
+
+    function core() {
+      al = Assets.list();
+      $log.debug('srca',srcA.length);
+      srcA=Object.keys(al);
+      //$log.debug('src init: '+srcA.length);
+      return recurseKeys();
     }
 
     // similar to controllers/assetshow.js#getChart
