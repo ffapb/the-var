@@ -16,7 +16,7 @@ angular.module('theVarApp')
     function recurseSymbols() {
       // terminal condition
       //$log.debug('symbol left: '+symbolA.length);
-      if(symbolA.length===0) { return recurseKeys(); }
+      if(symbolA.length===0) { return; }
 
       var symbolV = symbolA.pop();
       al[srcV][symbolV].retrieving=true;
@@ -35,7 +35,9 @@ angular.module('theVarApp')
       srcV = srcA.pop();
       symbolA=Object.keys(al[srcV]);
       //$log.debug('symbol init: '+symbolA.length);
-      return recurseSymbols();
+      return recurseSymbols().then(function() {
+        return recurseKeys();
+      });
     }
 
     function core() {
