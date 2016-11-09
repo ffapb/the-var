@@ -2,12 +2,12 @@
 
 var config = {
   endPoints: {
-    portfolios: "http://192.168.125.126/ffa-mfe/databases-api/api/getAccountSecurities.php",
-    prices: "/ffa-mfe/the-var-ffa/getHistory.php"
+    portfolios: 'http://192.168.125.126/ffa-mfe/databases-api/api/getAccountSecurities.php',
+    prices: '/ffa-mfe/the-var-ffa/getHistory.php'
   },
   accounts: [
-    { base: "Lebanon", a: "AC1" },
-    { base: "Lebanon", a: "AC2" }
+    { base: 'Lebanon', a: 'AC1' },
+    { base: 'Lebanon', a: 'AC2' }
   ]
 };
 
@@ -52,33 +52,41 @@ describe('Service: ffa', function () {
     Portfolios = _Portfolios_;
   }));
 
-  function httpExpectGet(withPrices) {
+  function httpExpectGet(withPrices, _conf_) {
+    if(!_conf_) {
+      _conf_=config;
+    }
+
     // first GET for checkAvailable
-    http.expectGET(/the-var-config.json/).respond(config);
+    http.expectGET(/the-var-config.json/).respond(_conf_);
     // 2nd GET for ffaConfig1
-    http.expectGET(/the-var-config.json/).respond(config);
+    http.expectGET(/the-var-config.json/).respond(_conf_);
+
+    // prepare to iterate
+    var account, portfolio;
+
     // iterate over accounts
-    for(var ac in config.accounts) {
-      var account = config.accounts[ac];
+    for(var ac in _conf_.accounts) {
+      account = _conf_.accounts[ac];
       // 3rd GET for securities of each account
       var re1 = new RegExp(
-        config.endPoints.portfolios
-        +".*"+account.base
-        +".*"+account.a
+        config.endPoints.portfolios +
+        '.*'+account.base +
+        '.*'+account.a
       );
-      var portfolio = portfolios[account.base][account.a];
+      portfolio = portfolios[account.base][account.a];
       http.expectGET(re1).respond(portfolio);
     }
 
     // iterate over securities
     if(withPrices) {
-      for(var ac in config.accounts) {
-        var account = config.accounts[ac];
-        var portfolio = portfolios[account.base][account.a];
+      for(ac in config.accounts) {
+        account = config.accounts[ac];
+        portfolio = portfolios[account.base][account.a];
         // 4th get prices of securities
         for(var sec in portfolio) {
           var isin = portfolio[sec].TIT_ISIN_BBG;
-          var re2 = new RegExp(config.endPoints.prices+".*"+isin);
+          var re2 = new RegExp(config.endPoints.prices+'.*'+isin);
           var price = prices[isin];
           http.expectGET(re2).respond(price);
         }
@@ -160,10 +168,41 @@ describe('Service: ffa', function () {
       ffa.portfolioPrices().then(function() {
         expect(Assets.na()).toEqual(3);
         expect(Assets.exists('FFA MF','x11')).toBe(true);
-        expect(Assets.list()['FFA MF']['x11'].historyMeta.mindate).toBe('2015-01-01');
-        expect(Assets.list()['FFA MF']['x11'].history.length).toBe(1);
+        expect(Assets.list()['FFA MF'].x11.historyMeta.mindate).toBe('2015-01-01');
+        expect(Assets.list()['FFA MF'].x11.history.length).toBe(1);
         done();
       });
+    });
+    http.flush();
+  });
+
+  it('detects invalid config', function (done) {
+    httpExpectGet(false,{});
+
+    // run portfolios
+    ffa.portfolios().then(function() {
+      // shouldnt get here
+      expect(false).toEqual(true);
+      done();
+    }, function(reason) {
+      expect(reason).toEqual('Config missing accounts field');
+      done();
+    });
+    http.flush();
+  });
+
+  it('handles empty accounts in config', function (done) {
+    httpExpectGet(false,{'accounts':[]});
+
+    // run portfolios
+    ffa.portfolios().then(function() {
+      // should get here
+      expect(false).toEqual(false);
+      done();
+    }, function() {
+      // shouldnt get here
+      expect(false).toEqual(true);
+      done();
     });
     http.flush();
   });

@@ -42,7 +42,7 @@ describe('Service: Assets', function () {
     expect(Assets.exists(a1.src,a1.lookup.Symbol)).toBe(true);
     expect(Assets.na()).toBe(n0+1);
     // add existing
-    console.log("Expect error: assets already contain...");
+    console.log('Expect error: assets already contain...');
     Assets.add(a1);
     expect(Assets.na()).toBe(n0+1);
     // del

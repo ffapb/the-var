@@ -41,7 +41,7 @@ describe('Service: Portfolios', function () {
     var pid1=Portfolios.add('portfolio 2','mod',[]);
     expect(Portfolios.np()).toBe(n0+1);
     // add existing
-    console.log("expect error: portfolio already contains");
+    console.log('expect error: portfolio already contains');
     var pid2 = Portfolios.add('portfolio 2','mod',[]);
     expect(pid1).toBe(pid2);
     expect(Portfolios.np()).toBe(n0+1);

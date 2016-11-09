@@ -69,7 +69,14 @@ angular.module('theVarApp')
             });
         }
 
-        if(config.accounts.length===0) { return; }
+        if(!config.hasOwnProperty('accounts')) {
+          return this.failConfig('Config missing accounts field');
+        }
+
+        if(config.accounts.length===0) {
+          pst.r = 0;
+          return;
+        }
 
         fff={}; // reset before retrieval
         return this.pstart(0);
@@ -78,6 +85,14 @@ angular.module('theVarApp')
       setAbort: function() {
         abort=true;
         $log.error('Will abort');
+      },
+
+      failConfig: function(msg) {
+        pst.r = 2;
+        // https://docs.angularjs.org/api/ng/service/$q
+        return $q(function(resolve,reject) {
+          reject(msg);
+        });
       },
 
       pstart: function(a1) {
@@ -91,6 +106,10 @@ angular.module('theVarApp')
         var a = config.accounts[a1];
 
         $log.debug('pst',a1,config.accounts,a);
+
+        if(!config.hasOwnProperty('endPoints')) {
+          return this.failConfig('Config missing endPoints field');
+        }
 
         var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a;
         return $http.get(url)
@@ -149,7 +168,9 @@ angular.module('theVarApp')
     readyForPrices: function() {
       var self=this;
       if(!config) { return false; }
+      if(!config.accounts) { return false; }
       var nac = config.accounts.length;
+      if(nac===0) { return false; }
       $log.debug('abc',self.np(),Object.keys(fff).length,fff,nac);
       return(self.np()===nac);
     },
