@@ -2,30 +2,48 @@
 
 describe('Service: Portfolios', function () {
 
-  // load the service's module
-  beforeEach(module('theVarApp'));
-
-  // instantiate service
-  var Portfolios;
-  beforeEach(inject(function (_Portfolios_) {
-    Portfolios = _Portfolios_;
-  }));
-
+  // fixtures
   var ppp = {
     '1': {
       'id': '1',
       'src': 'mod',
       'name': 'portfolio 1',
       'assets': [
-        { 'src': 'mod',
-          'symbol': 'symbol 1'
+        { 'src': 'src1',
+          'symbol': 'symbol1'
         },
-        { 'src': 'mod',
-          'symbol': 'symbol 2'
+        { 'src': 'src1',
+          'symbol': 'symbol2'
         }
       ]
     }
   };
+
+  var aaa = {
+    mod: {
+      symbol1: { historyMeta:{ lastprice:  5 } },
+      symbol2: { historyMeta:{ lastprice: 10 } }
+    },
+    src2: {
+      symbol3: { price: 0 },
+      symbol4: { price: 0 }
+    }
+  };
+
+  // load the service's module
+  beforeEach(module('theVarApp'));
+
+  // instantiate service
+  var Portfolios;
+  beforeEach(inject(function (_Portfolios_, _Assets_) {
+    Portfolios = _Portfolios_;
+
+    // for the listAssets function used from the 'unallocated' test
+    spyOn(_Assets_, 'list').and.callFake(function() {
+      return aaa;
+    });
+
+  }));
 
   it('set list np', function () {
     expect(!!Portfolios).toBe(true);
@@ -83,18 +101,28 @@ describe('Service: Portfolios', function () {
   it('unallocated', function () {
     expect(Portfolios.unallocated()).toBe(false);
     var pid=Portfolios.add('manual 2','portfolio 2',[]);
-    expect(Portfolios.unallocated(pid)).toBe(100);
-    var a1 = {src:'mod',lookup:{Symbol:'symbol1'},pct:10};
+    // before setting value, should be false
+    console.log('Expect error: no portfolio value set');
+    expect(Portfolios.unallocated(pid)).toBe(false);
+    // set value
+    Portfolios.updateValue(pid,250);
+    // add asset
+    var a1 = {src:'mod',lookup:{Symbol:'symbol1'},qty:10};
     Portfolios.addAsset(pid,a1);
     Portfolios.assetPct(pid,a1);
-    expect(Portfolios.unallocated(pid)).toBe(90);
-    var a2 = {src:'mod',lookup:{Symbol:'symbol2'},pct:10};
+    // check unallocated
+    expect(Portfolios.unallocated(pid)).toBe(80);
+
+    // add another asset
+    var a2 = {src:'mod',lookup:{Symbol:'symbol2'},qty:10,historyMeta:{lastprice:10}};
     Portfolios.addAsset(pid,a2);
     Portfolios.assetPct(pid,a2);
-    expect(Portfolios.unallocated(pid)).toBe(80);
-    a2.pct=20;
+    expect(Portfolios.unallocated(pid)).toBe(40);
+
+    // update qty
+    a2.qty=15;
     Portfolios.assetPct(pid,a2);
-    expect(Portfolios.unallocated(pid)).toBe(70);
+    expect(Portfolios.unallocated(pid)).toBe(20);
   });
 
 });

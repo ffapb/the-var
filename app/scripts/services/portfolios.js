@@ -16,10 +16,6 @@ angular.module('theVarApp')
       ppp = angular.fromJson(localStorage.getItem('ppp'));
     }
 
-    var qty2pct = function(qty,val,total) {
-      return qty*val/total*100;
-    };
-
     return {
       set: function(xxx) { ppp=xxx; },
       list: function() {
@@ -129,7 +125,6 @@ angular.module('theVarApp')
         ppp[pid].assets = ppp[pid].assets.map(function(x) {
           if(x.src===aaa.src && x.symbol===aaa.lookup.Symbol) {
             x.qty = aaa.qty;
-            x.pct = qty2pct(aaa.qty, aaa.historyMeta.lastprice, ppp[pid].value);
           }
           return x;
         });
@@ -168,13 +163,27 @@ angular.module('theVarApp')
             if(al[x.src].hasOwnProperty(x.symbol)) {
               var o2 = al[x.src][x.symbol];
               o2.qty = x.qty;
-              o2.pct = qty2pct(o2.qty, o2.historyMeta.lastprice, ppp[pid].value);
               return o2;
             }
           }
           return null;
         }).filter(function(x) { return !!x; });
         return o;
+      },
+
+      qty2pct: function(a,portfolio) {
+        if(!a.historyMeta) {
+          console.error('No price history available in qty2pct. Aborting: ',a);
+          return 0;
+        }
+        if(!portfolio.value) {
+          console.error('No portfolio value in qty2pct. Aborting');
+          return 0;
+        }
+        var qty=a.qty;
+        var val=a.historyMeta.lastprice;
+        var total=portfolio.value;
+        return qty*val/total*100;
       },
 
       unallocated: function(pid) {
@@ -185,9 +194,19 @@ angular.module('theVarApp')
           console.error('unallocated: Invalid portfolio ID '+pid);
           return false;
         }
-        var alist = ppp[pid].assets;
+        if(!ppp[pid].value) {
+          console.error('unallocated: portfolio ID '+pid+' has no value set value yet');
+          return false;
+        }
+
+        // 2016-11-10: cannot just do ppp[pid].assets, because it doesnt get the extra info in Assets class
+        // var alist = ppp[pid].assets;
+        var alist = this.listAssets(pid);
+        var self = this;
         return 100-alist
-          .map(function(a) { return a.pct?a.pct:0; })
+          .map(function(a) {
+            return self.qty2pct(a,ppp[pid]);
+          })
           .reduce(function(a,b) { return a+b; },0);
       }
 

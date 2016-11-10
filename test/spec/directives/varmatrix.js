@@ -36,7 +36,7 @@ describe('Directive: varmatrix', function () {
     element = angular.element('<varmatrix type="matrix"></varmatrix>');
     element = compileAndDigest(element,scope,$compile);
     expect(element.find('tr').length).toBe(3);
-    var expected = '<table class="table varmatrix ng-scope" style="width:40%"><caption>Portfolio VaR (with 90 % unallocated)</caption><tbody><tr><th></th><th nowrap="">1-day</th><th nowrap="">1-week</th><th nowrap="">1-year</th></tr><tr><th nowrap="">VaR 95 %</th><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td></tr><tr><th nowrap="">VaR 99 %</th><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td></tr></tbody></table>';
+    var expected = '<table class="table varmatrix ng-scope" style="width:40%"><caption>Portfolio VaR (with 90.00 % unallocated)</caption><tbody><tr><th></th><th nowrap="">1-day</th><th nowrap="">1-week</th><th nowrap="">1-year</th></tr><tr><th nowrap="">VaR 95 %</th><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td></tr><tr><th nowrap="">VaR 99 %</th><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td></tr></tbody></table>';
     expect(element.html()).toBe(expected);
   }));
 
@@ -53,14 +53,28 @@ describe('Directive: varmatrix', function () {
 
     element = angular.element('<tr varmatrix type="rowBodyPortfolio"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);
-    var expected = '<th class="ng-scope">bla</th><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>';
+    var expected = 
+    '<th class="ng-scope">bla</th>'+
+    '<td nowrap="" class="varmatrix ng-scope">'+
+      '<divvar varisk="1" limit="-0.2" usd="100" flip="false">'+
+      '<div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %">'+
+          '<div>100.00 %</div>'+
+          '<div>100.00 USD</div>'+
+        '</div>'+
+      '</divvar>'+
+    '</td>'+
+    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
+    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
+    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
+    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
+    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>';
     expect(element.html()).toBe(expected);
   }));
 
   it('row body asset', inject(function ($compile) {
     scope.calculateVaR=function() { return 1; };
     scope.portfolio={id:1,value:100};
-    scope.a = {pct: 10, pnls: [0.15]};
+    scope.a = {qty: 2, pnls: [0.15], historyMeta: { lastprice: 5 } };
 
     element = angular.element('<tr varmatrix type="rowBodyAsset"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);

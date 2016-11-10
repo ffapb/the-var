@@ -34,7 +34,7 @@ angular.module('theVarApp')
         style: 'width:40%'
       });
 
-      $('<caption/>',{text:'Portfolio VaR (with '+scope.unallocated()+' % unallocated)'}).appendTo(table);
+      $('<caption/>',{text:'Portfolio VaR (with '+scope.unallocated().toFixed(2)+' % unallocated)'}).appendTo(table);
       var tr = $('<tr/>');
       $('<th/>',{text:''}).appendTo(tr);
       nday.map(function(nd) {
@@ -115,7 +115,8 @@ angular.module('theVarApp')
             getDivVar(
               varVal,
               scope.a.pnls[scope.a.pnls.length-1],
-              scope.a.pct/100*scope.portfolio.value,
+              Portfolios.qty2pct(scope.a,scope.portfolio)/100*
+                scope.portfolio.value,
               true
             ).appendTo(td);
           }
@@ -155,7 +156,7 @@ angular.module('theVarApp')
       restrict: 'EA',
       transclude: false,
       link: function postLink(scope, element, attrs) {
-        scope.$watch('[unallocated(),a.pct,pendingStock.historyMeta.maxdate,pendingStock.historyMeta.mindate,portfolio.value,p.value]', function() {
+        scope.$watch('[unallocated(),a.qty,pendingStock.historyMeta.lastprice,pendingStock.historyMeta.maxdate,pendingStock.historyMeta.mindate,portfolio.value,p.value]', function() {
           element.find('.varmatrix').remove();
           var grb;
           switch(attrs.type) {

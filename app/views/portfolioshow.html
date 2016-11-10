@@ -90,13 +90,13 @@
         </td>
 
         <td nowrap>
-          <input type="number" step=0.1 ng-value="a.qty?a.qty:0" style="width:5em" ng-model="a.qty" ng-change="assetPct(a)">
+          <input type="number" min=0 step=1 ng-value="a.qty?a.qty:0" style="width:5em" ng-model="a.qty" ng-change="assetPct(a)">
           share(s)
           <div>{{a.qty*a.historyMeta.lastprice|number:2}} USD</div>
         </td>
 
         <td nowrap>
-          {{a.pct?a.pct:0}} %
+          {{qty2pct(a,portfolio)|number:2}} %
         </td>
         <td>
           {{a.history?a.history.length:0}} points

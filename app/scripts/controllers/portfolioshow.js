@@ -70,6 +70,10 @@ angular.module('theVarApp')
       Portfolios.assetPct(pid,a);
     };
 
+    $scope.qty2pct = function(a,portfolio) {
+      return Portfolios.qty2pct(a,portfolio);
+    };
+
     $scope.updateName=function() {
       Portfolios.updateName($scope.portfolio.id,$scope.portfolio.name);
     };
