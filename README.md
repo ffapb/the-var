@@ -94,3 +94,6 @@ or
 If it is not automatically loaded into the app,
 add it to the `overrides` section in `bower.json`,
 then run `bower update`
+
+# fixtures
+to beautify html fixtures, run `npm -g install js-beautify` and `js-beautify file.html --type html`

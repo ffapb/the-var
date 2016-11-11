@@ -17,6 +17,8 @@ describe('Directive: varmatrix', function () {
     return element;
   }
 
+  jasmine.getFixtures().fixturesPath = 'base/test/spec/javascripts/fixtures';
+
   beforeEach(inject(function ($rootScope,Portfolios) {
     scope = $rootScope.$new();
     PortfoliosM=Portfolios;
@@ -36,8 +38,11 @@ describe('Directive: varmatrix', function () {
     element = angular.element('<varmatrix type="matrix"></varmatrix>');
     element = compileAndDigest(element,scope,$compile);
     expect(element.find('tr').length).toBe(3);
-    var expected = '<table class="table varmatrix ng-scope" style="width:40%"><caption>Portfolio VaR (with 90.00 % unallocated)</caption><tbody><tr><th></th><th nowrap="">1-day</th><th nowrap="">1-week</th><th nowrap="">1-year</th></tr><tr><th nowrap="">VaR 95 %</th><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td></tr><tr><th nowrap="">VaR 99 %</th><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap=""><divvar varisk="0.1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 10.00 % &lt; -20.00 %"><div>10.00 %</div><div>10.00 USD</div></div></divvar></td></tr></tbody></table>';
-    expect(element.html()).toBe(expected);
+
+    var actual = element.html();
+    var expected = 'varmatrix/matrix3.html';
+    expected = jasmine.getFixtures().read(expected);
+    expect(actual).toBe(expected.trim().replace(/>[\s\t\n]+</g, '><'));
   }));
 
   it('row header', inject(function ($compile) {
@@ -53,22 +58,11 @@ describe('Directive: varmatrix', function () {
 
     element = angular.element('<tr varmatrix type="rowBodyPortfolio"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);
-    var expected = 
-    '<th class="ng-scope">bla</th>'+
-    '<td nowrap="" class="varmatrix ng-scope">'+
-      '<divvar varisk="1" limit="-0.2" usd="100" flip="false">'+
-      '<div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %">'+
-          '<div>100.00 %</div>'+
-          '<div>100.00 USD</div>'+
-        '</div>'+
-      '</divvar>'+
-    '</td>'+
-    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
-    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
-    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
-    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>'+
-    '<td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="-0.2" usd="100" flip="false"><div style="color:inherit" title="Red if 100.00 % &lt; -20.00 %"><div>100.00 %</div><div>100.00 USD</div></div></divvar></td>';
-    expect(element.html()).toBe(expected);
+
+    var actual = element.html();
+    var expected = 'varmatrix/row_body_portfolio.html';
+    expected = jasmine.getFixtures().read(expected);
+    expect(actual).toBe(expected.trim().replace(/>[\s\t\n]+</g, '><'));
   }));
 
   it('row body asset', inject(function ($compile) {
@@ -78,8 +72,11 @@ describe('Directive: varmatrix', function () {
 
     element = angular.element('<tr varmatrix type="rowBodyAsset"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);
-    var expected = '<th class="ng-scope">bla</th><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="0.15" usd="10" flip="true"><div style="color:red" title="Red if 15.00 % &lt; 100.00 %"><div>100.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="0.15" usd="10" flip="true"><div style="color:red" title="Red if 15.00 % &lt; 100.00 %"><div>100.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="0.15" usd="10" flip="true"><div style="color:red" title="Red if 15.00 % &lt; 100.00 %"><div>100.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="0.15" usd="10" flip="true"><div style="color:red" title="Red if 15.00 % &lt; 100.00 %"><div>100.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="0.15" usd="10" flip="true"><div style="color:red" title="Red if 15.00 % &lt; 100.00 %"><div>100.00 %</div><div>10.00 USD</div></div></divvar></td><td nowrap="" class="varmatrix ng-scope"><divvar varisk="1" limit="0.15" usd="10" flip="true"><div style="color:red" title="Red if 15.00 % &lt; 100.00 %"><div>100.00 %</div><div>10.00 USD</div></div></divvar></td>';
-    expect(element.html()).toBe(expected);
+
+    var actual = element.html();
+    var expected = 'varmatrix/row_body_asset.html';
+    expected = jasmine.getFixtures().read(expected);
+    expect(actual).toBe(expected.trim().replace(/>[\s\t\n]+</g, '><'));
   }));
 
   it('column', inject(function ($compile) {
