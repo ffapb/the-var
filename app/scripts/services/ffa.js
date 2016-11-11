@@ -111,7 +111,7 @@ angular.module('theVarApp')
           return this.failConfig('Config missing endPoints field');
         }
 
-        var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a;
+        var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a+'&forTheVar=true';
         return $http.get(url)
           // set portfolio
           .then(function(response) {
