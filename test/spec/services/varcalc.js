@@ -62,6 +62,7 @@ describe('Service: varCalc', function () {
     var e1 = varCalc.portfolioVaR(95,p1,1);
     var r1 = varCalc.calculateVaR(p1.symbol1,95,1);
     expect(e1).toBe(r1);
+    expect(e1).toBe(1);
   });
 
   it('portfolioVaR 3',function() {

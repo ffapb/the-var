@@ -158,11 +158,14 @@ angular.module('theVarApp')
         var a = ppp[pid].assets;
         if(!a) { return []; }
         var al = Assets.list();
+        var self = this;
         var o = a.map(function(x) {
           if(al.hasOwnProperty(x.src)) {
             if(al[x.src].hasOwnProperty(x.symbol)) {
               var o2 = al[x.src][x.symbol];
               o2.qty = x.qty;
+              // add a pct field for varmatrix and varcalc directives as well as other calculations
+              o2.pct = self.qty2pct(o2,ppp[pid]);
               return o2;
             }
           }
@@ -180,10 +183,7 @@ angular.module('theVarApp')
           console.error('No portfolio value in qty2pct. Aborting');
           return 0;
         }
-        var qty=a.qty;
-        var val=a.historyMeta.lastprice;
-        var total=portfolio.value;
-        return qty*val/total*100;
+        return a.qty*a.historyMeta.lastprice/portfolio.value*100;
       },
 
       unallocated: function(pid) {
@@ -202,10 +202,9 @@ angular.module('theVarApp')
         // 2016-11-10: cannot just do ppp[pid].assets, because it doesnt get the extra info in Assets class
         // var alist = ppp[pid].assets;
         var alist = this.listAssets(pid);
-        var self = this;
         return 100-alist
           .map(function(a) {
-            return self.qty2pct(a,ppp[pid]);
+            return a.pct;
           })
           .reduce(function(a,b) { return a+b; },0);
       }

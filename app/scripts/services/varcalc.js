@@ -101,25 +101,30 @@ angular.module('theVarApp')
         // multiply pnls by weights of assets
         var self = this;
         var pnlsWeighted = portSelKeys.map(function(k) {
-          if(!portfolio[k].pct||!totalPct||!portfolio[k].historyDateless) {
+          if(!portfolio[k].pct) {
+            console.error('missing field pct: ',k);
             return [];
-          } else {
-            // calculate pnls
-            portfolio[k].pnls = self.prices2pnls(
-              portfolio[k].historyDateless,
-              nday);
-
-            // This was the 1st implementation
-            // https://gist.github.com/deenar/f97d517d3188fc7b5302
-            //return portfolio[k].pnlsSort.map(function(y) {
-            //  return y*portfolio[k].pct/totalPct;
-            //});
-
-            return portfolio[k].pnls.map(function(y) {
-              var o = y*portfolio[k].pct/totalPct;
-              return o;
-            });
           }
+          if(!totalPct||!portfolio[k].historyDateless) {
+            console.error('missing other than field pct: ',k);
+            return [];
+          }
+
+          // calculate pnls
+          portfolio[k].pnls = self.prices2pnls(
+            portfolio[k].historyDateless,
+            nday);
+
+          // This was the 1st implementation
+          // https://gist.github.com/deenar/f97d517d3188fc7b5302
+          //return portfolio[k].pnlsSort.map(function(y) {
+          //  return y*portfolio[k].pct/totalPct;
+          //});
+
+          return portfolio[k].pnls.map(function(y) {
+            var o = y*portfolio[k].pct/totalPct;
+            return o;
+          });
         });
         // add pnls
         var pnlsTotal = pnlsWeighted.reduce(function(a,b) {

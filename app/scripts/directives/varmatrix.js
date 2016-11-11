@@ -48,7 +48,7 @@ angular.module('theVarApp')
         nday.map(function(nd) {
           var td = $('<td/>',{nowrap:''});
           getDivVar(
-            scope.portfolioVaR(p,nd)*(100-scope.unallocated())/100,
+            scope.portfolioVaR(p,nd), // 2016-11-11: no more need for this: *(100-scope.unallocated())/100,
             -0.20,
             scope.portfolio.value,
             false
@@ -115,7 +115,7 @@ angular.module('theVarApp')
             getDivVar(
               varVal,
               scope.a.pnls[scope.a.pnls.length-1],
-              Portfolios.qty2pct(scope.a,scope.portfolio)/100*
+              scope.a.pct/100*
                 scope.portfolio.value,
               true
             ).appendTo(td);
@@ -156,7 +156,7 @@ angular.module('theVarApp')
       restrict: 'EA',
       transclude: false,
       link: function postLink(scope, element, attrs) {
-        scope.$watch('[unallocated(),a.qty,pendingStock.historyMeta.lastprice,pendingStock.historyMeta.maxdate,pendingStock.historyMeta.mindate,portfolio.value,p.value]', function() {
+        scope.$watch('[unallocated(),a.pct,pendingStock.historyMeta.lastprice,pendingStock.historyMeta.maxdate,pendingStock.historyMeta.mindate,portfolio.value,p.value]', function() {
           element.find('.varmatrix').remove();
           var grb;
           switch(attrs.type) {

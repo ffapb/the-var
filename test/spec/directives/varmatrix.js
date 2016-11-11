@@ -42,6 +42,8 @@ describe('Directive: varmatrix', function () {
     var actual = element.html();
     var expected = 'varmatrix/matrix3.html';
     expected = jasmine.getFixtures().read(expected);
+    // other than toBe, can use stuff from here
+    // https://github.com/velesin/jasmine-jquery#jquery-matchers
     expect(actual).toBe(expected.trim().replace(/>[\s\t\n]+</g, '><'));
   }));
 
@@ -68,7 +70,7 @@ describe('Directive: varmatrix', function () {
   it('row body asset', inject(function ($compile) {
     scope.calculateVaR=function() { return 1; };
     scope.portfolio={id:1,value:100};
-    scope.a = {qty: 2, pnls: [0.15], historyMeta: { lastprice: 5 } };
+    scope.a = {pct: 10, pnls: [0.15] };
 
     element = angular.element('<tr varmatrix type="rowBodyAsset"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);
@@ -84,12 +86,12 @@ describe('Directive: varmatrix', function () {
     element = angular.element('<div varmatrix type="column"></div>');
     element = compileAndDigest(element,scope,$compile);
 //    expect(element.find('table>tr').length).toBe(2);
-    var expected = '<table class="table varmatrix"><tbody>'+
-      '<tr><td></td><td>1-day</td><td>1-week</td><td>1-year</td></tr>'+
-      '<tr><td>VaR 95%</td><td>100.00 %</td><td>100.00 %</td><td>100.00 %</td></tr>'+
-      '<tr><td>VaR 99%</td><td>100.00 %</td><td>100.00 %</td><td>100.00 %</td></tr>'+
-      '</tbody></table>';
-    expect(element.html()).toBe(expected);
+
+    var actual = element.html();
+    var expected = 'varmatrix/column.html';
+    expected = jasmine.getFixtures().read(expected);
+    expect(actual).toBe(expected.trim().replace(/>[\s\t\n]+</g, '><'));
+
   }));
 
 });
