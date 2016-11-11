@@ -48,7 +48,7 @@ angular.module('theVarApp')
         nday.map(function(nd) {
           var td = $('<td/>',{nowrap:''});
           getDivVar(
-            scope.portfolioVaR(p,nd), // 2016-11-11: no more need for this: *(100-scope.unallocated())/100,
+            scope.portfolioVaR(p,nd)*(100-scope.unallocated())/100,
             -0.20,
             scope.portfolio.value,
             false
