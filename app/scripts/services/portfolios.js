@@ -41,6 +41,9 @@ angular.module('theVarApp')
         });
         if(found.length>0) {
           console.error('Portfolios already contain ',newP);
+          // drop existing and replace with new
+          ppp[found[0]].assets = angular.fromJson(angular.toJson(newP.assets));
+          // just return id
           return ppp[found[0]].id;
         }
    
@@ -144,7 +147,6 @@ angular.module('theVarApp')
           console.error('Invalid portfolio ID '+pid);
           return false;
         }
-
         ppp[pid].value=value;
         this.saveToLs();
       },

@@ -116,8 +116,23 @@ angular.module('theVarApp')
           // set portfolio
           .then(function(response) {
             $log.debug('fc13',response);
+            // verify that response data is valid
+            if(!response.data.portfolio) {
+              console.error('response data missing portfolio field',response.data);
+              return self.pstart2(a1);
+            }
+            if(response.data.portfolio.constructor !== Array) {
+              console.error('response data portfolio field is not an array',response.data);
+              return self.pstart2(a1);
+            }
+
+            //
             var k=a.base+'-'+a.a;
-            fff[k]={acc: a, port: response.data }; // .slice(1,20) // slice only for testing purposes
+            fff[k]={
+              acc: a,
+              port: response.data.portfolio,
+              value: response.data.value
+            };
 
             // add symbolMain and symbol2
             var re=/[a-zA-Z0-9]+ [a-zA-Z]{2} (Equity|Corp)/i;
@@ -128,19 +143,31 @@ angular.module('theVarApp')
               } else {
                 if(a.TIT_ISIN_BBG==='') { // && a.TIT_REU_COD=='') {
                   a.symbolMain=a.TIT_COD;
-                } 
+                }
               }
               a.symbAlt=[a.TIT_ISIN_BBG,a.TIT_REU_COD,a.TIT_COD];
               a.symbAlt=a.symbAlt.filter(function(x) { return x!==a.symbolMain && !!x; });
               if(!a.symbolMain) { console.error('Failed to identify symbol for',a); }
               return a;
             });
- 
+
+            // add to portfolios list
             var assets = fff[k].port.map(function(x) {
-              return {src: 'FFA MF', symbol:x.symbolMain, pct: 0, qty: 0}; // TODO get pct/qty from mf
+              if(!x.qty) {
+                $log.error('Missing qty field');
+              }
+
+              return {
+                src: 'FFA MF',
+                symbol: x.symbolMain,
+                qty: x.qty
+              };
             });
 
-            Portfolios.add('FFA MF',k,assets);
+            var id = Portfolios.add('FFA MF',k,assets);
+            Portfolios.updateValue(id,fff[k].value);
+
+            // add assets to local data
             fff[k].port.map(function(a) {
               var newA = {
                 src: 'FFA MF',
@@ -154,15 +181,19 @@ angular.module('theVarApp')
               Assets.add(newA);
             });
 
+            return self.pstart2(a1);
+          }, function(response) {
+            console.error('error in getting portfolio of account',response);
+            pst.r=2;
+          });
+    },
+
+    pstart2: function(a1) {
             if(self.np()<config.accounts.length) {
               return self.pstart(a1+1);
             } else {
               pst.r=0;
             }
-          }, function(response) {
-            console.error('error in getting portfolio of account',response);
-            pst.r=2;
-          });
     },
 
     readyForPrices: function() {
@@ -171,7 +202,7 @@ angular.module('theVarApp')
       if(!config.accounts) { return false; }
       var nac = config.accounts.length;
       if(nac===0) { return false; }
-      $log.debug('abc',self.np(),Object.keys(fff).length,fff,nac);
+      // $log.debug('abc',self.np(),Object.keys(fff).length,fff,nac);
       return(self.np()===nac);
     },
 
@@ -207,7 +238,7 @@ angular.module('theVarApp')
       if(abort) { pst.r=2; return; }
       var k = Object.keys(fff)[ki];
 
-      // move status by number of skipped 
+      // move status by number of skipped
       pst.i+=fff[k].port.filter(function(a) {
         return !a.symbolMain;
       }).length;

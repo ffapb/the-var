@@ -14,18 +14,27 @@ var config = {
 // portfolio of each account
 var portfolios = {
   'Lebanon': {
-    'AC1': [
-      {'TIT_ISIN_BBG':'x11', 'TIT_REU_COD':'y11', 'TIT_NOM':'ac1 sec1'}
-    ],
-    'AC2': [
-      {'TIT_ISIN_BBG':'x21', 'TIT_REU_COD':'y21', 'TIT_NOM':'ac2 sec1'},
-      {'TIT_ISIN_BBG':'x22', 'TIT_REU_COD':'y22', 'TIT_NOM':'ac2 sec2'}
-    ]
+    'AC1': {
+      'portfolio': [
+        {'TIT_ISIN_BBG':'x11', 'TIT_REU_COD':'y11', 'TIT_NOM':'ac1 sec1'}
+      ],
+      'value': 100
+    },
+    'AC2': {
+      'portfolio': [
+        {'TIT_ISIN_BBG':'x21', 'TIT_REU_COD':'y21', 'TIT_NOM':'ac2 sec1'},
+        {'TIT_ISIN_BBG':'x22', 'TIT_REU_COD':'y22', 'TIT_NOM':'ac2 sec2'}
+      ],
+      'value': 200
+    }
   },
   'Dubai': {
-    'AC3': [
-      {'TIT_ISIN_BBG':'x31', 'TIT_REU_COD':'y31', 'TIT_NOM':'ac3 sec1'}
-    ]
+    'AC3': {
+      'portfolio': [
+        {'TIT_ISIN_BBG':'x31', 'TIT_REU_COD':'y31', 'TIT_NOM':'ac3 sec1'}
+      ],
+      'value': 300
+    }
   }
 };
 
@@ -82,7 +91,7 @@ describe('Service: ffa', function () {
     if(withPrices) {
       for(ac in config.accounts) {
         account = config.accounts[ac];
-        portfolio = portfolios[account.base][account.a];
+        portfolio = portfolios[account.base][account.a].portfolio;
         // 4th get prices of securities
         for(var sec in portfolio) {
           var isin = portfolio[sec].TIT_ISIN_BBG;
@@ -142,6 +151,11 @@ describe('Service: ffa', function () {
         expect(ffa.np()).toEqual(2);
         expect(Assets.na()).toEqual(3);
         expect(Portfolios.np()).toEqual(2);
+
+        // check that value field is received
+        for(var port in Portfolios.list()) {
+          expect(Portfolios.list()[port].value).toBe(Portfolios.list()[port].value);
+        }
         done();
       });
     });
