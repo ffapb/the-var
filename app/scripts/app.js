@@ -65,5 +65,6 @@ angular
 
 
       $logProvider.debugEnabled(true);
-  });
+  })
+;
 

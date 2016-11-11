@@ -21,6 +21,41 @@ angular.module('theVarApp')
     var configUrl = '/the-var-config.json?ts='+moment().format('x');  // append unix timestamp to avoid cache
     var N=60; // number of security prices to retrieve at a time
 
+    function validateSchema(type,data) {
+      switch(type) {
+        case 'config':
+          console.error('TBD');
+          return false;
+
+        case 'portfolio':
+          var schema = {
+            'type': 'object',
+            'properties': {
+              'portfolio': {
+                'type': 'array',
+                'items': [
+                  { 'type': 'number' },
+                  { 'type': 'string', 'default': 'foo' }
+                ]
+              },
+              'value': { 'type': 'number' },
+              'required': ['portfolio', 'value']
+            }
+          };
+          var ajv = new Ajv();
+          var validate = ajv.compile(schema);
+          return validate(data);
+
+        case 'price':
+          console.error('TBD');
+          return false;
+
+        default:
+          console.error('invalid schema type',type);
+          return false;
+      }
+    }
+
     return {
       np: function() {
         return Object.keys(fff).length;
@@ -117,6 +152,10 @@ angular.module('theVarApp')
           .then(function(response) {
             $log.debug('fc13',response);
             // verify that response data is valid
+            if(!validateSchema('portfolio', response.data)) {
+              return this.failConfig('response data for portfolio is invalid');
+            }
+
             if(!response.data.portfolio) {
               console.error('response data missing portfolio field',response.data);
               return self.pstart2(a1);

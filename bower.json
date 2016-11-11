@@ -41,6 +41,11 @@
         "dist/plugins/jqplot.highlighter.min.js",
         "dist/plugins/jqplot.cursor.min.js"
       ]
+    },
+    "ajv": {
+      "main": [
+        "lib/ajv.js"
+      ]
     }
   },
   "resolutions": {

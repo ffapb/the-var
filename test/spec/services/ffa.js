@@ -61,9 +61,12 @@ describe('Service: ffa', function () {
     Portfolios = _Portfolios_;
   }));
 
-  function httpExpectGet(withPrices, _conf_) {
+  function httpExpectGet(withPrices, _conf_, _portfolios_) {
     if(!_conf_) {
       _conf_=config;
+    }
+    if(!_portfolios_) {
+      _portfolios_=portfolios;
     }
 
     // first GET for checkAvailable
@@ -83,7 +86,8 @@ describe('Service: ffa', function () {
         '.*'+account.base +
         '.*'+account.a
       );
-      portfolio = portfolios[account.base][account.a];
+      console.log('portfolios',_portfolios_,account.base,account.a);
+      portfolio = _portfolios_[account.base][account.a];
       http.expectGET(re1).respond(portfolio);
     }
 
@@ -216,6 +220,26 @@ describe('Service: ffa', function () {
     }, function() {
       // shouldnt get here
       expect(false).toEqual(true);
+      done();
+    });
+    http.flush();
+  });
+
+  it('detects invalid portfolio data', function (done) {
+    var portfolioInvalid = {
+      'Lebanon': {
+        'AC1': {},
+        'AC2': {}
+      }
+    };
+    httpExpectGet(false,false,portfolioInvalid);
+
+    // run portfolios
+    ffa.portfolios().then(function() {
+      expect(false).toEqual(true);
+      done();
+    }, function() {
+      expect(false).toEqual(false);
       done();
     });
     http.flush();
