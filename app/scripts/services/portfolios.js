@@ -25,7 +25,7 @@ angular.module('theVarApp')
         return Object.keys(ppp).length;
       },
       add: function(src,name,assets) {
-        var newP={name:name,src:src,assets:assets,cash:0};
+        var newP={name:name,src:src,assets:assets,cash:0,value:0};
         if(!name || !src) {
           console.error('Adding invalid portfolio '+angular.toJson(newP));
           return false;
@@ -76,7 +76,13 @@ angular.module('theVarApp')
         if(ppp[pid].assets.filter(function(x) {
           return x.src===aaa.src && x.symbol===aaa.lookup.Symbol;
         }).length===0) {
-          ppp[pid].assets.push({src:aaa.src,symbol:aaa.lookup.Symbol});
+          ppp[pid].assets.push({
+            src:aaa.src,
+            symbol:aaa.lookup.Symbol,
+            qty:0,
+            pct:0
+          });
+          this.assetPct(pid,aaa);
           this.updateValue(pid);
           this.saveToLs();
         }
@@ -95,11 +101,15 @@ angular.module('theVarApp')
         this.saveToLs();
       },
       holdingAsset: function(src,symbol,inverse) {
+        var self = this;
         return Object.keys(ppp).filter(function(pid) {
           if(!ppp[pid].hasOwnProperty('assets')) {
+            console.error('portfolio missing assets field');
             if(!inverse) { return false; } else { return true; }
           }
-          var o = ppp[pid].assets.filter(function(x) {
+          var alist = self.listAssets(pid);
+          console.log('holding asset, alist',alist);
+          var o = alist.filter(function(x) {
             return x.src===src && x.symbol===symbol;
           }).length > 0;
           if(!inverse) { return o; } else { return !o; }
@@ -130,9 +140,14 @@ angular.module('theVarApp')
           return false;
         }
 
+        var self = this;
+        var alist = Assets.list();
         ppp[pid].assets = ppp[pid].assets.map(function(x) {
           if(x.src===aaa.src && x.symbol===aaa.lookup.Symbol) {
             x.qty = aaa.qty;
+            // add a pct field for varmatrix and varcalc directives as well as other calculations
+            x.historyMeta = alist[aaa.src][aaa.lookup.Symbol];
+            x.pct = self.qty2pct(x,ppp[pid]);
           }
           return x;
         });
@@ -170,6 +185,7 @@ console.log("udpate cash",pid,cash,ppp[pid].cash);
         // get assets worth
         var self = this;
         var alist = this.listAssets(pid);
+        console.log("update value start",pid,ppp[pid].value,ppp[pid].cash,alist);
         var assetsValue = 100-alist
           .map(function(a) {
             return self.qty2usd(a);
@@ -177,7 +193,7 @@ console.log("udpate cash",pid,cash,ppp[pid].cash);
           .reduce(function(a,b) { return a+b; },0);
 
         ppp[pid].value = ppp[pid].cash + assetsValue;
-        console.log("update value",pid,ppp[pid].value,ppp[pid].cash,assetsValue);
+        console.log("update value end",assetsValue);
       },
 
       listAssets: function(pid) {
@@ -189,14 +205,14 @@ console.log("udpate cash",pid,cash,ppp[pid].cash);
         var a = ppp[pid].assets;
         if(!a) { return []; }
         var al = Assets.list();
-        var self = this;
         var o = a.map(function(x) {
           if(al.hasOwnProperty(x.src)) {
             if(al[x.src].hasOwnProperty(x.symbol)) {
               var o2 = al[x.src][x.symbol];
+              o2.src=x.src;
+              o2.symbol=x.symbol;
               o2.qty = x.qty;
-              // add a pct field for varmatrix and varcalc directives as well as other calculations
-              o2.pct = self.qty2pct(o2,ppp[pid]);
+              o2.pct = x.pct;
               return o2;
             }
           }
@@ -206,6 +222,10 @@ console.log("udpate cash",pid,cash,ppp[pid].cash);
       },
 
       qty2pct: function(a,portfolio) {
+        if(!portfolio) {
+          console.error('portfolio argument undefined. Aborting');
+          return 0;
+        }
         if(!portfolio.value) {
           console.error('No portfolio value available in qty2pct. Aborting: ',portfolio);
           return 0;

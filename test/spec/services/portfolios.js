@@ -47,9 +47,9 @@ describe('Service: Portfolios', function () {
 
   it('set list np', function () {
     expect(!!Portfolios).toBe(true);
-    expect(Portfolios.np()===0);
+    expect(Portfolios.np()).toBe(0);
     Portfolios.set(ppp);
-    expect(Portfolios.np()===1);
+    expect(Portfolios.np()).toBe(1);
   });
 
   it('add del portfolio', function () {
@@ -69,23 +69,26 @@ describe('Service: Portfolios', function () {
   });
 
   it('add rm asset', function () {
+    console.log('add rm asset start');
     Portfolios.clear();
 
     var aaa1={src:'mod',lookup:{Symbol:'symbol1'}};
     // add new portfolio
-    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false).length===0);
-    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true).length===Portfolios.np());
+    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false).length).toBe(0);
+    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true).length).toBe(Portfolios.np());
     var pid=Portfolios.add('portfolio 2','mod',[]);
     Portfolios.addAsset(pid,aaa1);
     var p1 = Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false);
-    expect(p1.length===1);
+    expect(p1.length).toBe(1);
     p1=p1[0];
-    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true).length===0);
-    expect(p1.assets.length===1);
-    expect(p1.assets[0].pct===undefined);
-    aaa1.pct=10;
+    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true).length).toBe(0);
+    expect(p1.assets.length).toBe(1);
+    console.log('p1 assets 0',p1.assets[0]);
+    expect(p1.assets[0].pct).toBe(0);
+    aaa1.qty=10;
     Portfolios.assetPct(pid,aaa1);
-    expect(p1.assets[0].pct===10);
+    expect(p1.assets[0].pct).toBe(10);
+    console.log('add rm asset end');
   });
 
   it('update name', function () {
@@ -93,9 +96,9 @@ describe('Service: Portfolios', function () {
 
     var pid=Portfolios.add('portfolio 2','mod',[]);
     var p1=Portfolios.list()[pid];
-    expect(p1.name==='portfolio 2');
+    expect(p1.name).toBe('portfolio 2');
     Portfolios.updateName(pid,'portfolio 3');
-    expect(p1.name==='portfolio 3');
+    expect(p1.name).toBe('portfolio 3');
   });
  
   it('unallocated', function () {
@@ -108,7 +111,9 @@ describe('Service: Portfolios', function () {
     Portfolios.updateCash(pid,200);
     // add asset
     var a1 = {src:'mod',lookup:{Symbol:'symbol1'},qty:10};
+    console.log('add asset');
     Portfolios.addAsset(pid,a1);
+    console.log('asset pct');
     Portfolios.assetPct(pid,a1);
     // check unallocated
     expect(Portfolios.unallocated(pid)).toBe(80);
