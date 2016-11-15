@@ -101,11 +101,11 @@ describe('Service: Portfolios', function () {
   it('unallocated', function () {
     expect(Portfolios.unallocated()).toBe(false);
     var pid=Portfolios.add('manual 2','portfolio 2',[]);
-    // before setting value, should be false
+    // before setting cash, should be 100
     console.log('Expect error: no portfolio value set');
-    expect(Portfolios.unallocated(pid)).toBe(false);
-    // set value
-    Portfolios.updateValue(pid,250);
+    expect(Portfolios.unallocated(pid)).toBe(100);
+    // set cash
+    Portfolios.updateCash(pid,200);
     // add asset
     var a1 = {src:'mod',lookup:{Symbol:'symbol1'},qty:10};
     Portfolios.addAsset(pid,a1);
@@ -113,15 +113,17 @@ describe('Service: Portfolios', function () {
     // check unallocated
     expect(Portfolios.unallocated(pid)).toBe(80);
 
-    // add another asset
-    var a2 = {src:'mod',lookup:{Symbol:'symbol2'},qty:10,historyMeta:{lastprice:10}};
+    // add another asset and update cash
+    var a2 = {src:'mod',lookup:{Symbol:'symbol2'},qty:10};
     Portfolios.addAsset(pid,a2);
     Portfolios.assetPct(pid,a2);
+    Portfolios.updateCash(pid,100);
     expect(Portfolios.unallocated(pid)).toBe(40);
 
-    // update qty
+    // update qty and cash
     a2.qty=15;
     Portfolios.assetPct(pid,a2);
+    Portfolios.updateCash(pid,50);
     expect(Portfolios.unallocated(pid)).toBe(20);
   });
 

@@ -25,7 +25,7 @@ angular.module('theVarApp')
         return Object.keys(ppp).length;
       },
       add: function(src,name,assets) {
-        var newP={name:name,src:src,assets:assets};
+        var newP={name:name,src:src,assets:assets,cash:0};
         if(!name || !src) {
           console.error('Adding invalid portfolio '+angular.toJson(newP));
           return false;
@@ -43,11 +43,14 @@ angular.module('theVarApp')
           console.error('Portfolios already contain ',newP);
           // drop existing and replace with new
           ppp[found[0]].assets = angular.fromJson(angular.toJson(newP.assets));
+          this.updateValue(ppp[found[0]].id);
+          this.saveToLs();
           // just return id
           return ppp[found[0]].id;
         }
    
         ppp[newP.id] = angular.fromJson(angular.toJson(newP));
+        this.updateValue(newP.id);
         this.saveToLs();
         return newP.id;
       },
@@ -74,6 +77,7 @@ angular.module('theVarApp')
           return x.src===aaa.src && x.symbol===aaa.lookup.Symbol;
         }).length===0) {
           ppp[pid].assets.push({src:aaa.src,symbol:aaa.lookup.Symbol});
+          this.updateValue(pid);
           this.saveToLs();
         }
       },
@@ -87,6 +91,7 @@ angular.module('theVarApp')
           return x.src!==aaa.src || x.symbol!==aaa.lookup.Symbol;
         });
         ppp[pid].assets = nu;
+        this.updateValue(pid);
         this.saveToLs();
       },
       holdingAsset: function(src,symbol,inverse) {
@@ -131,6 +136,7 @@ angular.module('theVarApp')
           }
           return x;
         });
+        this.updateValue(pid);
         this.saveToLs();
       },
       updateName: function(pid,name) {
@@ -142,13 +148,36 @@ angular.module('theVarApp')
         ppp[pid].name=name;
         this.saveToLs();
       },
-      updateValue: function(pid,value) {
+      updateCash: function(pid,cash) {
         if(!ppp.hasOwnProperty(pid)) {
           console.error('Invalid portfolio ID '+pid);
           return false;
         }
-        ppp[pid].value=value;
+
+        ppp[pid].cash=cash;
+console.log("udpate cash",pid,cash,ppp[pid].cash);
+
+        this.updateValue(pid);
         this.saveToLs();
+      },
+
+      updateValue: function(pid) {
+        if(!ppp.hasOwnProperty(pid)) {
+          console.error('Invalid portfolio ID '+pid);
+          return false;
+        }
+
+        // get assets worth
+        var self = this;
+        var alist = this.listAssets(pid);
+        var assetsValue = 100-alist
+          .map(function(a) {
+            return self.qty2usd(a);
+          })
+          .reduce(function(a,b) { return a+b; },0);
+
+        ppp[pid].value = ppp[pid].cash + assetsValue;
+        console.log("update value",pid,ppp[pid].value,ppp[pid].cash,assetsValue);
       },
 
       listAssets: function(pid) {
@@ -177,15 +206,20 @@ angular.module('theVarApp')
       },
 
       qty2pct: function(a,portfolio) {
+        if(!portfolio.value) {
+          console.error('No portfolio value available in qty2pct. Aborting: ',portfolio);
+          return 0;
+        }
+
+        return this.qty2usd(a)/portfolio.value*100;
+      },
+
+      qty2usd: function(a) {
         if(!a.historyMeta) {
           console.error('No price history available in qty2pct. Aborting: ',a);
           return 0;
         }
-        if(!portfolio.value) {
-          console.error('No portfolio value in qty2pct. Aborting');
-          return 0;
-        }
-        return a.qty*a.historyMeta.lastprice/portfolio.value*100;
+        return a.qty*a.historyMeta.lastprice;
       },
 
       unallocated: function(pid) {
@@ -194,10 +228,6 @@ angular.module('theVarApp')
         }
         if(!ppp.hasOwnProperty(pid)) {
           console.error('unallocated: Invalid portfolio ID '+pid);
-          return false;
-        }
-        if(!ppp[pid].value) {
-          console.error('unallocated: portfolio ID '+pid+' has no value set value yet');
           return false;
         }
 
