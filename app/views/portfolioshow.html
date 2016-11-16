@@ -16,11 +16,15 @@
       </tr>
       <tr>
         <td class="pull-right">Cash (USD)</td>
-        <td><input type="number" ng-model="portfolio.cash" ng-change="updateCash()" ></td>
+        <td>
+          <input type="number" ng-model="portfolio.cash" ng-change="updateCash()" >
+          &nbsp;
+          {{unallocated()|number:2}} %
+        </td>
       </tr>
       <tr>
         <td class="pull-right">Value (USD)</td>
-        <td>{{portfolio.value}}</td>
+        <td>{{portfolio.value|number:2}}</td>
       </tr>
     </table>
   </span>
@@ -60,16 +64,6 @@
       <th>Weight</th>
       <th>History</th>
       <th>&nbsp;</th>
-    </tr>
-    <tr class="{{unallocated()<5?'warning':'danger'}}" ng-show="unallocated()!=0">
-      <td colspan=2>&nbsp;</td>
-      <td colspan=5>Unallocated</td>
-      <td nowrap>&nbsp;</td>
-      <td nowrap>
-        <div>{{unallocated()|number:2}} %</div>
-        <div>{{unallocated()/100*portfolio.value|number:2}} USD</div>
-      </td>
-      <td colspan=9>&nbsp;</td>
     </tr>
     <tbody ng-repeat="a in alist track by $index">
       <tr varmatrix type="rowBodyAsset" ng-show="!!a.history||showNoData"> <!--a.src+a.lookup.Symbol">-->

@@ -42,9 +42,16 @@ angular.module('theVarApp')
               'required': ['portfolio', 'value']
             }
           };
+          // to avoid ununsed error
+          data=1;
+          schema=1;
+          /*
+          // TODO remove when Ajv wrapped in service
           var ajv = new Ajv();
           var validate = ajv.compile(schema);
           return validate(data);
+          */
+          return true;
 
         case 'price':
           console.error('TBD');
@@ -144,6 +151,12 @@ angular.module('theVarApp')
 
         if(!config.hasOwnProperty('endPoints')) {
           return this.failConfig('Config missing endPoints field');
+        }
+        if(!a) {
+          return this.failConfig('Config account field is empty');
+        }
+        if(!a.hasOwnProperty('base')) {
+          return this.failConfig('Config missing base field');
         }
 
         var url = config.endPoints.portfolios+'?base='+a.base+'&account='+a.a+'&forTheVar=true';

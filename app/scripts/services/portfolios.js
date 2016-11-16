@@ -238,7 +238,7 @@ angular.module('theVarApp')
           return 0;
         }
         if(!portfolio.value) {
-          console.error('No portfolio value available in qty2pct. Aborting: ',portfolio);
+          console.error('No portfolio value available in qty2pct. Aborting');
           return 0;
         }
         return this.qty2usd(a)/portfolio.value*100;

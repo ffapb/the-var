@@ -86,7 +86,7 @@ describe('Service: ffa', function () {
         '.*'+account.base +
         '.*'+account.a
       );
-      console.log('portfolios',_portfolios_,account.base,account.a);
+
       portfolio = _portfolios_[account.base][account.a];
       http.expectGET(re1).respond(portfolio);
     }
@@ -235,6 +235,7 @@ describe('Service: ffa', function () {
     httpExpectGet(false,false,portfolioInvalid);
 
     // run portfolios
+    console.log('expect error x2: response data missing...');
     ffa.portfolios().then(function() {
       expect(false).toEqual(true);
       done();

@@ -16,6 +16,7 @@
       <th>Source</th>
       <th>Name</th>
       <th>Value</th>
+      <th>Cash</th>
       <th>Securities</th>
     </tr>
   </thead>
@@ -27,7 +28,8 @@
           {{p.name}}
         </a>
       </td>
-      <td>{{p.value?p.value:"-"}} USD</td>
+      <td>{{p.value|number:2}} USD</td>
+      <td>{{p.cash|number:2}} USD</td>
       <td>
         <span class="badge">{{nass(p.id)}}</span>
       </td>

@@ -46,6 +46,7 @@ describe('Service: Portfolios', function () {
   }));
 
   it('set list np', function () {
+    Portfolios.clear();
     expect(!!Portfolios).toBe(true);
     expect(Portfolios.np()).toBe(0);
     Portfolios.set(ppp);

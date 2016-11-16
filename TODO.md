@@ -1,4 +1,7 @@
 # HIGH PRIORITY
+2016-11-15
+* bug asset name/exchange not showing in portfolioshow
+
 2016-10-31
 * Interactive Chart API does not return any elements
  * https://github.com/markitondemand/DataApis/issues/45
