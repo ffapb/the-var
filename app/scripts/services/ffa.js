@@ -204,7 +204,7 @@ angular.module('theVarApp')
             });
 
             var id = Portfolios.add('FFA MF',k,assets);
-            Portfolios.updateValue(id,fff[k].value);
+            Portfolios.updateCash(id,fff[k].cash);
 
             // add assets to local data
             fff[k].port.map(function(a) {

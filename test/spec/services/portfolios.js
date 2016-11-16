@@ -69,32 +69,45 @@ describe('Service: Portfolios', function () {
   });
 
   it('add rm asset', function () {
-    console.log('add rm asset start');
     Portfolios.clear();
 
     var aaa1={src:'mod',lookup:{Symbol:'symbol1'}};
-    // add new portfolio
-    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false).length).toBe(0);
-    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true).length).toBe(Portfolios.np());
+
+    // no portfolio holding asset
+    var actual;
+    actual = Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false);
+    expect(actual.length).toBe(0);
+    actual = Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true);
+    expect(actual.length).toBe(Portfolios.np());
+
+    // add new portfolio with asset
+    console.log('Expect error: no portfolio value set');
     var pid=Portfolios.add('portfolio 2','mod',[]);
     Portfolios.addAsset(pid,aaa1);
-    var p1 = Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false);
-    expect(p1.length).toBe(1);
-    p1=p1[0];
-    expect(Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true).length).toBe(0);
-    expect(p1.assets.length).toBe(1);
-    console.log('p1 assets 0',p1.assets[0]);
-    expect(p1.assets[0].pct).toBe(0);
+
+    // expect found 1
+    actual = Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,true);
+    expect(actual.length).toBe(0);
+    actual = Portfolios.holdingAsset(aaa1.src,aaa1.lookup.Symbol,false);
+    expect(actual.length).toBe(1);
+
+    // focus on found has only 1 asset
+    actual=actual[0];
+    expect(actual.assets.length).toBe(1);
+
+    // since qty was undefined, expect pct = 0
+    expect(actual.assets[0].pct).toBe(0);
+
+    // after setting qty, expect pct to be set properly
     aaa1.qty=10;
-    Portfolios.assetPct(pid,aaa1);
-    expect(p1.assets[0].pct).toBe(10);
-    console.log('add rm asset end');
+    Portfolios.updateAsset(pid,aaa1);
+    expect(actual.assets[0].pct).toBe(100);
   });
 
   it('update name', function () {
     Portfolios.clear();
 
-    var pid=Portfolios.add('portfolio 2','mod',[]);
+    var pid=Portfolios.add('mod','portfolio 2',[]);
     var p1=Portfolios.list()[pid];
     expect(p1.name).toBe('portfolio 2');
     Portfolios.updateName(pid,'portfolio 3');
@@ -103,33 +116,34 @@ describe('Service: Portfolios', function () {
  
   it('unallocated', function () {
     expect(Portfolios.unallocated()).toBe(false);
+    // start portfolio
     var pid=Portfolios.add('manual 2','portfolio 2',[]);
     // before setting cash, should be 100
-    console.log('Expect error: no portfolio value set');
     expect(Portfolios.unallocated(pid)).toBe(100);
+    expect(Portfolios.list()[pid].value).toBe(0);
     // set cash
     Portfolios.updateCash(pid,200);
+    expect(Portfolios.list()[pid].value).toBe(200);
     // add asset
     var a1 = {src:'mod',lookup:{Symbol:'symbol1'},qty:10};
-    console.log('add asset');
     Portfolios.addAsset(pid,a1);
-    console.log('asset pct');
-    Portfolios.assetPct(pid,a1);
     // check unallocated
     expect(Portfolios.unallocated(pid)).toBe(80);
+    expect(Portfolios.list()[pid].value).toBe(250);
 
     // add another asset and update cash
     var a2 = {src:'mod',lookup:{Symbol:'symbol2'},qty:10};
     Portfolios.addAsset(pid,a2);
-    Portfolios.assetPct(pid,a2);
     Portfolios.updateCash(pid,100);
     expect(Portfolios.unallocated(pid)).toBe(40);
+    expect(Portfolios.list()[pid].value).toBe(250);
 
     // update qty and cash
     a2.qty=15;
-    Portfolios.assetPct(pid,a2);
+    Portfolios.updateAsset(pid,a2);
     Portfolios.updateCash(pid,50);
     expect(Portfolios.unallocated(pid)).toBe(20);
+    expect(Portfolios.list()[pid].value).toBe(250);
   });
 
 });

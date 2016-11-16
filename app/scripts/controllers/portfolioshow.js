@@ -66,8 +66,8 @@ angular.module('theVarApp')
       }
     };
 
-    $scope.assetPct=function(a) {
-      Portfolios.assetPct(pid,a);
+    $scope.updateAsset=function(a) {
+      Portfolios.updateAsset(pid,a);
     };
 
     $scope.qty2pct = function(a,portfolio) {
@@ -78,8 +78,8 @@ angular.module('theVarApp')
       Portfolios.updateName($scope.portfolio.id,$scope.portfolio.name);
     };
 
-    $scope.updateValue=function() {
-      Portfolios.updateValue($scope.portfolio.id,$scope.portfolio.value);
+    $scope.updateCash=function() {
+      Portfolios.updateCash($scope.portfolio.id,$scope.portfolio.cash);
     };
 
     $scope.unallocated = function() {

@@ -18,14 +18,14 @@ var portfolios = {
       'portfolio': [
         {'TIT_ISIN_BBG':'x11', 'TIT_REU_COD':'y11', 'TIT_NOM':'ac1 sec1'}
       ],
-      'value': 100
+      'cash': 100
     },
     'AC2': {
       'portfolio': [
         {'TIT_ISIN_BBG':'x21', 'TIT_REU_COD':'y21', 'TIT_NOM':'ac2 sec1'},
         {'TIT_ISIN_BBG':'x22', 'TIT_REU_COD':'y22', 'TIT_NOM':'ac2 sec2'}
       ],
-      'value': 200
+      'cash': 200
     }
   },
   'Dubai': {
@@ -33,7 +33,7 @@ var portfolios = {
       'portfolio': [
         {'TIT_ISIN_BBG':'x31', 'TIT_REU_COD':'y31', 'TIT_NOM':'ac3 sec1'}
       ],
-      'value': 300
+      'cash': 300
     }
   }
 };
@@ -158,7 +158,7 @@ describe('Service: ffa', function () {
 
         // check that value field is received
         for(var port in Portfolios.list()) {
-          expect(Portfolios.list()[port].value).toBe(Portfolios.list()[port].value);
+          expect(Portfolios.list()[port].cash).toBe(Portfolios.list()[port].cash);
         }
         done();
       });

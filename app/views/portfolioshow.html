@@ -15,8 +15,12 @@
         </td>
       </tr>
       <tr>
+        <td class="pull-right">Cash (USD)</td>
+        <td><input type="text" ng-model="portfolio.cash" ng-change="updateCash()" ></td>
+      </tr>
+      <tr>
         <td class="pull-right">Value (USD)</td>
-        <td><input type="text" ng-model="portfolio.value" ng-change="updateValue()" ></td>
+        <td>{{portfolio.value}}</td>
       </tr>
     </table>
   </span>
@@ -90,7 +94,7 @@
         </td>
 
         <td nowrap>
-          <input type="number" min=0 step=1 ng-value="a.qty?a.qty:0" style="width:5em" ng-model="a.qty" ng-change="assetPct(a)">
+          <input type="number" min=0 step=1 ng-value="a.qty?a.qty:0" style="width:5em" ng-model="a.qty" ng-change="updateAsset(a)">
           share(s)
           <div>{{a.qty*a.historyMeta.lastprice|number:2}} USD</div>
         </td>
