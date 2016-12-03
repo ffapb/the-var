@@ -102,7 +102,7 @@ angular.module('theVarApp')
         var self = this;
         var pnlsWeighted = portSelKeys.map(function(k) {
           if(!portfolio[k].pct) {
-            console.error('missing field pct: ',k);
+            // console.error('missing field pct: ',k);
             return [];
           }
           if(!totalPct||!portfolio[k].historyDateless) {

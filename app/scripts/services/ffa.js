@@ -19,7 +19,7 @@ angular.module('theVarApp')
     var available = 0;
     var self;
     var configUrl = '/the-var-config.json?ts='+moment().format('x');  // append unix timestamp to avoid cache
-    var N=60; // number of security prices to retrieve at a time
+    var N=1; //60; // number of security prices to retrieve at a time
 
     function validateSchema(type,data) {
       switch(type) {
@@ -183,7 +183,7 @@ angular.module('theVarApp')
             fff[k]={
               acc: a,
               port: response.data.portfolio,
-              value: response.data.value
+              cash: response.data.cash
             };
 
             // add symbolMain and symbol2
@@ -212,7 +212,7 @@ angular.module('theVarApp')
               return {
                 src: 'FFA MF',
                 symbol: x.symbolMain,
-                qty: x.qty
+                qty: !x.qty?0:x.qty
               };
             });
 
