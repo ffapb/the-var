@@ -48,15 +48,23 @@ describe('Directive: varmatrix', function () {
   }));
 
   it('varmatrix should still be shown only once even after value change twice', inject(function ($compile) {
+    element = angular.element('<varmatrix type="matrix"></varmatrix>');
+
+    scope.portfolio={id:1,value:100};
     scope.portfolioVaR=function() { return 1; };
     scope.unallocated=function() { return 90; };
-    scope.portfolio={id:1,value:100};
-    element = angular.element('<varmatrix type="matrix"></varmatrix>');
     element = compileAndDigest(element,scope,$compile);
+
     scope.portfolio={id:1,value:110};
+    scope.portfolioVaR=function() { return 2; };
+    scope.unallocated=function() { return 190; };
     element = compileAndDigest(element,scope,$compile);
+
     scope.portfolio={id:1,value:100};
+    scope.portfolioVaR=function() { return 1; };
+    scope.unallocated=function() { return 90; };
     element = compileAndDigest(element,scope,$compile);
+
     expect(element.find('tr').length).toBe(3);
 
     var actual = element.html();
@@ -90,7 +98,7 @@ describe('Directive: varmatrix', function () {
   it('row body asset', inject(function ($compile) {
     scope.calculateVaR=function() { return 1; };
     scope.portfolio={id:1,value:100};
-    scope.a = {pct: 10, pnls: [0.15] };
+    scope.a = { pct: 10, historyMeta: { pnl: { last: 0.15 } } };
 
     element = angular.element('<tr varmatrix type="rowBodyAsset"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);

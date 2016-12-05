@@ -88,7 +88,7 @@
         </td>
 
         <td nowrap>
-          <input type="number" min=0 step=1 ng-value="a.qty?a.qty:0" style="width:5em" ng-model="a.qty" ng-change="updateAsset(a)">
+          <input type="number" min=0 step="any" ng-value="a.qty?a.qty:0" style="width:5em" ng-model="a.qty" ng-change="updateAsset(a)">
           share(s)
           <div>{{a.qty*a.historyMeta.lastprice|number:2}} USD</div>
         </td>

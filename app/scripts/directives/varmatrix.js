@@ -114,7 +114,7 @@ angular.module('theVarApp')
           } else {
             getDivVar(
               varVal,
-              scope.a.pnls[scope.a.pnls.length-1],
+              scope.a.historyMeta.pnl.last/100,
               scope.a.pct/100*
                 scope.portfolio.value,
               true

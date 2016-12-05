@@ -237,10 +237,12 @@ angular.module('theVarApp')
           console.error('portfolio argument undefined. Aborting');
           return 0;
         }
+
         if(!portfolio.value) {
-          // console.error('No portfolio value available in qty2pct. Aborting');
+          console.error('No portfolio value available in qty2pct. Aborting');
           return 0;
         }
+
         return this.qty2usd(a)/portfolio.value*100;
       },
 
@@ -249,6 +251,7 @@ angular.module('theVarApp')
           // console.error('No price history available in qty2pct. Aborting: ',a);
           return 0;
         }
+
         return a.qty*a.historyMeta.lastprice;
       },
 

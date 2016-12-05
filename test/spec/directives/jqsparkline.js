@@ -17,5 +17,6 @@ describe('Directive: jqSparkline', function () {
     element = angular.element('<div jq-sparkline ng-model="x"></div>');
     element = $compile(element)(scope);
     //expect(element.text()).toBe('this is the jqSparkline directive');
+    //expect(element.text()).not.toBe('');
   }));
 });
