@@ -63,6 +63,13 @@ angular.module('theVarApp')
       }
     }
 
+    // if al2i=0 and N=10, this will be 0,10 but will return the items from index 0 to index 9 inclusive
+    function al2slice(al2,al2i,N) {
+      var al2s=al2.slice(al2i*N,al2i*N+N);
+      console.log('subset',al2i,al2s,al2);
+      return al2s;
+    }
+
     return {
       np: function() {
         return Object.keys(fff).length;
@@ -321,8 +328,7 @@ angular.module('theVarApp')
         console.error('Should not have gotten here',al2i,al2.length,N,Math.floor(al2.length/N));
         return;
       }
-      var al2s=al2.slice(al2i*N,al2i*N+N); // if al2i=0 and N=10, this will be 0,10 but will return the items from index 0 to index 9 inclusive
-      // console.log('subset',al2i,al2s,self);
+      var al2s=al2slice(al2,al2i,N);
 
       return Assets.getChart('FFA MF',al2s,config)
         .then(function(psa) {
@@ -366,8 +372,8 @@ angular.module('theVarApp')
             self.mwpPost();
           }
 
-          $log.debug('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
-          if(al2i+1>Math.floor(al2.length/N)) {
+          // console.log('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
+          if(al2slice(al2,al2i+1,N).length==0) {
             return self.mwpS2Post(ki,self);
           }
 
