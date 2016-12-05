@@ -47,6 +47,26 @@ describe('Directive: varmatrix', function () {
     expect(actual).toBe(expected.trim().replace(/>[\s\t\n]+</g, '><'));
   }));
 
+  it('varmatrix should still be shown only once even after value change twice', inject(function ($compile) {
+    scope.portfolioVaR=function() { return 1; };
+    scope.unallocated=function() { return 90; };
+    scope.portfolio={id:1,value:100};
+    element = angular.element('<varmatrix type="matrix"></varmatrix>');
+    element = compileAndDigest(element,scope,$compile);
+    scope.portfolio={id:1,value:110};
+    element = compileAndDigest(element,scope,$compile);
+    scope.portfolio={id:1,value:100};
+    element = compileAndDigest(element,scope,$compile);
+    expect(element.find('tr').length).toBe(3);
+
+    var actual = element.html();
+    var expected = 'varmatrix/matrix3.html';
+    expected = jasmine.getFixtures().read(expected);
+    // other than toBe, can use stuff from here
+    // https://github.com/velesin/jasmine-jquery#jquery-matchers
+    expect(actual).toBe(expected.trim().replace(/>[\s\t\n]+</g, '><'));
+  }));
+
   it('row header', inject(function ($compile) {
     element = angular.element('<tr varmatrix type="rowHeader"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);

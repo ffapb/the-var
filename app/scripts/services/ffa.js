@@ -66,7 +66,7 @@ angular.module('theVarApp')
     // if al2i=0 and N=10, this will be 0,10 but will return the items from index 0 to index 9 inclusive
     function al2slice(al2,al2i,N) {
       var al2s=al2.slice(al2i*N,al2i*N+N);
-      console.log('subset',al2i,al2s,al2);
+      //console.log('subset',al2i,al2s,al2);
       return al2s;
     }
 
