@@ -373,7 +373,7 @@ angular.module('theVarApp')
           }
 
           // console.log('recurse',al2i,al2.length,N,Math.floor(al2.length/N));
-          if(al2slice(al2,al2i+1,N).length==0) {
+          if(al2slice(al2,al2i+1,N).length===0) {
             return self.mwpS2Post(ki,self);
           }
 
