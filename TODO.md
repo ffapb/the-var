@@ -1,4 +1,11 @@
 # HIGH PRIORITY
+2016-12-05
+* varmatrix getting duplicated at each cash edit
+* portfolio value not automatically updated after retrieve prices
+ * could also block other buttons during retrieval
+ * should fix abort button
+* single stock VaR != portfolio VaR of single stock !!!!!
+
 2016-11-15
 * bug asset name/exchange not showing in portfolioshow
 
