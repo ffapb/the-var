@@ -32,7 +32,14 @@ angular.module('theVarApp')
     };
 
     $scope.list = function() {
-      return Portfolios.listAssets($scope.portfolio.id);
+      var assets = Portfolios.listAssets($scope.portfolio.id);
+
+      // sort by weight
+      assets.sort(function(a,b) {
+        return b.pct-a.pct;
+      });
+
+      return assets;
     };
 
     if(!!$routeParams.pid) {

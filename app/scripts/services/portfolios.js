@@ -229,6 +229,7 @@ angular.module('theVarApp')
           }
           return null;
         }).filter(function(x) { return !!x; });
+
         return o;
       },
 

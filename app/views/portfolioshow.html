@@ -94,8 +94,10 @@
         </td>
 
         <td nowrap>
-          <!-- using a.pct here doesnt get updated in real-time -->
+          <!-- using a.pct here doesnt get updated in real-time
           {{qty2pct(a,portfolio)|number:2}} %
+          <br>-->
+          {{a.pct|number:2}} %
         </td>
         <td>
           {{a.history?a.history.length:0}} points
