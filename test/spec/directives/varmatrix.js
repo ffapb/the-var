@@ -98,7 +98,7 @@ describe('Directive: varmatrix', function () {
   it('row body asset', inject(function ($compile) {
     scope.calculateVaR=function() { return 1; };
     scope.portfolio={id:1,value:100};
-    scope.a = { pct: 10, historyMeta: { pnl: { last: 0.15 } } };
+    scope.a = { pct: 10, historyMeta: { pnl: { last: 15 } } };
 
     element = angular.element('<tr varmatrix type="rowBodyAsset"><th>bla</th></tr>');
     element = compileAndDigest(element,scope,$compile);

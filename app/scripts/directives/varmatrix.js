@@ -109,17 +109,19 @@ angular.module('theVarApp')
         nday.map(function(nd) {
           var varVal = scope.calculateVaR(scope.a,p,nd);
           var td = $('<td/>',{nowrap:'',class:'varmatrix'});
-          if(!scope.a.pnls) {
+          if(!scope.a.historyMeta.pnl.last) {
             $('<span/>',{text:'N/A'}).appendTo(td);
-          } else {
-            getDivVar(
-              varVal,
-              scope.a.historyMeta.pnl.last/100,
-              scope.a.pct/100*
-                scope.portfolio.value,
-              true
-            ).appendTo(td);
+            td.appendTo(tr);
+            return;
           }
+
+          getDivVar(
+            varVal,
+            scope.a.historyMeta.pnl.last/100,
+            scope.a.pct/100*
+              scope.portfolio.value,
+            true
+          ).appendTo(td);
           td.appendTo(tr);
         });
       });
