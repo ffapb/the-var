@@ -78,7 +78,7 @@ angular.module('theVarApp')
           if(od.indexOf(o[i])===-1) {
             // for bins that are skipped (since o is only the covered bins), push zeros
             for(var j=ou.length; j<o[i]; j++) {
-              ou.push(0);
+              ou.push(sgn);
               od.push(j);
             }
 
@@ -90,9 +90,12 @@ angular.module('theVarApp')
         }
         // convert to percentages of the total count
         var op = ou.map(function(x) { return x/d2.length*100; });
-  /*      for(i=1;i<op.length;i++) {
+  /*    
+        // cumulative
+        for(i=1;i<op.length;i++) {
           op[i]+=op[i-1];
-        }*/
+        }
+  */
 
         var edges = od.map(function(x) {
           return x*ss+m1;
