@@ -109,7 +109,7 @@ angular.module('theVarApp')
         nday.map(function(nd) {
           var varVal = scope.calculateVaR(scope.a,p,nd);
           var td = $('<td/>',{nowrap:'',class:'varmatrix'});
-          if(!scope.a.historyMeta.pnl.last) {
+          if(!scope.a.hasOwnProperty('historyMeta') || !scope.a.historyMeta.hasOwnProperty('pnl') || !scope.a.historyMeta.pnl.hasOwnProperty('last')) {
             $('<span/>',{text:'N/A'}).appendTo(td);
             td.appendTo(tr);
             return;
