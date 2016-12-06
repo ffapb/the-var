@@ -159,7 +159,9 @@ angular.module('theVarApp')
       transclude: false,
       link: function postLink(scope, element, attrs) {
         scope.$watch('[unallocated(),a.pct,pendingStock.historyMeta.lastprice,pendingStock.historyMeta.maxdate,pendingStock.historyMeta.mindate,portfolio.value,p.value]', function() {
-          element.find('.varmatrix').remove();
+          // use http://api.jquery.com/find/
+          // instead of an html dom find
+          $(element).find('[class*="varmatrix"]').remove();
           var grb;
           switch(attrs.type) {
             case 'matrix':
