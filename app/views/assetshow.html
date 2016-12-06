@@ -80,7 +80,10 @@
             </button>
           </td>
           <td>
-            <div ng-if="!showJqplot1" jq-sparkline ng-model="pendingStock.historyDownsampled" type="line"></div>
+            <div ng-if="!showJqplot1">
+              <div jq-sparkline ng-model="pendingStock.historyDownsampled" type="line"></div>
+              <small>(downsampled)</small>
+            </div>
             <!-- http://angular-ui.github.io/ui-chart/ -->
             <div ng-if=" showJqplot1" ui-chart="[pendingStock.historyJqplot]" chart-options="myChartOpts.usd" ></div>
           </td>
@@ -95,15 +98,27 @@
             </button>
           </td>
           <td>
-            <div ng-if="!showJqplot2" jq-sparkline ng-model="pendingStock.pnlsDownsampled" type="line"></div>
+            <div ng-if="!showJqplot2">
+              <div jq-sparkline ng-model="pendingStock.pnlsDownsampled" type="line"></div>
+              <small>(downsampled)</small>
+            </div>
             <!-- http://angular-ui.github.io/ui-chart/ -->
             <div ng-if=" showJqplot2" ui-chart="[pendingStock.pnlsJqplot]" chart-options="myChartOpts.perc" ></div>
           </td>
         </tr>
         <tr>
-          <td>Empirical distribution</td>
           <td>
-            <div jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar"></div>
+            Empirical distribution
+            <br/>
+            <button ng-click="showJqplot3=!showJqplot3">
+              <span ng-show="!showJqplot3">Detailed</span>
+              <span ng-show=" showJqplot3">Summary</span>
+            </button>
+          </td>
+          <td>
+            <div ng-if="!showJqplot3" jq-sparkline ng-model="pendingStock.pnlsEdf" type="bar"></div>
+            <!-- http://angular-ui.github.io/ui-chart/ -->
+            <div ng-if=" showJqplot3" ui-chart="[pendingStock.pnlsEdfJqplot]" chart-options="myChartOpts.percBar" ></div>
           </td>
         </tr>
         <tr>

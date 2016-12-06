@@ -39,7 +39,8 @@
         "dist/jquery.jqplot.min.css",
         "dist/plugins/jqplot.dateAxisRenderer.min.js",
         "dist/plugins/jqplot.highlighter.min.js",
-        "dist/plugins/jqplot.cursor.min.js"
+        "dist/plugins/jqplot.cursor.min.js",
+        "dist/plugins/jqplot.barRenderer.min.js"
       ]
     },
     "ajv": {

@@ -146,6 +146,18 @@ angular.module('theVarApp')
     $scope.myChartOpts.perc = angular.fromJson(angular.toJson($scope.myChartOpts.usd));
     $scope.myChartOpts.perc.axes.xaxis.renderer = $.jqplot.DateAxisRenderer;
     $scope.myChartOpts.perc.axes.yaxis.tickOptions.formatString='%%%.2f';
+
+    $scope.myChartOpts.percBar = {
+      seriesDefaults: {
+        renderer: $.jqplot.BarRenderer,
+        rendererOptions: {
+          fillToZero: true,
+          barWidth: 2,
+          shadowAlpha: 0
+        }
+      }
+    };
+
     $log.debug($scope.myChartOpts.perc);
 
   });

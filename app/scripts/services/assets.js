@@ -173,7 +173,15 @@ angular.module('theVarApp')
         });
         pendingStock.pnlsSort=pnlsSort;
 
-        pendingStock.pnlsEdf=varCalc.edf(pnls,1/100);
+        var edf = varCalc.edf(pnls,1/100);
+        pendingStock.pnlsEdf=edf.percentages;
+
+        pendingStock.pnlsEdfJqplot = [];
+        for(i=0;i<edf.percentages.length;i++) {
+          //pendingStock.pnlsEdfJqplot.push(Math.abs(edf.percentages[i]));
+          pendingStock.pnlsEdfJqplot.push([edf.edges[i]*100,Math.abs(edf.percentages[i])]);
+        }
+
         return pendingStock;
       },
 

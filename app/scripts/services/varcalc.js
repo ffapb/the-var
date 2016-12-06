@@ -61,9 +61,14 @@ angular.module('theVarApp')
           return Math.min(a,b);
         }, 99999999);
         m1 = Math.floor(m1/ss)*ss;
+
+        // calculate bin numbers for data
         var o = d2.map(function(x) { return Math.floor((x-m1)/ss); });
-        var ou = [];
-        var od = [];
+
+        // gather counts by bin
+        // Can depend on push below since d2 is sorted
+        var ou = []; // count
+        var od = []; // bin edge
         for(var i=0;i<o.length;i++) {
           var sgn=1;
           if(d2[i]<0) {
@@ -71,6 +76,12 @@ angular.module('theVarApp')
           }
 
           if(od.indexOf(o[i])===-1) {
+            // for bins that are skipped (since o is only the covered bins), push zeros
+            for(var j=ou.length; j<o[i]; j++) {
+              ou.push(0);
+              od.push(j);
+            }
+
             ou.push(sgn);
             od.push(o[i]);
           } else {
@@ -82,7 +93,12 @@ angular.module('theVarApp')
   /*      for(i=1;i<op.length;i++) {
           op[i]+=op[i-1];
         }*/
-        return op;
+
+        var edges = od.map(function(x) {
+          return x*ss+m1;
+        });
+
+        return {percentages: op, edges: edges};
       },
 
       portfolioVaR: function(percentile,portfolio,nday) {

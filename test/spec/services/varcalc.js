@@ -28,29 +28,89 @@ describe('Service: varCalc', function () {
     expect(varCalc.calculateVaR(p3,55,1)).toBe(+0.5);
   });
 
-  it('edf', function () {
+  it('edf theoretical', function () {
     var p1 = [1,1,1,1,1,1,1,1];
-    var e1 = varCalc.edf(p1,1);
+    var e1 = varCalc.edf(p1,1).percentages;
     expect(e1.length).toBe(1);
     expect(e1[0]).toBe(100);
     var p2 = [1,0,1,0,1,0,1,0];
-    var e21 = varCalc.edf(p2,1);
+    var e21 = varCalc.edf(p2,1).percentages;
     expect(e21.length).toBe(2);
     expect(e21[0]).toBe(50);
     expect(e21[1]).toBe(50);
-    var e22 = varCalc.edf(p2,2);
+    var e22 = varCalc.edf(p2,2).percentages;
     expect(e22.length).toBe(1);
     expect(e22[0]).toBe(100);
     var p3 = [1,2,0,1,2,0,1,2,0,1,2,0];
-    var e31 = varCalc.edf(p3,1);
+    var e31 = varCalc.edf(p3,1).percentages;
     expect(e31.length).toBe(3);
     expect(e31[0]).toBeCloseTo(100/3,5);
     expect(e31[1]).toBeCloseTo(100/3,5);
     expect(e31[2]).toBeCloseTo(100/3,5);
-    var e32 = varCalc.edf(p3,2);
+    var e32 = varCalc.edf(p3,2).percentages;
     expect(e32.length).toBe(2);
     expect(e32[0]).toBeCloseTo(200/3);
     expect(e32[1]).toBeCloseTo(100/3);
+  });
+
+  it('edf more realistic', function () {
+    // copied from BLC LB Equity P&L
+    var input = [
+      0,0,0,0,0,
+      -0.05,
+      0,0,0,0,0,0,
+      0.07,
+      0,0,0,0,0,
+      -0.09,
+      0,0,0,0,0,0,0,
+      -0.05,
+      0,0,0,0,0,0,0,0,
+      -0.008,
+      0,0,0,0,0,0,0,0,
+      0.39,
+      0,0,0,0,0,0,0,0,0,
+      -0.41,
+      0,0,0,0,0,0,0,0
+    ];
+    var expected = [
+      -1.59,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,
+      -1.59,
+      0,0,0,
+      -3.17,
+      0,0,0,
+      -1.59,
+      88.89,
+      0,0,0,0,0,0,
+      1.59,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,
+      0,
+      1.59
+    ];
+    var actual = varCalc.edf(input,1/100);
+    var percentages=actual.percentages;
+    var edges=actual.edges;
+    
+    percentages=percentages.map(function(x) { return Math.round(x*100)/100; });
+
+    expect(percentages.length).toBe(81);
+    expect(expected.length).toBe(81);
+    //expect(percentages).toEqual(expected);
+    expect(percentages[0]).toEqual(expected[0]);
+    expect(percentages[32]).toEqual(expected[32]);
+    expect(percentages[36]).toEqual(expected[36]);
+    expect(percentages[40]).toEqual(expected[40]);
+    expect(percentages[41]).toEqual(expected[41]);
+    expect(percentages[48]).toEqual(expected[48]);
+    expect(percentages[80]).toEqual(expected[80]);
+
+    expect(edges[0]).toBeCloseTo(-0.41,5);
+    expect(edges[80]).toBeCloseTo(0.39,5);
   });
 
   it('portfolioVaR 1',function() {
