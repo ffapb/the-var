@@ -83,7 +83,6 @@ angular.module('theVarApp')
             pct:0
           });
           this.updateAsset(pid,aaa);
-          this.updateValue(pid);
           this.saveToLs();
         }
       },
@@ -140,7 +139,6 @@ angular.module('theVarApp')
           return false;
         }
 
-        var self = this;
         var alist = Assets.list();
         ppp[pid].assets = ppp[pid].assets.map(function(x) {
           if(x.src===aaa.src && x.symbol===aaa.lookup.Symbol) {
@@ -151,16 +149,6 @@ angular.module('theVarApp')
         });
 
         this.updateValue(pid);
-
-        // now that the portfolio value is calculated, we can calculate the asset percentage
-        ppp[pid].assets = ppp[pid].assets.map(function(x) {
-          if(x.src===aaa.src && x.symbol===aaa.lookup.Symbol) {
-            // add a pct field for varmatrix and varcalc directives as well as other calculations
-            x.pct = self.qty2pct(x,ppp[pid]);
-          }
-          return x;
-        });
-
         this.saveToLs();
       },
       updateName: function(pid,name) {
@@ -181,11 +169,6 @@ angular.module('theVarApp')
         ppp[pid].cash=cash;
 
         this.updateValue(pid);
-        var self = this;
-        this.listAssets(pid).filter(function(x) {
-          x.lookup={Symbol:x.symbol};
-          self.updateAsset(pid,x); // to get the pct field updated
-        });
         this.saveToLs();
       },
 
@@ -205,6 +188,7 @@ angular.module('theVarApp')
           .reduce(function(a,b) { return a+b; },0);
 
         ppp[pid].value = ppp[pid].cash + assetsValue;
+
       },
 
       listAssets: function(pid) {
@@ -216,6 +200,7 @@ angular.module('theVarApp')
         var a = ppp[pid].assets;
         if(!a) { return []; }
         var al = Assets.list();
+        var self = this;
         var o = a.map(function(x) {
           if(al.hasOwnProperty(x.src)) {
             if(al[x.src].hasOwnProperty(x.symbol)) {
@@ -223,7 +208,10 @@ angular.module('theVarApp')
               o2.src=x.src;
               o2.symbol=x.symbol;
               o2.qty = x.qty;
-              o2.pct = x.pct;
+
+              // need to update pct here in case there was a price refresh
+              o2.pct = self.qty2pct(o2,ppp[pid]);
+
               return o2;
             }
           }
@@ -240,7 +228,7 @@ angular.module('theVarApp')
         }
 
         if(!portfolio.value) {
-          console.error('No portfolio value available in qty2pct. Aborting');
+          //console.error('No portfolio value available in qty2pct. Aborting');
           return 0;
         }
 

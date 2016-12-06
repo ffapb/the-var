@@ -19,18 +19,6 @@ angular.module('theVarApp')
 
     $scope.showNoData=true;
 
-    $scope.set=function(pid_) {
-      pid = pid_;
-      pl = Portfolios.list();
-      if(!pl.hasOwnProperty(pid)) {
-        window.location.href='#/portfolioList';
-        console.error('portfolioshowctrl/set: Invalid portfolio id '+pid);
-        return;
-      }
-      $scope.portfolio = pl[pid];
-      $scope.alist = $scope.list();
-    };
-
     $scope.list = function() {
       var assets = Portfolios.listAssets($scope.portfolio.id);
 
@@ -41,10 +29,6 @@ angular.module('theVarApp')
 
       return assets;
     };
-
-    if(!!$routeParams.pid) {
-      $scope.set($routeParams.pid);
-    }
 
     $scope.calculateVaR = function(p,percentile,nday) {
       return varCalc.calculateVaR(p,percentile,nday);
@@ -92,5 +76,24 @@ angular.module('theVarApp')
     $scope.unallocated = function() {
       return Portfolios.unallocated($scope.portfolio.id);
     };
+
+    $scope.set=function(pid_) {
+      pid = pid_;
+      pl = Portfolios.list();
+      if(!pl.hasOwnProperty(pid)) {
+        window.location.href='#/portfolioList';
+        console.error('portfolioshowctrl/set: Invalid portfolio id '+pid);
+        return;
+      }
+      $scope.portfolio = pl[pid];
+      // trigger a fake update for the pct values of assets to get updated
+      $scope.updateCash();
+      // get list
+      $scope.alist = $scope.list();
+    };
+
+    if(!!$routeParams.pid) {
+      $scope.set($routeParams.pid);
+    }
 
   });
